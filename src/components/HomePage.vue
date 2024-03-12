@@ -1,0 +1,270 @@
+<template>
+    <section class="personalization">
+        <form>
+            <input type="text" class="textInput" placeholder="Votre pseudo" id="pseudoInput" maxlength="10">
+            <div>
+                <h3>Votre avatar</h3>
+                <div class="avatar-container">
+                    <div class="avatar-selected">
+                        <!-- Avatar sélectionné apparaîtra ici -->
+                    </div>
+                </div>
+                <div class="avatar-options">
+                    <img class="avatar-option" src="../assets/Comparaison.png" alt="Avatar 1"
+                        onclick="selectAvatar(this)">
+                    <img class="avatar-option" src="../assets/Realping.png" alt="Avatar 2"
+                        onclick="selectAvatar(this)">
+                    <img class="avatar-option" src="../assets/security.png" alt="Avatar 3"
+                        onclick="selectAvatar(this)">
+                </div>
+            </div>
+            <input type="submit" class="submitBtn" value="Jouer !" id="submitBtn">
+        </form>
+    </section>
+    <section class="tutorial">
+        <h3>
+            Comment jouer ?
+        </h3>
+        <div id="tutorial" class="tutorial-box"></div>
+    </section>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+    name: 'HomePage',
+    methods: {
+        selectAvatar () {
+            
+        }
+    }
+})
+</script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
+
+body {
+    background-color: #2E2E3A;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* elements */
+
+input[type=submit] {
+    border-radius: 20px;
+    background-color: #FF570A;
+    border: 0;
+    color: white;
+    padding: 5px 15px;
+    width: 100px;
+    font-size: 1em;
+}
+
+input[type=text] {
+    background-color: #FF570A;
+    border: 0;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+}
+
+input::placeholder {
+    color: white;
+    font-size: 1em;
+}
+
+select {
+    width: 30vh;
+    background-color: #FF570A;
+    border: 0;
+    color: white;
+    margin: 10px 0;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+/* header */
+
+header {
+    justify-content: center;
+    display: flex;
+}
+
+header a {
+    margin-top: 15px;
+}
+
+/* main */
+
+main {
+    display: flex;
+    justify-content: center;
+    height: 60vh;
+    gap: 20%;
+    background-color: #6320EE;
+    border-radius: 20px;
+    margin: 5% 10%;
+    padding: 20px;
+}
+
+main section {
+    width: 25%;
+}
+
+.personalization {
+    justify-content: center;
+    display: flex;
+    padding-top: 35px;
+    text-align: center;
+}
+
+.tutorial {
+    text-align: center;
+}
+
+.tutorial h2 {
+    margin: 0;
+}
+
+.tutorial-box {
+    background-color: #8075FF;
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: 20px;
+}
+
+.game-options {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.game {
+    flex: 30%;
+    background-color: #8075FF;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.selected {
+    background-color: #FF570A;
+}
+
+.playersList {
+    background-color: #6320EE;
+    border-radius: 20px;
+    margin: 5%;
+    padding: 20px;
+}
+
+.playersList h3 {
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+.playersList p {
+    margin: 0 0 0 0;
+}
+
+.playersContainer {
+    display: flex;
+}
+
+.playerContainer {
+    flex: 25%;
+    display: grid;
+}
+
+.playerContainer img {
+    margin: auto;
+}
+
+.playerContainer p {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.submitBtn {
+    margin-top: 35px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.settings {
+    text-align: center;
+}
+
+/* footer */
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    color: white;
+}
+
+.footerLinks {
+    display: flex;
+    text-align: center;
+    padding: 0 10%;
+}
+
+.footerLinks a {
+    flex: 0 0 33%;
+    text-decoration: none;
+}
+
+
+
+.avatar-container {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: black;
+    margin: 0 auto 30px auto;
+    cursor: pointer;
+}
+
+.avatar-options {
+    display: flex;
+    gap: 5px;
+}
+
+.avatar-option,
+.player-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.avatar-option:hover {
+    transform: scale(1.1);
+}
+
+.avatar-selected {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.avatar-selected img {
+    width: 100%;
+    height: auto;
+}
+</style>
