@@ -11,11 +11,11 @@
                 </div>
                 <div class="avatar-options">
                     <img class="avatar-option" src="../assets/Comparaison.png" alt="Avatar 1"
-                        onclick="selectAvatar(this)">
+                        @onclick="selectAvatar(this)">
                     <img class="avatar-option" src="../assets/Realping.png" alt="Avatar 2"
-                        onclick="selectAvatar(this)">
+                        @onclick="selectAvatar(this)">
                     <img class="avatar-option" src="../assets/security.png" alt="Avatar 3"
-                        onclick="selectAvatar(this)">
+                        @onclick="selectAvatar(this)">
                 </div>
             </div>
             <input type="submit" class="submitBtn" value="Jouer !" id="submitBtn">
@@ -36,10 +36,14 @@ export default defineComponent({
     name: 'HomePage',
     methods: {
         selectAvatar () {
-            
+            console.log('test');
         }
     }
 })
+
+function selectAvatar(selectAvatar: string) {
+    console.log('test');
+}
 </script>
 
 <style scoped>
