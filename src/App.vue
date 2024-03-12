@@ -1,15 +1,18 @@
 <template>
-  <HomePage></HomePage>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HomePage from './components/HomePage.vue';
+import HelloWorld from './components/HelloWorld.vue';
+import footerApp from './components/footer/footer.vue'; // Import du composant Footer
 
 export default defineComponent({
   name: 'App',
   components: {
-    HomePage
+    HelloWorld,
+    footerApp
   }
 });
 </script>
