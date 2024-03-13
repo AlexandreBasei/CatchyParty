@@ -1,17 +1,17 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <RoomComponent></RoomComponent>
   <footerApp></footerApp>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
 import footerApp from './components/footer/footer.vue'; // Import du composant Footer
+import RoomComponent from './components/rooms/RoomComponent.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld,
+    RoomComponent,
     footerApp
   }
 });

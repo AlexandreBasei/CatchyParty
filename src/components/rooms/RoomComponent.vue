@@ -1,61 +1,114 @@
 <template>
-    <div>
-      <input type="text" v-model="username" placeholder="Entrez votre nom" />
-      <button @click="joinRoom">Rejoindre la salle</button>
-      <div v-if="joinedRoom">
-        <h2>Bienvenue dans la salle {{ roomName }}</h2>
+  <div>
+    <div v-if="!roomJoined">
+      <h1>Créer ou Rejoindre un Salon</h1>
+      <div v-if="rooms.length > 0">
         <ul>
-          <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+          <li v-for="room in rooms" :key="room.id">
+            {{ room.players.length }} / 10
+            - Salon de {{ room.players[0].username }}
+            - {{ room.id }}
+            <button @click="joinExistingRoom(room)">Rejoindre</button>
+          </li>
         </ul>
       </div>
+      <div v-else>
+        <p>Aucun salon disponible pour le moment.</p>
+      </div>
+      <form @submit.prevent="createRoom">
+        <label for="username">Nom d'utilisateur:</label>
+        <input type="text" v-model="username" required>
+        <button type="submit">Créer un salon</button>
+      </form>
     </div>
-  </template>
-  
-  <script lang="ts">
-  import { defineComponent, ref, Ref } from 'vue';
-  import io from 'socket.io-client';
-  
-  interface User {
-    id: string;
-    name: string;
-  }
-  
-  export default defineComponent({
-    props: {
-      serverUrl: { type: String, default: 'http://localhost:3000' },
-      roomId: { type: String, required: true },
+    <div v-else>
+      <p>Vous avez rejoint un salon avec les joueurs suivants:</p>
+      <ul>
+        <li v-for="player in currentRoom.players" :key="player.username">{{ player.username }}</li>
+      </ul>
+      <button @click="refreshPlayers()">Actualiser</button>
+      <button @click="playGame">Jouer !</button>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent } from 'vue';
+import io from 'socket.io-client';
+
+interface Room {
+  id: string;
+  players: { username: string }[];
+}
+
+export default defineComponent({
+  data() {
+    return {
+      username: '',
+      rooms: [] as Room[],
+      socket: io('http://localhost:3000'), // Assuming you have socket.io-client installed
+      roomJoined: false,
+      currentRoom: '',
+    };
+  },
+  mounted() {
+    this.socket.emit('get rooms');
+    this.socket.on('list rooms', (rooms: Room[]) => {
+      this.rooms = rooms;
+    });
+  },
+  methods: {
+    createRoom() {
+      if (this.username) {
+        const currentRoomId = Math.random().toString(36).substring(2, 8);
+        const player = {
+          host: true,
+          roomId: currentRoomId,
+          username: this.username,
+          socketId: this.socket.id,
+        };
+        this.socket.emit('playerData', player);
+        this.roomJoined = true;
+        this.currentRoom = currentRoomId;
+      }
     },
-    setup(props) {
-      // const socket: Ref<SocketIOClient.Socket | null> = ref(null);
-      const username = ref('');
-      const joinedRoom = ref(false);
-      const roomName = ref('');
-      const users = ref<User[]>([]);
-  
-      const joinRoom = () => {
-        // if (username.value && props.roomId && socket.value) {
-        //   // socket.value.emit('joinRoom', { username: username.value, roomId: props.roomId });
-        //   joinedRoom.value = true;
-        // }
-      };
-  
-      // socket.value = io(props.serverUrl);
-      // socket.value.on('connect', () => {
-      //   console.log('Connected to server');
-      // });
-      // socket.value.on('roomInfo', ({ roomName: name, users: roomUsers }: { roomName: string, users: User[] }) => {
-      //   roomName.value = name;
-      //   users.value = roomUsers;
-      // });
-  
-      return {
-        username,
-        joinedRoom,
-        roomName,
-        users,
-        joinRoom,
-      };
+    joinExistingRoom(room: Room) {
+      if (this.username) {
+        const player = {
+          host: false,
+          roomId: room.id,
+          username: this.username,
+          socketId: this.socket.id,
+        };
+        this.socket.emit('playerData', player); // Envoyer les informations du joueur au serveur
+        console.log(this.rooms);
+        this.roomJoined = true;
+        
+      }
     },
-  });
-  </script>
-  
+    refreshPlayers() {
+
+      console.log(this.rooms);
+      
+    },
+    playGame() {
+      this.socket.emit('play', {
+        username: this.username,
+        // roomId: this.currentRoom.id,
+      });
+    },
+  },
+});
+</script>
+
+<style scoped>
+.message {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+
+li {
+  text-decoration: none;
+}
+</style>
