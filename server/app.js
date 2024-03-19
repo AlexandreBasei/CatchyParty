@@ -1,3 +1,4 @@
+const { log } = require('console');
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -11,67 +12,75 @@ const io = require("socket.io")(server, {
   }
 });
 
-const rooms = [];
+let rooms = [];
 
 io.on('connection', (socket) => {
-    console.log(`[connection] ${socket.id}`);
-
-  socket.on('get rooms', () => {
-    io.emit('list rooms', rooms);
-  });
+  console.log(`[connection] ${socket.id}`);
 
   socket.on('playerData', (player) => {
-    if (player.host) {
-      // Générer l'ID de la nouvelle salle
-      const newRoomId = generateRoomId();
-      const newRoom = {
-        id: newRoomId, // Assigner l'ID généré à la nouvelle salle
-        players: [player],
-      };
-      rooms.push(newRoom);
-      io.emit('list rooms', rooms);
-      socket.emit('join room', newRoomId); // Envoyer l'ID de la nouvelle salle au joueur
-    } else {
-      const room = rooms.find((room) => room.id === player.roomId);
-      if (room && room.players.length < 10) { // Limiter à 10 joueurs par salon
-        room.players.push(player);
-        io.emit('list rooms', rooms);
-      } else {
-        socket.emit('room full', player.roomId);
+    console.log(`[playerData] ${player.username}`);
+
+    let room = null;
+
+    if (player.roomId === "") {
+      room = createRoom(player);
+      console.log(`[create room ] - ${room.id} - ${player.username}`);
+    }
+    else {
+      room = rooms.find(r => r.id === player.roomId);
+
+      if (room === undefined) {
+        return;
       }
+
+      player.roomId = room.id;
+      room.players.push(player);
     }
+
+    socket.join(room.id);
+
+    io.to(socket.id).emit('join room', room.id);
   });
 
-  socket.on('get room players', (roomId) => {
-    const room = rooms.find((room) => room.id === roomId);
-    if (room) {
-      io.to(roomId).emit('room players updated', room.players);
-    }
+  socket.on('get rooms', () => {
+    io.to(socket.id).emit('list rooms', rooms);
   });
 
-  socket.on('play', (player) => {
-    socket.to(player.roomId).emit('play', player);
-  });
+  // socket.on('play', (roomId) => {
 
-  socket.on('play again', (roomId) => {
-    const roomIndex = rooms.findIndex((room) => room.id === roomId);
-    if (roomIndex !== -1) {
-      rooms.splice(roomIndex, 1);
-      io.emit('list rooms', rooms);
-    }
-  });
+  // });
 
   socket.on('disconnect', () => {
-    console.log('Client déconnecté');
-    // Gérer la déconnexion d'un joueur (supprimer le joueur du salon, etc.)
+    console.log(`[disconnect] ${socket.id}`);
+    let room = null;
+
+    rooms.forEach(r => {
+      r.players.forEach(p => {
+        if (p.socketId === socket.id && p.host) {
+          room = r;
+          rooms = rooms.filter(r => r !== room);
+        }
+      })
+    })
   });
-});
+})
+
+function createRoom(player) {
+  const room = { id: roomId(), players: [] };
+
+  player.roomId = room.id;
+
+  room.players.push(player);
+  rooms.push(room);
+
+  return room;
+}
+
+function roomId() {
+  return Math.random().toString(36).substr(2, 9);
+}
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
-
-function generateRoomId() {
-  return Math.random().toString(36).substr(2, 8);
-}
