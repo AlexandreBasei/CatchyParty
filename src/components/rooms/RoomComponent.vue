@@ -25,6 +25,7 @@
 
     <section v-else>
         <p>Vous avez rejoint un salon avec les joueurs suivants :</p>
+        <p>{{ rooms }}</p>
         <div v-for="room in rooms" :key="room.id">
             <ul v-if="room.id === currentRoom">
                 <li v-for="player in room.players" :key="player.username">{{ player.username }}</li>

@@ -6,6 +6,7 @@
         <button onclick="searchSong()">Search</button>
         <div id="result"></div>
         <div id="checkboxSection"></div>
+        <p>{{ data }}</p>
         <form action="" @sumbit.prevent="getRandomArtist()" v-for="(genre, element) in data" v-bind:key="element">
             <div></div>
             <button type="submit" id="getSelectedGenres">Get Selected Genres</button>
@@ -18,13 +19,35 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue'
 
 interface Data {
-    genre: [element:string],
+    genre: [],
 }
 
 export default defineComponent({
+    setup() {
+        const genres = ref<Data[]>([]);
+
+        const fetchGenres = async () => {
+            try {
+                const response = await fetch('artists.json');
+                const data = await response.json();
+                genres.value = Object.keys(data).map((genre) => ({
+                    // Set values for your genre object properties here (e.g., name: genre})
+                    value: genre,
+                }));
+            } catch (error) {
+                console.error('Error fetching JSON:', error);
+            }
+        };
+
+        onMounted(fetchGenres);
+
+        return {
+            genres,
+        };
+    },
     //Ici les variables utilisées dans le DOM
     data() {
         return {
@@ -37,27 +60,28 @@ export default defineComponent({
     mounted() {
         // Charger le fichier JSON
         fetch('artists.json')
-        .then(response => response.json())
-        .then(data => {
-            const checkboxSection = document.getElementById('checkboxSection');
+            .then(response => response.json())
+            .then(data => {
+                const checkboxSection = document.getElementById('checkboxSection');
+                console.log('esttre');
 
-            // Parcourir chaque nom de tableau dans le fichier JSON
-            for (const genre in data) {
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = 'genre';
-                checkbox.value = genre;
-                checkbox.id = genre;
+                // Parcourir chaque nom de tableau dans le fichier JSON
+                for (const genre in data) {
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.name = 'genre';
+                    checkbox.value = genre;
+                    checkbox.id = genre;
 
-                const label = document.createElement('label');
-                label.htmlFor = genre;
-                label.textContent = genre;
+                    const label = document.createElement('label');
+                    label.htmlFor = genre;
+                    label.textContent = genre;
 
-                checkboxSection.appendChild(checkbox);
-                checkboxSection.appendChild(label);
-                checkboxSection.appendChild(document.createElement('br'));
-            }
-        })
+                    checkboxSection.appendChild(checkbox);
+                    checkboxSection.appendChild(label);
+                    checkboxSection.appendChild(document.createElement('br'));
+                }
+            })
             .catch(error => console.error('Error fetching JSON:', error));
     },
     //Ici les fonctions (méthodes)
