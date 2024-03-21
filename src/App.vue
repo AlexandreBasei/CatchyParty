@@ -8,13 +8,13 @@
 import { defineComponent } from 'vue';
 import footerApp from './components/footer/footer.vue'; // Import du composant Footer
 import RoomComponent from './components/rooms/RoomComponent.vue';
-import GeniusFindLyrics from './components/FindLyrics/GeniusFindLyrics.vue';
+// import GeniusFindLyrics from './components/FindLyrics/GeniusFindLyrics.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     RoomComponent,
-    GeniusFindLyrics,
+    // GeniusFindLyrics,
     footerApp
   }
 });

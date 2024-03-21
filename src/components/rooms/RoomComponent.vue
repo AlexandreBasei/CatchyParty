@@ -1,5 +1,6 @@
 <template>
-    <section v-if="!roomJoined">
+    <!-- Affichage accueil -->
+    <section v-if="!roomJoined && !roomId">
         <h1>Créer ou rejoindre un salon</h1>
 
         <div v-if="rooms.length > 0">
@@ -23,15 +24,47 @@
         </form>
     </section>
 
-    <section v-else>
+    <!-- Affichage rejoindre salle via l'url -->
+    <section v-else-if="roomId">
+        <div v-for="room in rooms" :key="room.id">
+            <div v-if="room.id === roomId">
+                <h1>Vous allez rejoindre la salle de {{ room.players[0].username }}</h1>
+                <form @submit.prevent="joinRoom(room)">
+                    <label for="username">Nom d'utilisateur : </label>
+                    <input type="text" v-model="username" required>
+                    <button type="submit">Rejoindre</button>
+                </form>
+                <button @click="reload">Retourner à l'accueil</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Affichage salle rejointe-->
+    <section v-else-if="roomJoined">
         <p>Vous avez rejoint un salon avec les joueurs suivants :</p>
-        <p>{{ rooms }}</p>
         <div v-for="room in rooms" :key="room.id">
             <ul v-if="room.id === currentRoom">
-                <li v-for="player in room.players" :key="player.username">{{ player.username }}</li>
+                <li v-for="rplayer in room.players" :key="rplayer.socketId"><span v-if="rplayer.host">👑</span> {{ rplayer.username }}<button v-if="player.host && rplayer.socketId !== player.socketId" @click="setHost(rplayer)">Promouvoir hôte</button></li>
+                <p  id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</p>
                 <button v-if="room.players.length > 1" @click="play">Démarrer la partie</button>
+                <button @click="exitRoom">Quitter la partie</button>
             </ul>
         </div>
+    </section>
+
+    <!-- Affichage salle n'existe pas -->
+    <section v-if="!roomJoined && roomId">
+        <div v-if="rooms.length === 0">
+            <p>Le salon que vous essayez de rejoindre n'existe pas</p>
+            <button @click="reload">Retourner à l'accueil</button>
+        </div>
+        <div v-for="room in rooms" :key="room.id">
+            <div v-if="room.id !== roomId || !rooms">
+                <p>Le salon que vous essayez de rejoindre n'existe pas</p>
+                <button @click="reload">Retourner à l'accueil</button>
+            </div>
+        </div>
+
     </section>
 </template>
 
@@ -41,7 +74,14 @@ import io from 'socket.io-client';
 
 interface Room {
     id: string;
-    players: { username: string }[];
+    players: {
+        host: boolean,
+        roomId: string,
+        socketId: string,
+        username: string,
+        turn: boolean,
+        win: boolean,
+    }[];
 }
 
 export default defineComponent({
@@ -58,22 +98,32 @@ export default defineComponent({
                 username: "",
                 socketId: "",
                 turn: false,
-                win: false
+                win: false,
             },
-            linkToShare: {},
+            roomId: "",
         }
     },
     mounted() {
 
         this.socket.on('join room', (roomId) => {
             this.player.roomId = roomId;
-            this.linkToShare = { link: window.location.href, room: this.player.roomId };
             this.currentRoom = roomId;
+        });
+
+        this.socket.on('new host', (newHostId) => {
+            if (this.player.socketId === newHostId) {
+                this.player.host = true;
+            }
         });
 
         setInterval(() => {
             this.updRooms();
-        }, 10);
+        }, 20);
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const roomId = urlParams.get('room');
+        this.roomId = roomId ?? "";
     },
     methods: {
         updRooms() {
@@ -91,7 +141,6 @@ export default defineComponent({
 
                 this.socket.emit('playerData', this.player);
                 this.roomJoined = true;
-                this.updRooms();
             }
         },
 
@@ -102,9 +151,8 @@ export default defineComponent({
                 this.player.socketId = this.socket.id ?? "";
 
                 this.socket.emit('playerData', this.player);
-                console.log(this.rooms);
                 this.roomJoined = true;
-                this.updRooms();
+                this.roomId = "";
             }
             else {
                 alert("Veuillez entrer un nom d'utilisateur pour rejoindre une partie");
@@ -112,10 +160,30 @@ export default defineComponent({
         },
 
         exitRoom() {
-            if (this.roomJoined === true) {
-                console.log('exit');
+            this.rooms.forEach(room => {
+                if (room.id === this.currentRoom) {
+                    this.player.host = false;
+                    this.player.username = "";
+                    this.player.roomId = "";
+                    this.player.turn = false;
+                    this.player.win = false;
+                    this.socket.emit("exit room");
+                    this.roomJoined = false;
+                }
+            });
+        },
 
-            }
+        setHost(player: object) {
+            this.player.host = false;
+            this.socket.emit("set host", player);
+        },
+
+        reload() {
+            window.location.search = '?room=';
+        },
+
+        copy(text:string) {
+            navigator.clipboard.writeText(text);
         },
 
         play() {
@@ -125,3 +193,14 @@ export default defineComponent({
     }
 })
 </script>
+
+<style scoped>
+#shareLink{
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#shareLink:active{
+    transform: scale(1.05);
+}
+</style>

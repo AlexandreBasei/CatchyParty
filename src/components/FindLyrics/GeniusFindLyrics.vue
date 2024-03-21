@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <section>
         <h1>Song Search</h1>
         <input type="text" id="artistInput" placeholder="Artist Name" v-model="artist">
@@ -174,4 +174,4 @@ export default defineComponent({
         }
     }
 })
-</script>
+</script> -->
