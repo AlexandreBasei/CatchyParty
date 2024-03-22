@@ -1,11 +1,17 @@
 
 <template>
     <header>
-        <a href="../homepage/homepage.html">
-            <img alt="logo" src="../../assets/logo.svg">
-        </a>
+        <RouterLink to="/">
+            <img alt="logo" src="@/assets/logo.svg">
+        </RouterLink>
+            
     </header>
 </template>
 <style lang="scss or less">
-    @import "./header.css";
+    import './header.css';
 </style>
+<script>
+    export default({
+    name: 'headerApp',
+    });
+</script>
