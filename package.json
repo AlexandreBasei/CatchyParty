@@ -11,12 +11,14 @@
     "axios": "^1.6.7",
     "core-js": "^3.8.3",
     "express": "^4.18.3",
+    "i": "^0.3.7",
     "path": "^0.12.7",
     "request": "^2.88.2",
     "socket.io": "^4.7.4",
     "socket.io-client": "^4.7.4",
     "vue": "^3.2.13",
-    "vue-property-decorator": "^9.1.2"
+    "vue-property-decorator": "^9.1.2",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",
