@@ -4,7 +4,7 @@
         <section class="personalization">
             <form @submit.prevent="handleSubmit">
                 <input type="text" class="textInput" placeholder="Votre pseudo" v-model="pseudo" maxlength="10">
-                <div>
+                <div class="avatar-choice">
                     <h3>Your avatar</h3>
                     <div class="avatar-container">
                         <div class="avatar-selected">
@@ -17,7 +17,7 @@
                         <img class="avatar-option" src="../../assets/security.png" alt="Avatar 3" @click="selectAvatar('Avatar 3')">
                     </div>
                 </div>
-                <RouterLink to="/game-select">
+                <RouterLink to="/game-select" class="submit">
                     <input type="submit" class="submitBtn" value="Play !" id="submitBtn">
                 </RouterLink>
             </form>
@@ -49,9 +49,9 @@ import './homepage.css';
                 pseudo: '',
                 tutorialText: '',
                 steps: [
-                    "Étape 1 : Faites ceci...",
-                    "Étape 2 : Maintenant, faites cela...",
-                    "Étape 3 : Puis cela..."
+                    "Étape 1 : Do this...",
+                    "Étape 2 : Now, this...",
+                    "Étape 3 : And this..."
                 ],
                 currentStep: 0
             }

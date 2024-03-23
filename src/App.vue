@@ -36,6 +36,7 @@ export default defineComponent({
   text-align: center;
   color: white;
   /* margin-top: 60px; */
+  width:100%;
 }
 </style>
 <style lang="scss or less">

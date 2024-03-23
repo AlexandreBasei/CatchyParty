@@ -21,7 +21,7 @@
         display: inline-block;
     }
 
-    select{
+    select, input[type=text], button{
         width: 30vh;
         background-color: #F4D35E;
         border: 0;
@@ -29,6 +29,16 @@
         margin: 10px 0;
         padding: 5px;
         border-radius: 10px;
+    }
+
+    input[type=submit]{
+        background-color: #F4D35E;
+        border: 0;
+        color: white;
+        margin: 10px 0;
+        padding: 5px;
+        border-radius: 10px;
+        width: 30vh;
     }
 
     label{
@@ -62,6 +72,17 @@
         gap: 10%;
         justify-content: center;
         display: flex;
+    }
+
+    .avatar-choice{
+        justify-content: center;
+        display: grid;
+    }
+
+    .submit{
+        justify-content: center;
+        display: flex;
+        margin-top: 1em;
     }
 
     .personalization{
