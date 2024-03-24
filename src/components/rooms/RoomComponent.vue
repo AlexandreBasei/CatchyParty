@@ -44,8 +44,23 @@
         <p>Vous avez rejoint un salon avec les joueurs suivants :</p>
         <div v-for="room in rooms" :key="room.id">
             <ul v-if="room.id === currentRoom">
-                <li v-for="rplayer in room.players" :key="rplayer.socketId"><span v-if="rplayer.host">👑</span> {{ rplayer.username }}<button v-if="player.host && rplayer.socketId !== player.socketId" @click="setHost(rplayer)">Promouvoir hôte</button></li>
-                <p  id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</p>
+                <li v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
+                    <span v-if="rplayer.host">👑</span>
+                    {{ rplayer.username }}
+                    <button v-if="player.host && rplayer.socketId !== player.socketId"
+                        @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
+                        <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#000000"
+                            class="bi bi-three-dots-vertical">
+                            <path
+                                d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                        </svg>
+                    </button>
+                    <div v-bind:id="rplayer.socketId" class="hostMenu">
+                        <button @click="setHost(rplayer)">Define new room's host</button>
+                        <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
+                    </div>
+                </li>
+                <p id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</p>
                 <button v-if="room.players.length > 1" @click="play">Démarrer la partie</button>
                 <button @click="exitRoom">Quitter la partie</button>
             </ul>
@@ -116,6 +131,13 @@ export default defineComponent({
             }
         });
 
+        this.socket.on('kicked', (kickedId) => {
+            if (this.player.socketId === kickedId) {
+                this.exitRoom();
+                console.log('kicked');
+            }
+        });
+
         setInterval(() => {
             this.updRooms();
         }, 20);
@@ -124,6 +146,19 @@ export default defineComponent({
         const urlParams = new URLSearchParams(queryString);
         const roomId = urlParams.get('room');
         this.roomId = roomId ?? "";
+
+        document.addEventListener('click', (event: MouseEvent) => {
+            /*eslint no-undef: 0*/
+            const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
+            /*eslint no-undef: 0*/
+            const buttons = document.querySelectorAll('.hostMenuButton') as NodeListOf<HTMLElement>;
+
+            modals.forEach((modal) => {
+                if (!modal.contains(event.target as Node) && !this.isButtonClicked(buttons, event.target as Node)) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
     },
     methods: {
         updRooms() {
@@ -178,11 +213,36 @@ export default defineComponent({
             this.socket.emit("set host", player);
         },
 
+        displayHostMenu(socketId: string) {
+            const menuToDisplay = document.getElementById(socketId);
+
+            if (menuToDisplay) {
+                menuToDisplay.style.display = "flex";
+            }
+        },
+
+        isButtonClicked(buttons: NodeListOf<HTMLElement>, target: Node): boolean {
+            for (const button of buttons) {
+                if (button.contains(target)) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        kickPlayer(socketId: string) {
+            this.rooms.forEach(room => {
+                if (room.id === this.currentRoom) {
+                    this.socket.emit("kick player", socketId);
+                }
+            });
+        },
+
         reload() {
             window.location.search = '?room=';
         },
 
-        copy(text:string) {
+        copy(text: string) {
             navigator.clipboard.writeText(text);
         },
 
@@ -195,12 +255,59 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#shareLink{
+
+ul{
+    list-style-type: none;
+}
+
+ul li{
+    width: fit-content;
+}
+
+.hostMenuButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 0px;
+    height: 15px;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.hostMenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    width: 20vw;
+    flex-flow: wrap row;
+    align-items: start;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.hostMenu button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.hostMenu button:hover{
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hostMenu button:first-child{
+    border-bottom: 1px solid black;
+}
+
+#shareLink {
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
-#shareLink:active{
+#shareLink:active {
     transform: scale(1.05);
 }
 </style>
