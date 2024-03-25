@@ -1,9 +1,9 @@
-<!-- <template>
+<template>
     <section>
         <h1>Song Search</h1>
         <input type="text" id="artistInput" placeholder="Artist Name" v-model="artist">
         <input type="text" id="titleInput" placeholder="Song Title" v-model="title">
-        <button onclick="searchSong()">Search</button>
+        <button @click="searchSong()">Search</button>
         <div id="result"></div>
         <div id="checkboxSection"></div>
         <p>{{ data }}</p>
@@ -19,54 +19,40 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted } from 'vue';
+import jsonData from '../../assets/artists.json';
 
 interface Data {
-    genre: [],
+    [genre: string]: string[];
 }
 
+
 export default defineComponent({
-    setup() {
-        const genres = ref<Data[]>([]);
-
-        const fetchGenres = async () => {
-            try {
-                const response = await fetch('artists.json');
-                const data = await response.json();
-                genres.value = Object.keys(data).map((genre) => ({
-                    // Set values for your genre object properties here (e.g., name: genre})
-                    value: genre,
-                }));
-            } catch (error) {
-                console.error('Error fetching JSON:', error);
-            }
-        };
-
-        onMounted(fetchGenres);
-
-        return {
-            genres,
-        };
-    },
     //Ici les variables utilisées dans le DOM
     data() {
         return {
             artist: "",
             title: "",
             data: [] as Data[],
+            jsonData: jsonData,
         }
     },
     // Ici tout le code procédural
     mounted() {
-        // Charger le fichier JSON
-        fetch('artists.json')
-            .then(response => response.json())
-            .then(data => {
-                const checkboxSection = document.getElementById('checkboxSection');
-                console.log('esttre');
+        // Appeler la fonction à un endroit approprié, par exemple au chargement de la page
+        this.fetchAndCreateCheckboxes();
+    },
+    //Ici les fonctions (méthodes)
+    methods: {
+        async fetchAndCreateCheckboxes(): Promise<void> {
+            console.log("ALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEX");
+            try {
+                const response = await fetch(this.jsonData);
+                this.data = await response.json();
 
-                // Parcourir chaque nom de tableau dans le fichier JSON
-                for (const genre in data) {
+                const checkboxSection = document.getElementById('checkboxSection');
+
+                for (const genre in this.data) {
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.name = 'genre';
@@ -77,35 +63,41 @@ export default defineComponent({
                     label.htmlFor = genre;
                     label.textContent = genre;
 
-                    checkboxSection.appendChild(checkbox);
-                    checkboxSection.appendChild(label);
-                    checkboxSection.appendChild(document.createElement('br'));
+                    if (checkboxSection) {
+                        checkboxSection.appendChild(checkbox);
+                        checkboxSection.appendChild(label);
+                        checkboxSection.appendChild(document.createElement('br'));
+                    }
                 }
-            })
-            .catch(error => console.error('Error fetching JSON:', error));
-    },
-    //Ici les fonctions (méthodes)
-    methods: {
+            } catch (error) {
+                console.error('Error fetching JSON:', error);
+            }
+        },
+
         async searchSong() {
             try {
                 const response = await fetch(`/search?artist=${encodeURIComponent(this.artist)}&title=${encodeURIComponent(this.title)}`);
                 const data = await response.json();
                 const resultDiv = document.getElementById('result');
-                if (data.error) {
-                    resultDiv.innerText = data.error;
-                } else {
-                    resultDiv.innerHTML = `
+
+                if (resultDiv) {
+                    if (data.error) {
+                        resultDiv.innerText = data.error;
+                    } else {
+                        resultDiv.innerHTML = `
                                 <h2>${data.title}</h2>
                                 <p>Artist: ${data.primary_artist.name}</p>
                                 <p>URL: <a href="${data.url}" target="_blank">${data.url}</a></p>
                             `;
+                    }
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         },
         async getSelectedGenres() {
-            const checkboxes = document.querySelectorAll('input[name=genre]:checked');
+            /*eslint no-undef: 0*/
+            const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[name=genre]:checked');
             const selectedGenres = Array.from(checkboxes).map(checkbox => checkbox.value);
             return selectedGenres;
         },
@@ -127,16 +119,20 @@ export default defineComponent({
             const randomSong = await this.getRandomSong(randomArtist);
             if (randomSong) {
                 const randomArtistElement = document.getElementById('randomArtist');
-                randomArtistElement.innerHTML = `
+                if (randomArtistElement) {
+                    randomArtistElement.innerHTML = `
                             <p>Random Artist in ${randomGenre}: ${randomArtist}</p>
                             <p>Random Song: <a href="${randomSong.url}" target="_blank">${randomSong.title}</a></p>`;
 
-                const lyrics = await this.getLyrics(randomArtist, randomSong.title);
-                if (lyrics) {
-                    const lyricsElement = document.getElementById('lyrics');
-                    lyricsElement.textContent = lyrics;
-                } else {
-                    alert(`Aucune paroles trouvées pour la chanson "${randomSong.title}".`);
+                    const lyrics = await this.getLyrics(randomArtist, randomSong.title);
+                    if (lyrics) {
+                        const lyricsElement = document.getElementById('lyrics');
+                        if (lyricsElement) {
+                            lyricsElement.textContent = lyrics;
+                        }
+                    } else {
+                        alert(`Aucune paroles trouvées pour la chanson "${randomSong.title}".`);
+                    }
                 }
             } else {
                 alert(`Aucune chanson trouvée pour l'artiste "${randomArtist}".`);
@@ -174,4 +170,4 @@ export default defineComponent({
         }
     }
 })
-</script> -->
+</script>
