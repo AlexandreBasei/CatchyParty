@@ -5,6 +5,9 @@ const request = require('request');
 const path = require('path');
 const axios = require('axios');
 
+const getLyrics = require("./getLyrics");
+const getSong = require("./getSong");
+
 const app = express();
 const server = http.createServer(app);
 

@@ -6,11 +6,7 @@
         <button @click="searchSong()">Search</button>
         <div id="result"></div>
         <div id="checkboxSection"></div>
-        <p>{{ data }}</p>
-        <form action="" @sumbit.prevent="getRandomArtist()" v-for="(genre, element) in data" v-bind:key="element">
-            <div></div>
-            <button type="submit" id="getSelectedGenres">Get Selected Genres</button>
-        </form>
+        <button id="getSelectedGenres" @click="getRandomArtist">Get Selected Genres</button>
         <div id="selectedGenres"></div>
         <div id="randomArtist"></div>
         <div id="lyrics"></div>
@@ -22,18 +18,12 @@
 import { defineComponent, ref, onMounted } from 'vue';
 import jsonData from '../../assets/artists.json';
 
-interface Data {
-    [genre: string]: string[];
-}
-
-
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
     data() {
         return {
             artist: "",
             title: "",
-            data: [] as Data[],
             jsonData: jsonData,
         }
     },
@@ -47,12 +37,9 @@ export default defineComponent({
         async fetchAndCreateCheckboxes(): Promise<void> {
             console.log("ALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEX");
             try {
-                const response = await fetch(this.jsonData);
-                this.data = await response.json();
-
                 const checkboxSection = document.getElementById('checkboxSection');
 
-                for (const genre in this.data) {
+                for (const genre in this.jsonData) {
                     const checkbox = document.createElement('input');
                     checkbox.type = 'checkbox';
                     checkbox.name = 'genre';
