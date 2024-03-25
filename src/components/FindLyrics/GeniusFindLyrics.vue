@@ -9,14 +9,14 @@
         <button id="getSelectedGenres" @click="getRandomArtist">Get Selected Genres</button>
         <div id="selectedGenres"></div>
         <div id="randomArtist"></div>
-        <div id="lyrics"></div>
-        <div id="lyricsDiv"></div>
+        <div id="lyrics">{{ lyrics }}</div>
     </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from 'vue';
 import jsonData from '../../assets/artists.json';
+import io from 'socket.io-client';
 
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
@@ -25,17 +25,22 @@ export default defineComponent({
             artist: "",
             title: "",
             jsonData: jsonData,
+            socket: io('http://localhost:3000'),
+            lyrics: "",
         }
     },
     // Ici tout le code procédural
     mounted() {
         // Appeler la fonction à un endroit approprié, par exemple au chargement de la page
         this.fetchAndCreateCheckboxes();
+
+        this.socket.on('get lyrics', (lyrics) => {
+            this.lyrics = lyrics;
+        });
     },
     //Ici les fonctions (méthodes)
     methods: {
         async fetchAndCreateCheckboxes(): Promise<void> {
-            console.log("ALEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEX");
             try {
                 const checkboxSection = document.getElementById('checkboxSection');
 
@@ -127,8 +132,7 @@ export default defineComponent({
         },
         async getArtistsInGenre(genre: string) {
             try {
-                const response = await fetch('artists.json');
-                const data = await response.json();
+                const data: { [index: string]: string[]; } = this.jsonData;
                 return data[genre] || [];
             } catch (error) {
                 console.error('Error fetching artists:', error);
@@ -137,7 +141,8 @@ export default defineComponent({
         },
         async getRandomSong(artistName: string) {
             try {
-                const response = await fetch(`/randomSong?artist=${encodeURIComponent(artistName)}`);
+                const response = await fetch(`http://localhost:3000/randomSong?artist=${encodeURIComponent(artistName)}`);
+                await console.log(response);
                 const data = await response.json();
                 return data;
             } catch (error) {
@@ -147,8 +152,9 @@ export default defineComponent({
         },
         async getLyrics(ArtistName: string, songName: string) {
             try {
-                const response = await fetch(`/lyrics?ArtistName=${encodeURIComponent(ArtistName)}&songName=${encodeURIComponent(songName)}`);
+                const response = await fetch(`http://localhost:3000/lyrics?ArtistName=${encodeURIComponent(ArtistName)}&songName=${encodeURIComponent(songName)}`);
                 const data = await response.json();
+                this.socket.emit("send id",this.socket.id)
                 return data;
             } catch (error) {
                 console.error('Error fetching lyrics:', error);

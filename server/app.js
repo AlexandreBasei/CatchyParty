@@ -4,13 +4,15 @@ const socketIo = require('socket.io');
 const request = require('request');
 const path = require('path');
 const axios = require('axios');
+var cors = require('cors');
 
-const getLyrics = require("./getLyrics");
-const getSong = require("./getSong");
+const getLyrics = require("../src/assets/getLyrics");
+const getSong = require("../src/assets/getSong");
 
 const app = express();
 const server = http.createServer(app);
 
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itryYxm1';
@@ -134,6 +136,12 @@ function roomId() {
 
 // --------------------------- Partie recherche de musique ----------------------
 
+let socketId = "";
+
+io.on('connection', (socket) => {
+    socketId = socket.id;
+})
+
 function searchSong(artistName, songTitle, callback) {
     // Encode the artist name and song title for the URL
     const artistEncoded = encodeURIComponent(artistName);
@@ -161,6 +169,7 @@ function searchSong(artistName, songTitle, callback) {
             try {
                 // Parse the JSON response
                 const searchData = JSON.parse(body);
+                console.log(response);
                 // Check if there are any search results
                 if (searchData.response.hits.length > 0) {
                     // Extract the first search result (assuming it's the most relevant)
@@ -269,12 +278,10 @@ app.get('/lyrics', async (req, res) => {
         };
 
         console.log(options);
-        let lyricsContent = document.getElementById("lyricsDiv"); // Déclaration de la variable lyricsContent en dehors de la promesse
 
         getLyrics(options).then((lyrics) => {
             console.log(lyrics); // Affiche les paroles dans la console
-            lyricsContent.innerHTML = lyrics; // Attribution de la valeur des paroles à la variable lyricsContent
-
+            io.to(socketId).emit('get lyrics', lyrics);
         });
 
         getSong(options).then((song) =>
