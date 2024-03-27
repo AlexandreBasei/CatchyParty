@@ -1,0 +1,64 @@
+.personalization-main{
+    background-color: var(--tertiary);
+    border-radius: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+
+.personalization-main{
+    height: auto;
+    margin: 5% 5% 15% 5%;
+}
+
+header{
+    height: 10vh;
+}
+
+footer{
+    height: 5vh;
+}
+
+.playersList{
+    background-color: var(--tertiary);
+    border-radius: 20px;
+    margin: 2% 5% 0 5%;
+    padding: 20px;
+}
+
+.playersList h3{
+    margin: 0 0 15px 0;
+    text-align: center;
+}
+
+.playersList p{
+    margin: 0 0 0 0;
+}
+}
+
+@media only screen and (min-width: 1000px) {
+    .playersList{
+        background-color: var(--tertiary);
+        border-radius: 20px;
+        margin: 2% 5% 0 5%;
+        padding: 20px;
+        width: 25%;
+    } 
+
+    .settings{
+        width: auto;
+        display: flex;
+        gap: 10vh;
+    }
+
+    .game-container{
+        width: 30%;
+    }
+
+    .game-options{
+        justify-content: center;
+    }
+
+    .personalization-main{
+       padding: 5vh;
+    }
+}

@@ -16,14 +16,14 @@
     body{
         color: var(--white);
         font-family: 'Montserrat', sans-serif;
-        background: linear-gradient(180deg, rgba(3, 172, 152, 1) 29%, rgba(51, 116, 193, 1) 57%, rgba(189, 255, 105, 1) 83%);
+        background: linear-gradient(193deg, rgba(3, 172, 152, 1) 29%, rgba(51, 116, 193, 1) 57%, rgba(189, 255, 105, 1) 83%);
         background-repeat: no-repeat;
         display: inline-block;
     }
 
     select, input[type=text], button{
         width: 30vh;
-        background-color: #F4D35E;
+        background-color: var(--quaternary);
         border: 0;
         color: white;
         margin: 10px 0;
@@ -54,7 +54,10 @@
         padding: 20px 15px;
         margin: 5%;
         gap: 5%;
+        justify-content: center;
+        display: flex;
     }
+
 
     main section{
         width: 50%;
@@ -62,16 +65,6 @@
 
     .content{
         display: block;
-    }
-
-    .about-main section{
-        width: 100%;
-    }
-
-    .about-main{
-        gap: 10%;
-        justify-content: center;
-        display: flex;
     }
 
     .avatar-choice{
@@ -90,13 +83,6 @@
         padding-top: 0;
     }
 
-    .personalization-main{
-        height: 100%;
-        background-color: var(--tertiary);
-        border-radius: 20px;
-        margin: 5% 5% 15% 5%;
-    }
-
     .personalization form{
         display: block;
     }
@@ -111,6 +97,10 @@
 
     .submitBtn{
         margin-top: 5vh;
+    }
+
+    .game-container{
+        flex: 30%;
     }
 
     .playersList{

@@ -5,10 +5,12 @@
         <p>If you have any questions or suggestions, please contact us by e-mail :</p>
         <div>
             <span id="email">owen.donnars@gmail.com</span>
-            <img class="email-icon" src="../../assets/copy.svg" alt="Email Icon" width="20" height="20" onclick="copyEmail()">
+            <img class="email-icon" src="../../assets/copy.svg" alt="Email Icon" width="20" height="20" @click="copyEmail()">
         </div>
     </div>
-    <footerApp></footerApp>
+    <div class="footer">
+        <footerApp></footerApp>
+    </div>
 </template>
 <style lang="scss or less">
     import './contact.css';

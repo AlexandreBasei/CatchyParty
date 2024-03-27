@@ -23,23 +23,44 @@
                         
                     </select>
                     <br>
+                    <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
+                </form>
+                <div>
                     <h3>Game selection</h3>
 
                     <div class="game-options">
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 1"></div>
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 2"></div>
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 3"></div>
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 4"></div>
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 5"></div>
-                        <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 6"></div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 1"></div>
+                            <p>Game1</p>
+                        </div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 2"></div>
+                            <p>Game2</p>
+                        </div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 3"></div>
+                            <p>Game3</p>
+                        </div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 4"></div>
+                            <p>Game4</p>
+                        </div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 5"></div>
+                            <p>Game5</p>
+                        </div>
+                        <div class="game-container">
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 6"></div>
+                            <p>Game6</p>
+                        </div>
                     </div>
-                    <br>
-                    <input type="submit" value="Select" class="submitBtn">
-                </form>
+                </div>
             </section>
         </main>
     </div>
-    <footerApp></footerApp>
+    <div class="footer">
+        <footerApp></footerApp>
+    </div>
 </template>
 
 <script>

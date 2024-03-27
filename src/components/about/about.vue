@@ -14,7 +14,9 @@
             <p>We believe that music has the power to bring people together and create moments of joy and connection. By combining music and games, we aim to provide a platform where users can have fun, express their creativity, and share their passion for music with others.</p>
         </section>
     </main>
-    <footerApp></footerApp>
+    <div class="footer">
+        <footerApp></footerApp>
+    </div>
 </template>
 <style lang="scss or less">
     import './about.css';

@@ -15,11 +15,20 @@ body{
     color: var(--white);
     font-family: 'Montserrat', sans-serif;
     background: rgb(3,172,152);
-    background: linear-gradient(90deg, rgba(3,172,152,1) 29%, rgba(51,116,193,1) 57%, rgba(189,255,105,1) 83%);
+    background: linear-gradient(193deg, rgba(3,172,152,1) 29%, rgba(51,116,193,1) 57%, rgba(189,255,105,1) 83%);
     background-repeat: no-repeat;
     background-size: cover;
     width: 100%;
     margin: 0;
+}
+
+.content{
+    height: 80vh;
+    overflow: auto;
+}
+
+input[type=submit]:hover{
+    cursor: pointer;
 }
 
 
@@ -72,22 +81,6 @@ main section{
 }
 .selected {
     background-color: var(--secondary);
-}
-
-.playersList{
-    background-color: var(--tertiary);
-    border-radius: 20px;
-    margin: 2% 5% 0 5%;
-    padding: 20px;
-}
-
-.playersList h3{
-    margin: 0 0 15px 0;
-    text-align: center;
-}
-
-.playersList p{
-    margin: 0 0 0 0;
 }
 
 .playersContainer{

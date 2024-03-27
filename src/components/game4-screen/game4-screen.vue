@@ -7,7 +7,7 @@
 <script lang="ts">
 
 export default({
-  name: 'game4-screen',
+  name: 'game4_screen',
   components: {
 
   }

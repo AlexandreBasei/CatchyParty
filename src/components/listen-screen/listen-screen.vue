@@ -1,5 +1,7 @@
 <template>
-
+  <div class="bg">
+    <h1>Listen ...</h1>
+  </div>
 </template>
 <style lang="scss or less">
     import './listen-screen.css';

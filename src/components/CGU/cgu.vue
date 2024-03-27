@@ -38,7 +38,9 @@
             </p>
         </section>
     </main>
-    <footerApp></footerApp>
+    <div class="footer">
+        <footerApp></footerApp>
+    </div>
 </template>
 <style lang="scss or less">
     import './cgu.css';

@@ -29,7 +29,9 @@
             <div id="tutorial" class="tutorial-box">{{ tutorialText }}</div>
         </section>
     </main>
-    <footerApp></footerApp>
+    <div class="footer">
+        <footerApp></footerApp>
+    </div>
 </template>
 <style lang="scss or less">
 import './homepage.css';
