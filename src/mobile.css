@@ -1,0 +1,133 @@
+@media only screen and (max-width: 600px) {
+
+    :root{
+        --primary: #28AFB0;
+        --secondary: #FF570A;
+        --tertiary: #19647E;
+        --quaternary: #F4D35E;
+        --quinary: #14121A;
+    
+        --black: #14080E;
+        --white: #FFFFFF;
+    }
+
+    /* elements */
+
+    body{
+        color: var(--white);
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(193deg, rgba(3, 172, 152, 1) 29%, rgba(51, 116, 193, 1) 57%, rgba(189, 255, 105, 1) 83%);
+        background-repeat: no-repeat;
+        display: inline-block;
+    }
+
+    select, input[type=text], button{
+        width: 30vh;
+        background-color: var(--quaternary);
+        border: 0;
+        color: white;
+        margin: 10px 0;
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    input[type=submit]{
+        background-color: #F4D35E;
+        border: 0;
+        color: white;
+        margin: 10px 0;
+        padding: 5px;
+        border-radius: 10px;
+        width: 30vh;
+    }
+
+    label{
+        margin-bottom: 10px;
+    }
+
+    /* main */
+
+    main{
+        flex-wrap: wrap;
+        height: 75vh;
+        text-align: center;
+        padding: 20px 15px;
+        margin: 5%;
+        gap: 5%;
+        justify-content: center;
+        display: flex;
+    }
+
+
+    main section{
+        width: 50%;
+    }
+
+    .content{
+        display: block;
+    }
+
+    .avatar-choice{
+        justify-content: center;
+        display: grid;
+    }
+
+    .submit{
+        justify-content: center;
+        display: flex;
+        margin-top: 1em;
+    }
+
+    .personalization{
+        margin: auto;
+        padding-top: 0;
+    }
+
+    .personalization form{
+        display: block;
+    }
+
+    .tutorial{
+        width: 40vh;
+    }
+
+    .settings{
+        width: 100%;
+    }
+
+    .submitBtn{
+        margin-top: 5vh;
+    }
+
+    .game-container{
+        flex: 30%;
+    }
+
+    .playersList{
+        margin: 5%;
+    }
+    
+
+    .playersList p{
+        font-size: 0.8em;
+    }
+
+    .playersContainer{
+        display: flex;
+    }
+
+    .playerContainer{
+        flex: 25%;
+        display: grid;
+    }
+
+    .playerContainer img{
+        margin: auto;
+    }
+
+    .playerContainer p{
+        text-align: center;
+        margin-top: 5px;
+    }
+    
+  }

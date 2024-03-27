@@ -9,12 +9,26 @@
     --white: #FFFFFF;
 }
 
+
+
 body{
     color: var(--white);
     font-family: 'Montserrat', sans-serif;
-    background: url('./assets/svg/motif1.svg'), var(--black);
-    background-size: 100px 100px;
-    background-repeat: repeat;
+    background: rgb(3,172,152);
+    background: linear-gradient(193deg, rgba(3,172,152,1) 29%, rgba(51,116,193,1) 57%, rgba(189,255,105,1) 83%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    margin: 0;
+}
+
+.content{
+    height: 80vh;
+    overflow: auto;
+}
+
+input[type=submit]:hover{
+    cursor: pointer;
 }
 
 
@@ -59,7 +73,7 @@ main section{
 }
 .game {
     flex: 30%;
-    background-color: var(--tertiary);
+    background-color: var(--primary);
     padding: 10px;
     margin: 5px;
     border-radius: 15px;
@@ -67,22 +81,6 @@ main section{
 }
 .selected {
     background-color: var(--secondary);
-}
-
-.playersList{
-    background-color: var(--primary);
-    border-radius: 20px;
-    margin: 2% 5% 0 5%;
-    padding: 20px;
-}
-
-.playersList h3{
-    margin: 0 0 15px 0;
-    text-align: center;
-}
-
-.playersList p{
-    margin: 0 0 0 0;
 }
 
 .playersContainer{

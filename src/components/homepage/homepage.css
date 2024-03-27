@@ -39,3 +39,58 @@
 .email-icon{
     cursor: pointer;
 }
+
+@media only screen and (max-width: 600px) {
+
+    footer{
+        display: grid;
+        align-items: center;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    body{
+        height: 100vh;
+    }
+
+    .personalization, .tutorial{
+        margin: auto;
+    }
+
+    .footer{
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+
+    select, input[type=text], button{
+        width: 30vh;
+        background-color: var(--quaternary);
+        border: 0;
+        color: white;
+        margin: 10px 0;
+        padding: 5px;
+        border-radius: 10px;
+    }
+
+    input[type=submit]{
+        background-color: var(--quaternary);
+        border: 0;
+        color: white;
+        margin: 10px 0;
+        padding: 5px;
+        border-radius: 10px;
+        width: 30vh;
+    }
+
+    .avatar-choice{
+        justify-content: center;
+        display: grid;
+    }
+
+    .submit{
+        justify-content: center;
+        display: flex;
+        margin-top: 1em;
+    }
+}

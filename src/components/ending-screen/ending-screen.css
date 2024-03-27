@@ -1,0 +1,43 @@
+
+
+.rewardCont{
+    display: flex;
+}
+
+.rewards{
+    display: grid;
+    width: 50%;
+    justify-content: center;
+}
+
+.secRewards{
+    display: flex;
+    gap: 10vh;
+}
+
+.secRewards p{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.secRewardsCont{
+    display: grid;
+    justify-content: center;
+    gap: 2vh;
+}
+
+.textP{
+    margin: 5vh 0 !important;
+}
+
+@media only screen and (max-width: 600px) {
+    
+    .submitBtn{
+        margin-bottom: 2vh !important;
+        margin-top: 2vh !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+}

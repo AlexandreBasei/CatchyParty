@@ -1,0 +1,39 @@
+@import url('../game1-screen/game1-screen.css');
+
+:root{
+    --primary: #28AFB0;
+    --secondary: #FF570A;
+    --tertiary: #19647E;
+    --quaternary: #F4D35E;
+    --quinary: #14121A;
+
+    --black: #14080E;
+    --white: #FFFFFF;
+}
+
+h2{
+    color: var(--secondary);
+}
+
+#manager{
+    background: var(--quaternary);
+}
+
+@media only screen and (max-width: 600px) {
+
+    .content{
+        overflow: scroll;
+    }
+
+    .chrono{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .chrono{
+        position: absolute;
+        right: 10vh;
+        top: 10vh;
+    }
+}
