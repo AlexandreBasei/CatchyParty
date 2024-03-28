@@ -1,26 +1,48 @@
 <template>
-    <headerApp></headerApp>
     <div class="content">
         <section class="playersList">
             <h3>Players</h3>
-            <div class="playersContainer">
-                <div class="playerContainer">
-                    <img class="player-icon" id="avatarImg" alt="player 1">
-                    <p id="pseudoPlayer1"></p>
+            <div class="playersContainer" v-for="room in rooms" :key="room.id">
+                <div class="playerContainer" v-if="room.id === player.roomId">
+                    <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
+
+                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="../../assets/Avatar1.png"
+                            id="avatarImg" alt="Avatar">
+                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="../../assets/Avatar2.png"
+                            id="avatarImg" alt="Avatar">
+                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="../../assets/Avatar3.png"
+                            id="avatarImg" alt="Avatar">
+
+                        <p id="pseudoPlayer1">{{ rplayer.username }}</p>
+                        <span v-if="rplayer.host">👑</span>
+                        <button v-if="player.host && rplayer.socketId !== player.socketId"
+                            @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
+                            <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#000000"
+                                class="bi bi-three-dots-vertical">
+                                <path
+                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                            </svg>
+                        </button>
+                        <div v-bind:id="rplayer.socketId" class="hostMenu">
+                            <button @click="setHost(rplayer)">Define new room's host</button>
+                            <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
         <main class="personalization-main">
             <section class="settings">
+                <p id="shareLink" @click="copy(`localhost:8080?room=${this.player.roomId}`)">Copier le lien d'invitation</p>
                 <form>
                     <label for="nbPlayers">Number of players</label>
                     <select id="nbPlayers">
-                        
+
                     </select>
                     <br>
                     <label for="nbRounds">Number of rounds</label>
                     <select id="nbRounds">
-                        
+
                     </select>
                     <br>
                     <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
@@ -30,27 +52,33 @@
 
                     <div class="game-options">
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 1"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 1"></div>
                             <p>Game1</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 2"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 2"></div>
                             <p>Game2</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 3"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 3"></div>
                             <p>Game3</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 4"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 4"></div>
                             <p>Game4</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 5"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 5"></div>
                             <p>Game5</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png" alt="Game 6"></div>
+                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
+                                    alt="Game 6"></div>
                             <p>Game6</p>
                         </div>
                     </div>
@@ -58,35 +86,127 @@
             </section>
         </main>
     </div>
-    <div class="footer">
-        <footerApp></footerApp>
-    </div>
 </template>
 
-<script>
-    import footerApp from '../footer/footer.vue';
-    import headerApp from '../header/header.vue'; 
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import io from 'socket.io-client';
 
-export default {
+interface Room {
+    id: string;
+    players: {
+        host: boolean,
+        avatar: string,
+        roomId: string,
+        socketId: string,
+        username: string,
+        turn: boolean,
+        win: boolean,
+    }[];
+}
+
+interface Player {
+    host: boolean,
+    avatar: string,
+    roomId: string,
+    socketId: string,
+    username: string,
+    turn: boolean,
+    win: boolean,
+}
+
+export default defineComponent({
     name: 'game_select',
-    components: {
-            footerApp,
-            headerApp,
-        },
+
+    props: {
+        socket: {
+            type: Object,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            rooms: [] as Room[],
+            currentRoom: '',
+            player: {} as Player,
+            avatarPath: "",
+        }
+    },
+
     mounted() {
+
+        this.socket.on('join room', (player: any) => {
+            this.player = player;
+            this.avatarPath = `../../assets/${player.avatar}.png`;
+        });
+
+        this.socket.on('new host', (newHostId: string) => {
+            if (this.player.socketId === newHostId) {
+                this.player.host = true;
+            }
+        });
+
+        this.socket.on('kicked', (kickedId: string) => {
+            if (this.player.socketId === kickedId) {
+                this.exitRoom();
+                console.log('kicked');
+            }
+        });
+
+        setInterval(() => {
+            this.updRooms();
+        }, 20);
+
         this.roundsNumber();
         this.playersNumber();
         this.updateAvatar();
     },
     methods: {
+        updRooms() {
+            this.socket.emit('get rooms');
+
+            this.socket.on('list rooms', (rooms: Room[]) => {
+                this.rooms = rooms;
+            });
+        },
+
+        exitRoom() {
+            this.rooms.forEach(room => {
+                if (room.id === this.currentRoom) {
+                    this.player.host = false;
+                    this.player.username = "";
+                    this.player.roomId = "";
+                    this.player.turn = false;
+                    this.player.win = false;
+                    this.socket.emit("exit room");
+                    window.location.reload();
+                }
+            });
+        },
+
+        kickPlayer(socketId: string) {
+            this.rooms.forEach(room => {
+                if (room.id === this.currentRoom) {
+                    this.socket.emit("kick player", socketId);
+                }
+            });
+        },
+
+        copy(text: string) {
+            navigator.clipboard.writeText(text);
+        },
+
         playersNumber() {
             var selectElement = document.getElementById("nbPlayers");
 
             for (var i = 1; i <= 10; i++) {
                 var option = document.createElement("option");
-                option.text = i;
-                option.value = i;
-                selectElement.appendChild(option);
+                option.text = i.toString();
+                option.value = i.toString();
+                if (selectElement) {
+                    selectElement.appendChild(option);
+                }
             }
         },
         roundsNumber() {
@@ -94,21 +214,25 @@ export default {
 
             for (var i = 1; i <= 3; i++) {
                 var option = document.createElement("option");
-                option.text = i;
-                option.value = i;
-                selectElement.appendChild(option);
+                option.text = i.toString();
+                option.value = i.toString();
+                if (selectElement) {
+                    selectElement.appendChild(option);
+                }
             }
         },
-        toggleSelection(event) {
-            event.currentTarget.classList.toggle("selected");
+        toggleSelection(event: MouseEvent) {
+            if (event.currentTarget instanceof HTMLElement) {
+                event.currentTarget.classList.toggle("selected");
+            }
         },
         updateAvatar() {
             var img = document.getElementById('avatarImg');
             var avatarPath = this.getAvatar();
-            img.src = avatarPath;
-            var img1 = document.getElementById('pseudoPlayer1');
-            var pseudoText = this.getPseudo();
-            img1.textContent = pseudoText;
+            // img.src = avatarPath;
+            // var img1 = document.getElementById('pseudoPlayer1');
+            // var pseudoText = this.getPseudo();
+            // img1.textContent = pseudoText;
         },
         getAvatar() {
             var avatar = localStorage.getItem('selectedAvatar');
@@ -131,9 +255,141 @@ export default {
             }
         }
     }
-}
+})
 </script>
 
 <style scoped>
-    @import './game-select.css';
+.playerContainer img {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.personalization-main {
+    background-color: var(--tertiary);
+    border-radius: 20px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul li {
+    width: fit-content;
+}
+
+.hostMenuButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 0px;
+    height: 15px;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.hostMenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    width: 20vw;
+    flex-flow: wrap row;
+    align-items: start;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.hostMenu button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.hostMenu button:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hostMenu button:first-child {
+    border-bottom: 1px solid black;
+}
+
+#shareLink {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#shareLink:active {
+    transform: scale(1.05);
+}
+
+@media only screen and (max-width: 600px) {
+
+    .personalization-main {
+        height: auto;
+        margin: 5% 5% 15% 5%;
+    }
+
+    header {
+        height: 10vh;
+    }
+
+    footer {
+        height: 5vh;
+    }
+
+    .player-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .playersList {
+        background-color: var(--tertiary);
+        border-radius: 20px;
+        margin: 2% 5% 0 5%;
+        padding: 20px;
+        display: flex;
+        flex-flow: wrap row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .playersList h3 {
+        margin: 0 0 15px 0;
+        text-align: center;
+    }
+
+    .playersList p {
+        margin: 0 0 0 0;
+    }
+}
+
+@media only screen and (min-width: 1000px) {
+    .playersList {
+        background-color: var(--tertiary);
+        border-radius: 20px;
+        margin: 2% 5% 0 5%;
+        padding: 20px;
+        width: 25%;
+    }
+
+    .settings {
+        width: auto;
+        display: flex;
+        gap: 10vh;
+    }
+
+    .game-container {
+        width: 30%;
+    }
+
+    .game-options {
+        justify-content: center;
+    }
+
+    .personalization-main {
+        padding: 5vh;
+    }
+}
 </style>

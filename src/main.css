@@ -89,7 +89,18 @@ main section{
 
 .playerContainer{
     flex: 25%;
-    display: grid;
+    display: flex;
+    flex-flow: wrap column;
+    align-items: center;
+    justify-content: center;
+}
+
+.playerContainer div{
+    display: flex;
+    flex-flow: nowrap row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
 }
 
 .playerContainer img{
@@ -98,7 +109,7 @@ main section{
 
 .playerContainer p{
     text-align: center;
-    margin-top: 5px;
+    /* margin-top: 5px; */
 }
 
 .submitBtn{

@@ -51,8 +51,7 @@ io.on('connection', (socket) => {
         }
 
         socket.join(room.id);
-
-        io.to(socket.id).emit('join room', room.id);
+        io.to(socket.id).emit('join room', player);
     });
 
     socket.on('get rooms', () => {

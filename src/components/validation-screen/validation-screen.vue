@@ -60,9 +60,7 @@
         <footerApp></footerApp>
     </div> -->
 </template>
-<style lang="scss or less">
-    import './validation-screen.css';
-</style>
+
 <script lang="ts">
     /* import footerApp from '../footer/footer.vue'; */
     import headerApp from '../header/header.vue'; 
@@ -74,3 +72,7 @@ export default({
   }
 });
 </script>
+
+<style lang="scss or less">
+    import './validation-screen.css';
+</style>

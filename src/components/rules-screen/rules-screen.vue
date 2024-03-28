@@ -1,31 +1,75 @@
 <template>
-    <headerApp></headerApp>
+  <headerApp></headerApp>
   <div class="rulesCont">
     <h3>Rules</h3>
     <hr>
     <p>
       Welcome to the world ..... The goal of the game, choose the best card corresponding to the situation described.
-    <br><br>
+      <br><br>
       Use the title, the name of the album or the artist to be the funniest of your friends.
-    <br><br>
-      You must be as creative as possible in order to be selected to be the manager (the one who decides who is the funniest).
-    <br><br>
+      <br><br>
+      You must be as creative as possible in order to be selected to be the manager (the one who decides who is the
+      funniest).
+      <br><br>
       Score as many points as possible to hope to earn the gold note and add it to your collection.
     </p>
   </div>
   <input type="submit" value="Suivant" class="submitBtn" style="margin: auto;">
-  <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony">
+  <img src="/img/symfony.svg" alt="symfony" class="symfony">
 </template>
-<style lang="scss or less">
-    import './rules-screen.css';
-</style>
-<script lang="ts">
-import headerApp from '../header/header.vue'; 
 
-export default({
+<script lang="ts">
+import headerApp from '../header/header.vue';
+
+export default ({
   name: 'rules-screen',
   components: {
     headerApp,
   }
 });
 </script>
+
+<style scoped>
+    :root{
+    --primary: #28AFB0;
+    --secondary: #FF570A;
+    --tertiary: #19647E;
+    --quaternary: #F4D35E;
+    --quinary: #14121A;
+
+    --black: #14080E;
+    --white: #FFFFFF;
+}
+
+.rulesCont{
+    background: var( --tertiary);
+    border-radius: 20px;
+    margin: 2vh;
+    padding: 2vh;
+}
+
+.rulesCont p{
+    text-align: left;
+}
+
+.submitBtn{
+    margin-top: 5vh !important;
+}
+
+@media only screen and (min-width: 1000px) {
+    .rulesCont p{
+        text-align: center;
+    }
+
+    .rulesCont{
+        background: var( --tertiary);
+        border-radius: 20px;
+        margin: auto;
+        padding: 2vh;
+        width: 100vh;
+    }
+    
+}
+
+
+</style>

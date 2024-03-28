@@ -1,17 +1,23 @@
-
 <template>
     <header>
         <RouterLink to="/">
-            <img alt="logo" src="@/assets/logo.svg">
+            <img alt="logo" src="../../assets/logo.svg">
         </RouterLink>
-            
+
     </header>
 </template>
-<style lang="scss or less">
-    import './header.css';
+<style scoped>
+    header{
+    justify-content: center;
+    display: flex;
+}
+
+header a{
+    margin-top: 15px;
+}
 </style>
 <script>
-    export default({
+export default ({
     name: 'headerApp',
-    });
+});
 </script>
