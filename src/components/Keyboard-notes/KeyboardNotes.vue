@@ -38,8 +38,7 @@
 
 import './style.css';
 
-import { defineComponent, ref, onMounted } from 'vue';
-import jsonData from '../../assets/artists.json';
+import { defineComponent } from 'vue';
 import io from 'socket.io-client';
 import { Howl } from 'howler';
 
@@ -65,7 +64,7 @@ export default defineComponent({
             showTimer: false,
             remainingTime: 0,
             roundDuration: 60, // Durée de chaque tour en secondes
-            timerInterval: null,
+            timerInterval: 0,
         }
     },
     // Ici tout le code procédural
@@ -118,7 +117,7 @@ export default defineComponent({
 
                 // Load the sound for this note
                 this.sounds[note] = new Howl({
-                    src: [`sounds/${note}.mp3`] // Path to local audio files
+                    src: [`./sounds/${note}.mp3`] // Path to local audio files
                 });
 
                 // Store the note and its duration
@@ -168,7 +167,7 @@ export default defineComponent({
         playSound(note: string) {
             // Charger et jouer le son correspondant à la note
             const sound = new Howl({
-                src: [`sounds/${note}.mp3`] // Path to local audio files
+                src: [`./sounds/${note}.mp3`] // Path to local audio files
             });
             sound.play();
         },
@@ -207,33 +206,31 @@ export default defineComponent({
         // },
 
         playRound() {
-            if (this.timerInterval !== null) {
-                this.timerInterval = setInterval(() => {
-                    if (this.remainingTime <= 0) {
-                        clearInterval(this.timerInterval);
-                        this.timerInterval = null;
-                        this.currentRound++;
-                        if (this.currentRound < this.maxRounds) {
-                            // Démarre le prochain tour si ce n'est pas le dernier
-                            this.remainingTime = this.roundDuration;
-                            this.playRound();
-                        } else {
-                            // Termine le jeu si tous les tours sont joués
-                            this.showTimer = false;
-                            console.log('Fin du jeu');
-                        }
+            this.timerInterval = window.setInterval(() => {
+                if (this.remainingTime <= 0) {
+                    clearInterval(this.timerInterval);
+                    this.timerInterval = 0;
+                    this.currentRound++;
+                    if (this.currentRound < this.maxRounds) {
+                        // Démarre le prochain tour si ce n'est pas le dernier
+                        this.remainingTime = this.roundDuration;
+                        this.playRound();
                     } else {
-                        if (this.showMainGame) {
-                            this.showMainGame = false;
-                            this.showAfterGame = true; // Afficher la section after-game après le tour principal
-                        } else {
-                            this.showMainGame = true;
-                            this.showAfterGame = false; // Réafficher la section main-game après le tour after-game
-                        }
-                        this.remainingTime--;
+                        // Termine le jeu si tous les tours sont joués
+                        this.showTimer = false;
+                        console.log('Fin du jeu');
                     }
-                }, 1000);
-            }
+                } else {
+                    if (this.showMainGame) {
+                        this.showMainGame = false;
+                        this.showAfterGame = true; // Afficher la section after-game après le tour principal
+                    } else {
+                        this.showMainGame = true;
+                        this.showAfterGame = false; // Réafficher la section main-game après le tour after-game
+                    }
+                    this.remainingTime--;
+                }
+            }, 1100000);
         },
 
         formatTime(seconds: number): string {
