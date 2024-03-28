@@ -1,21 +1,24 @@
 <template>
     <div>
+        <div id="timer">
+            Temps restant : {{ remainingTime }} secondes
+        </div>
         <div class="main-game" v-show="showMainGame">
             <div id="piano">
-                <div class="key" data-note="A0" @click="playSound('A0')" draggable="true" v-bind:id="noteID()">A0</div>
-                <div class="key" data-note="A1" @click="playSound('A1')" draggable="true" v-bind:id="noteID()">A1</div>
-                <div class="key" data-note="A2" @click="playSound('A2')" draggable="true" v-bind:id="noteID()">A2</div>
-                <div class="key" data-note="B0" @click="playSound('B0')" draggable="true" v-bind:id="noteID()">B0</div>
-                <div class="key" data-note="B1" @click="playSound('B1')" draggable="true" v-bind:id="noteID()">B1</div>
-                <div class="key" data-note="B2" @click="playSound('B2')" draggable="true" v-bind:id="noteID()">B1</div>
-                <div class="key" data-note="C1" @click="playSound('C1')" draggable="true" v-bind:id="noteID()">C1</div>
-                <div class="key" data-note="C2" @click="playSound('C2')" draggable="true" v-bind:id="noteID()">C2</div>
-                <div class="key" data-note="C3" @click="playSound('C3')" draggable="true" v-bind:id="noteID()">C3</div>
-                <div class="key" data-note="D1" @click="playSound('D1')" draggable="true" v-bind:id="noteID()">D1</div>
-                <div class="key" data-note="D2" @click="playSound('D2')" draggable="true" v-bind:id="noteID()">D2</div>
-                <div class="key" data-note="D3" @click="playSound('D3')" draggable="true" v-bind:id="noteID()">D3</div>
-                <div class="key" data-note="E1" @click="playSound('E1')" draggable="true" v-bind:id="noteID()">E1</div>
-                <div class="key" data-note="E2" @click="playSound('E2')" draggable="true" v-bind:id="noteID()">E2</div>
+                <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
+                <div class="key" data-note="A1" @click="playSound('A1')" draggable="true">A1</div>
+                <div class="key" data-note="A2" @click="playSound('A2')" draggable="true">A2</div>
+                <div class="key" data-note="B0" @click="playSound('B0')" draggable="true">B0</div>
+                <div class="key" data-note="B1" @click="playSound('B1')" draggable="true">B1</div>
+                <div class="key" data-note="B2" @click="playSound('B2')" draggable="true">B1</div>
+                <div class="key" data-note="C1" @click="playSound('C1')" draggable="true">C1</div>
+                <div class="key" data-note="C2" @click="playSound('C2')" draggable="true">C2</div>
+                <div class="key" data-note="C3" @click="playSound('C3')" draggable="true">C3</div>
+                <div class="key" data-note="D1" @click="playSound('D1')" draggable="true">D1</div>
+                <div class="key" data-note="D2" @click="playSound('D2')" draggable="true">D2</div>
+                <div class="key" data-note="D3" @click="playSound('D3')" draggable="true">D3</div>
+                <div class="key" data-note="E1" @click="playSound('E1')" draggable="true">E1</div>
+                <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
             <button id="play">Play</button>
@@ -43,6 +46,7 @@ import io from 'socket.io-client';
 import { Howl } from 'howler';
 
 interface Notes {
+    id: string,
     note: string,
     duration: number,
     interval: number,
@@ -63,8 +67,10 @@ export default defineComponent({
             maxRounds: 3,
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 60, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
+            interRoundDuration: 30,
             timerInterval: 0,
+            RoundPassed: false,
         }
     },
     // Ici tout le code procédural
@@ -89,6 +95,7 @@ export default defineComponent({
             if (event instanceof DragEvent) {
                 const note = event.dataTransfer?.getData("text/plain") || "";
                 const noteElement = document.createElement("div");
+                noteElement.id = this.noteID();
                 noteElement.className = "note";
                 noteElement.textContent = note;
                 noteElement.dataset.duration = "1"; // Default duration
@@ -99,7 +106,7 @@ export default defineComponent({
                 durationInput.step = "0.1";
                 durationInput.value = "1";
                 durationInput.addEventListener("change", () => {
-                    this.updateDuration(note, parseFloat(durationInput.value));
+                    this.updateDuration(noteElement.id, parseFloat(durationInput.value));
                 });
                 noteContainer.appendChild(noteElement);
                 noteContainer.appendChild(durationInput);
@@ -111,7 +118,7 @@ export default defineComponent({
                 intervalInput.step = "0.1";
                 intervalInput.value = "0";
                 intervalInput.addEventListener("change", () => {
-                    this.updateInterval(note, parseFloat(intervalInput.value));
+                    this.updateInterval(noteElement.id, parseFloat(intervalInput.value));
                 });
                 noteContainer.appendChild(intervalInput);
 
@@ -121,7 +128,7 @@ export default defineComponent({
                 });
 
                 // Store the note and its duration
-                this.notesDuration.push({ note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) });
+                this.notesDuration.push({ id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) });
             }
         });
 
@@ -142,18 +149,18 @@ export default defineComponent({
     },
     //Ici les fonctions (méthodes)
     methods: {
-        updateDuration(note: string, duration: number) {
+        updateDuration(id: string, duration: number) {
             for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].note === note) {
+                if (this.notesDuration[i].id === id) {
                     this.notesDuration[i].duration = duration;
                     break;
                 }
             }
         },
 
-        updateInterval(note: string, interval: number) {
+        updateInterval(id: string, interval: number) {
             for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].note === note) {
+                if (this.notesDuration[i].id === id) {
                     this.notesDuration[i].interval = interval;
                     break;
                 }
@@ -181,57 +188,45 @@ export default defineComponent({
             this.currentRound = 0;
             this.playRound();
         },
-        // playRound() {
-        //     const roundDuration = 60; // Durée de chaque tour en secondes
-
-        //     // Timer pour le tour actuel
-        //     const timer = setInterval(() => {
-        //         this.currentRound++;
-        //         if (this.currentRound === 3) {
-        //             clearInterval(timer); // Arrêter le timer si c'est le troisième tour
-        //             this.showMainGame = false;
-        //             this.showAfterGame = false;
-        //             this.showEndGame = true; // Afficher la section end-game
-        //         }
-        //         else {
-        //             if (this.showMainGame) {
-        //                 this.showMainGame = false;
-        //                 this.showAfterGame = true; // Afficher la section after-game après le tour principal
-        //             } else {
-        //                 this.showMainGame = true;
-        //                 this.showAfterGame = false; // Réafficher la section main-game après le tour after-game
-        //             }
-        //         }
-        //     }, roundDuration * 1000);
-        // },
 
         playRound() {
             this.timerInterval = window.setInterval(() => {
                 if (this.remainingTime <= 0) {
+
                     clearInterval(this.timerInterval);
+
                     this.timerInterval = 0;
                     this.currentRound++;
+
+
                     if (this.currentRound < this.maxRounds) {
                         // Démarre le prochain tour si ce n'est pas le dernier
-                        this.remainingTime = this.roundDuration;
-                        this.playRound();
+                        this.showMainGame = false;
+                        this.showAfterGame = true;
+
+                        setTimeout(() => {
+                            console.log("c'est bon mon gars");
+                            this.showMainGame = true;
+                            this.showAfterGame = false; // Cacher la div après 30 secondes
+                            this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
+                            this.playRound(); // Appeler la fonction playRound() pour démarrer un nouveau tour
+                        }, 30000); // 30 secondes
                     } else {
                         // Termine le jeu si tous les tours sont joués
                         this.showTimer = false;
+                        clearInterval(this.timerInterval);
+                        this.showMainGame = false;
+                        this.showAfterGame = false;
+                        this.showEndGame = true; // Afficher la section end-game
                         console.log('Fin du jeu');
                     }
                 } else {
-                    if (this.showMainGame) {
-                        this.showMainGame = false;
-                        this.showAfterGame = true; // Afficher la section after-game après le tour principal
-                    } else {
-                        this.showMainGame = true;
-                        this.showAfterGame = false; // Réafficher la section main-game après le tour after-game
-                    }
                     this.remainingTime--;
                 }
-            }, 1100000);
+            }, 1000);
         },
+
+
 
         formatTime(seconds: number): string {
             const minutes: number = Math.floor(seconds / 60);
