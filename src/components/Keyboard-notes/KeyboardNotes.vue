@@ -1,7 +1,18 @@
 <template>
     <div>
-        <div id="timer">
+        <!-- Affichage du temps restant -->
+        <div id="timer" v-show="timerInGame">
             Temps restant : {{ remainingTime }} secondes
+        </div>
+
+        <!-- Affichage du temps restant dans le décompte des 30 secondes -->
+        <div id="countdown" v-show="timerInterGame">
+            Temps restant : {{ secondsLeft }} secondes
+        </div>
+        <div class="first-step" v-show="firstStepGame">
+            <label for="userIdea">Entrez ce que vous souhaitez faire jouer à vos giga brows :</label>
+            <input type="text" v-model="userIdeaInput" placeholder="Depeche toi...">
+            <button @click="submitIdea()">SUBMIT TON IDEE LE S</button>
         </div>
         <div class="main-game" v-show="showMainGame">
             <div id="piano">
@@ -24,17 +35,19 @@
             <button id="play">Play</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
-            <button id="play">AFTER ROUND</button>
-        </div>
-        <div class="end-game" v-show="showEndGame">
-            <button id="play">END GAME</button>
-        </div>
-        <div class="Waiting-game" v-show="showWaitingGame">
-            <button @click="startGame" v-show="!showMainGame && !showAfterGame && !showEndGame">Lancer la
-                partie</button>
+            <label for="guess">Votre guess :</label>
+            <input type="text" v-model="guessInput"
+                placeholder="Ecrivez la musique à laquelle correspond l'enchainement de notes...">
+            <button @click="PlayNotesDone()">Jouer la suite !!!!!!!!!!!!!</button>
         </div>
     </div>
-
+    <div class="end-game" v-show="showEndGame">
+        <button id="play">END GAME</button>
+    </div>
+    <div class="Waiting-game" v-show="showWaitingGame">
+        <button @click="startGame" v-show="!showMainGame && !showAfterGame && !showEndGame">Lancer la
+            partie</button>
+    </div>
 </template>
 
 <script lang="ts">
@@ -52,17 +65,29 @@ interface Notes {
     interval: number,
 }
 
+interface UserXidea {
+    idUser: string;
+    idea: string;
+}
+
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
     data() {
         return {
             sounds: {} as Record<string, Howl>,
             notesDuration: [] as Notes[],
+            userIdeaInput: '', // Variable pour stocker la valeur de l'input
+            userIdeas: [] as string[], // Tableau pour stocker les réponses
+            guessInput: '', // Variable pour stocker la valeur de l'input
+            Responses: [] as string[], // Tableau pour stocker les réponses
             socket: io('http://localhost:3000'),
+            firstStepGame: false,
             showMainGame: false,
             showAfterGame: false,
             showEndGame: false,
             showWaitingGame: true,
+            timerInterGame: false,
+            timerInGame: false,
             currentRound: 0,
             maxRounds: 3,
             showTimer: false,
@@ -70,7 +95,7 @@ export default defineComponent({
             roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 30,
             timerInterval: 0,
-            RoundPassed: false,
+            secondsLeft: 0,
         }
     },
     // Ici tout le code procédural
@@ -180,19 +205,28 @@ export default defineComponent({
         },
 
         startGame() {
-            this.showMainGame = true;
-            this.showAfterGame = false;
-            this.showEndGame = false;
-            this.showTimer = true;
-            this.remainingTime = this.roundDuration;
-            this.currentRound = 0;
-            this.playRound();
+            // this.showMainGame = true;
+            // this.showAfterGame = false;
+            // this.showEndGame = false;
+            // this.showTimer = true;
+            // this.remainingTime = this.roundDuration;
+            // this.currentRound = 0;
+            this.Firststep();
         },
 
+        Firststep() {
+            this.firstStepGame = true;
+            const sourceArray: string[] = ["Idée 1", "Idée 2", "Idée 3", "Idée 4", "Idée 5"];
+            const userXideaArray: UserXidea[] = [];
+
+            // Appel de la fonction avec un idUser spécifié
+            this.takeRandomValueAndAddToUserXidea("user123", sourceArray, userXideaArray);
+        },
         playRound() {
             this.timerInterval = window.setInterval(() => {
+                this.timerInGame = true;
+                this.timerInterGame = false;
                 if (this.remainingTime <= 0) {
-
                     clearInterval(this.timerInterval);
 
                     this.timerInterval = 0;
@@ -203,17 +237,31 @@ export default defineComponent({
                         // Démarre le prochain tour si ce n'est pas le dernier
                         this.showMainGame = false;
                         this.showAfterGame = true;
+                        this.timerInGame = false;
+                        this.timerInterGame = true;
 
-                        setTimeout(() => {
-                            console.log("c'est bon mon gars");
-                            this.showMainGame = true;
-                            this.showAfterGame = false; // Cacher la div après 30 secondes
-                            this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
-                            this.playRound(); // Appeler la fonction playRound() pour démarrer un nouveau tour
-                        }, 30000); // 30 secondes
+                        this.secondsLeft = 10;
+
+                        // Décompte des 30 secondes sur le front-end
+                        const countdownInterval = setInterval(() => {
+                            if (this.secondsLeft <= 0) {
+                                this.submitGuess();
+                                console.log(this.Responses);
+                                clearInterval(countdownInterval); // Arrêter le deuxième timer une fois les 30 secondes écoulées
+                                console.log("c'est bon mon gars");
+                                this.showMainGame = true;
+                                this.showAfterGame = false; // Cacher la div après 30 secondes
+                                this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
+                                this.playRound(); // Appeler la fonction playRound() pour démarrer un nouveau tour
+                            } else {
+                                this.secondsLeft--; // Mettre à jour le compteur de secondes
+                                console.log(this.secondsLeft);
+                            }
+                        }, 1000); // Interval mis à 100
                     } else {
                         // Termine le jeu si tous les tours sont joués
-                        this.showTimer = false;
+                        this.timerInGame = false;
+                        this.timerInterGame = false;
                         clearInterval(this.timerInterval);
                         this.showMainGame = false;
                         this.showAfterGame = false;
@@ -232,6 +280,47 @@ export default defineComponent({
             const minutes: number = Math.floor(seconds / 60);
             const sec: number = seconds % 60;
             return `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
+        },
+
+        submitIdea() {
+            this.userIdeas.push(this.userIdeaInput);
+            // Réinitialise la valeur de guessInput après l'avoir ajoutée au tableau Responses
+            this.userIdeaInput = '';
+            console.log(this.userIdeas);
+        },
+
+        submitGuess() {
+            this.Responses.push(this.guessInput);
+            // Réinitialise la valeur de guessInput après l'avoir ajoutée au tableau Responses
+            this.guessInput = '';
+        },
+
+        PlayNotesDone() {
+            console.log("ff");
+        },
+
+        takeRandomValueAndAddToUserXidea(idUser: string, sourceArray: string[], userXideaArray: UserXidea[]): void {
+            if (sourceArray.length === 0) {
+                console.log("Le tableau source est vide.");
+                return;
+            }
+
+            // Sélectionne un index aléatoire dans le tableau source
+            const randomIndex = Math.floor(Math.random() * sourceArray.length);
+
+            // Récupère la valeur à l'index aléatoire
+            const idea = sourceArray[randomIndex];
+
+            // Retire l'élément sélectionné du tableau source
+            sourceArray.splice(randomIndex, 1);
+
+            // Ajoute la valeur à userXidea avec l'idUser spécifié
+            userXideaArray.push({ idUser, idea });
+            console.log(`source array : ${sourceArray}`);
+            userXideaArray.forEach((item, index) => {
+                console.log(`[${index + 1}] IdUser: ${item.idUser}, Idea: ${item.idea}`);
+            });
+            // console.log(`Idée '${idea}' ajoutée à userXidea pour l'utilisateur '${idUser}'.`);
         },
     },
 });
