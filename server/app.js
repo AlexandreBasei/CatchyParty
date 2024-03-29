@@ -35,27 +35,40 @@ io.on('connection', (socket) => {
     // playersConnected.push(socket.id);
 
     socket.on('submitIdea', (idea, player) => {
+        let playersLENGTH = 0;
+        let isDone = false;
         rooms.forEach(room => {
-            room.players.forEach(p => {
-                if (p.roomId === room.id) {
-                    if (p.socketId !== socket.id && p.idea == false) {
+            console.log(`${player.roomId} + ${room.id}`);
+            if (player.roomId === room.id) {
+                console.log("hey");
+                room.players.forEach(p => {
+
+                    if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
                         userIdeas.push({ id: p.socketId, idea: idea });
                         p.idea = true;
-                    }
-                    if (userIdeas.length === room.players.length) {
-                        console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
-                        io.emit('MainGame');
-                        console.log(`${userIdeas.length} / ${playersConnected.length}`);
+                        isDone = !isDone;
+                        console.log(`${userIdeas.length} / ${playersLENGTH}`);
                         console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
-
                     }
-                }
 
-            });
+                    playersLENGTH = room.players.length;
+
+                });
+            }
         });
-        // socket.emit('ideaSubmitted');
+
+        if (userIdeas.length === playersLENGTH) {
+            console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
+            io.emit('MainGame', userIdeas);
+
+        }
+        socket.emit('ideaSubmitted');
         console.log(userIdeas);
+    });
+
+    socket.on('sendPlayer:3', (player) => {
+        io.to(player.socketId).emit('receivePlayer:3', player);
     });
 
     socket.on('game started', (game) => {
@@ -72,10 +85,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('random attribute', () => {
-        const assignedIdea = assignRandomIdeas(socket.id);
-        // Envoyer l'idée attribuée à ce socket
-        io.emit('assigned idea', assignedIdea);
-        console.log(`serv : assigned idea : ${assignedIdea}`);
+        console.log("hihi ^^");
     });
 
     socket.on('playerData', (player) => {

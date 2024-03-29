@@ -19,8 +19,10 @@
             <button @click="submitIdea()" :disabled="ideaSubmitted">SUBMIT TON IDEE LE S</button>
             <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
         </div>
-        <div v-if="assignedIdeaDone !== ''">
-            <p>L'idée qui vous a été attribuée est : {{ assignedIdea.idea }}</p>
+        <div v-for="idealex in assignedIdea" :key="idealex.id">
+            <div v-if="typeof idealex === 'object' && idealex.id">
+                <p>L'idée qui vous a été attribuée est : {{ idealex.idea }}</p>
+            </div>
         </div>
         <div class="main-game" v-show="showMainGame">
             <div id="piano">
@@ -82,7 +84,7 @@ export default defineComponent({
             required: true
         }
     },
-    
+
     data() {
         return {
             sounds: {} as Record<string, Howl>,
@@ -91,7 +93,6 @@ export default defineComponent({
             userIdeas: [] as string[], // Tableau pour stocker les réponses
             guessInput: '', // Variable pour stocker la valeur de l'input
             Responses: [] as string[], // Tableau pour stocker les réponses
-            socket: io('http://localhost:3000'),
             firstStepGame: false,
             ideaSubmitted: false,
             gameStarted: false,
@@ -136,6 +137,10 @@ export default defineComponent({
             });
         });
 
+        this.socket.on('receivePlayer:3', (player: any) => {
+            this.player = player;
+        });
+
         this.socket.on('ideaSubmitted', () => {
             this.ideaSubmitted = true;
         });
@@ -148,8 +153,10 @@ export default defineComponent({
             this.startGame();
         });
 
-        this.socket.on('MainGame', () => {
+        this.socket.on('MainGame', (userIdeas: any) => {
             this.socket.emit('random attribute');
+            this.assignedIdea = userIdeas;
+            console.log(this.assignedIdea);
             this.firstStepGame = false;
             this.showMainGame = true;
             this.showAfterGame = false;

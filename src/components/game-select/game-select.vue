@@ -166,7 +166,8 @@ export default defineComponent({
             console.log("GAME1 START");
             
             if (game === "game1") {
-                this.game1 = true
+                this.game1 = true;
+                this.socket.emit('sendPlayer:3', this.player);
             }
         })
 
