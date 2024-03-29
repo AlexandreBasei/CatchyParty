@@ -87,7 +87,7 @@
         </section>
     </main>
 
-    <gameSelect v-if="homepage === false" :socket="socket"></gameSelect>
+    <gameSelect v-if="!homepage" :socket="socket"></gameSelect>
 
     <div class="footer">
         <footerApp></footerApp>

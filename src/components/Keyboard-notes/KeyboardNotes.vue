@@ -76,6 +76,13 @@ interface AssignedIdea {
 
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
+    props: {
+        socket: {
+            type: Object,
+            required: true
+        }
+    },
+    
     data() {
         return {
             sounds: {} as Record<string, Howl>,

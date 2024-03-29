@@ -47,7 +47,7 @@
                     <br>
                     <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
                 </form>
-                <button @click="game1 = true">Start Game</button>
+                <button @click="start('game1')" v-if="player.host">Start Game</button>
                 <div>
                     <h3>Game selection</h3>
 
@@ -88,14 +88,14 @@
         </main>
     </div>
 
-
+    <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
     
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import io from 'socket.io-client';
-import {  } from "module";
+import Kbnotes from "../Keyboard-notes/KeyboardNotes.vue";
 
 interface Room {
     id: string;
@@ -123,6 +123,9 @@ interface Player {
 
 export default defineComponent({
     name: 'game_select',
+    components: {
+        Kbnotes,
+    },
 
     props: {
         socket: {
@@ -159,15 +162,21 @@ export default defineComponent({
             }
         });
 
+        this.socket.on('game start', (game:string) => {
+            console.log("GAME1 START");
+            
+            if (game === "game1") {
+                this.game1 = true
+            }
+        })
+
         setInterval(() => {
             this.updRooms();
         }, 20);
 
         this.roundsNumber();
         this.playersNumber();
-        this.updateAvatar();
-
-        console.log(this.player.avatar);
+        // this.updateAvatar();
         
     },
     methods: {
@@ -257,32 +266,38 @@ export default defineComponent({
                 event.currentTarget.classList.toggle("selected");
             }
         },
-        updateAvatar() {
-            var img = document.getElementById('avatarImg');
-            var avatarPath = this.getAvatar();
-            // img.src = avatarPath;
-            // var img1 = document.getElementById('pseudoPlayer1');
-            // var pseudoText = this.getPseudo();
-            // img1.textContent = pseudoText;
-        },
-        getAvatar() {
-            var avatar = localStorage.getItem('selectedAvatar');
-            if (avatar == 'Avatar 1') {
-                return '../../assets/Comparaison.png';
-            }
-            if (avatar == 'Avatar 2') {
-                return '../../assets/Realping.png';
-            }
-            if (avatar == 'Avatar 3') {
-                return '../../assets/security.png';
-            }
-        },
-        getPseudo() {
-            var pseudo = localStorage.getItem('pseudoP1');
-            if (!pseudo) {
-                return 'Randomname';
-            } else {
-                return pseudo;
+        // updateAvatar() {
+        //     var img = document.getElementById('avatarImg');
+        //     var avatarPath = this.getAvatar();
+        //     // img.src = avatarPath;
+        //     // var img1 = document.getElementById('pseudoPlayer1');
+        //     // var pseudoText = this.getPseudo();
+        //     // img1.textContent = pseudoText;
+        // },
+        // getAvatar() {
+        //     var avatar = localStorage.getItem('selectedAvatar');
+        //     if (avatar == 'Avatar 1') {
+        //         return '../../assets/Comparaison.png';
+        //     }
+        //     if (avatar == 'Avatar 2') {
+        //         return '../../assets/Realping.png';
+        //     }
+        //     if (avatar == 'Avatar 3') {
+        //         return '../../assets/security.png';
+        //     }
+        // },
+        // getPseudo() {
+        //     var pseudo = localStorage.getItem('pseudoP1');
+        //     if (!pseudo) {
+        //         return 'Randomname';
+        //     } else {
+        //         return pseudo;
+        //     }
+        // },
+
+        start(game:string) {
+            if (game === "game1") {
+                this.socket.emit('game started', game);
             }
         }
     }

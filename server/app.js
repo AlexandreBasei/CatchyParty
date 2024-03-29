@@ -58,6 +58,13 @@ io.on('connection', (socket) => {
         console.log(userIdeas);
     });
 
+    socket.on('game started', (game) => {
+        console.log("This game start : ", game);
+        if (game === "game1") {
+            io.emit('game start', game);
+        }
+    })
+
     socket.on('play', () => {
         // Émettre un événement vers tous les clients pour démarrer la partie
         io.emit('startGame');
