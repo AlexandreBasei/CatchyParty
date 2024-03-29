@@ -9,10 +9,18 @@
         <div id="countdown" v-show="timerInterGame">
             Temps restant : {{ secondsLeft }} secondes
         </div>
+        <div class="Waiting-game" v-show="showWaitingGame">
+            <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
+                :disabled="gameStarted">go tester</button>
+        </div>
         <div class="first-step" v-show="firstStepGame">
             <label for="userIdea">Entrez ce que vous souhaitez faire jouer à vos giga brows :</label>
             <input type="text" v-model="userIdeaInput" placeholder="Depeche toi...">
-            <button @click="submitIdea()">SUBMIT TON IDEE LE S</button>
+            <button @click="submitIdea()" :disabled="ideaSubmitted">SUBMIT TON IDEE LE S</button>
+            <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
+        </div>
+        <div v-if="assignedIdeaDone !== ''">
+            <p>L'idée qui vous a été attribuée est : {{ assignedIdea.idea }}</p>
         </div>
         <div class="main-game" v-show="showMainGame">
             <div id="piano">
@@ -44,10 +52,6 @@
     <div class="end-game" v-show="showEndGame">
         <button id="play">END GAME</button>
     </div>
-    <div class="Waiting-game" v-show="showWaitingGame">
-        <button @click="startGame" v-show="!showMainGame && !showAfterGame && !showEndGame">Lancer la
-            partie</button>
-    </div>
 </template>
 
 <script lang="ts">
@@ -66,8 +70,8 @@ interface Notes {
     interval: number,
 }
 
-interface UserXidea {
-    idUser: string;
+interface AssignedIdea {
+    id: string;
     idea: string;
 }
 
@@ -83,6 +87,8 @@ export default defineComponent({
             Responses: [] as string[], // Tableau pour stocker les réponses
             socket: io('http://localhost:3000'),
             firstStepGame: false,
+            ideaSubmitted: false,
+            gameStarted: false,
             showMainGame: false,
             showAfterGame: false,
             showEndGame: false,
@@ -93,10 +99,22 @@ export default defineComponent({
             maxRounds: 3,
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
+            roundDuration: 30, // Durée de chaque tour en secondes
             interRoundDuration: 30,
             timerInterval: 0,
             secondsLeft: 0,
+            assignedIdea: {} as AssignedIdea,
+            assignedIdeaDone: '',
+            player: {
+                host: false,
+                avatar: "Avatar 1",
+                roomId: "",
+                username: "",
+                socketId: "",
+                turn: false,
+                win: false,
+                idea: false,
+            },
         }
     },
     // Ici tout le code procédural
@@ -112,8 +130,46 @@ export default defineComponent({
             });
         });
 
+        this.socket.on('ideaSubmitted', () => {
+            this.ideaSubmitted = true;
+        });
+
+        this.socket.on('newUserIdea', () => {
+            this.player.idea = true;
+        });
+
+        this.socket.on('startGame', () => {
+            this.startGame();
+        });
+
+        this.socket.on('MainGame', () => {
+            this.socket.emit('random attribute');
+            this.firstStepGame = false;
+            this.showMainGame = true;
+            this.showAfterGame = false;
+            this.showEndGame = false;
+            this.remainingTime = this.roundDuration;
+            this.currentRound = 0;
+            this.playRound();
+            console.log('La partie a démarré côté client...');
+            this.gameStarted = true; // Met à jour gameStarted pour désactiver le bouton "Jouer"
+        });
+
         noteContainer.addEventListener("dragover", (event) => {
             event.preventDefault();
+        });
+
+        this.socket.on('assigned idea', (assignedIdeas: AssignedIdea[]) => {
+            // Parcourir les idées attribuées pour trouver celle qui correspond à l'utilisateur actuel
+            assignedIdeas.forEach(idea => {
+                if (idea.id === this.socket.id) {
+                    // Mettre à jour l'idée attribuée pour l'utilisateur actuel
+                    this.assignedIdea = idea;
+                    this.assignedIdeaDone = this.assignedIdea.idea;
+
+                    console.log('Assigned idea for current user:', this.assignedIdea.idea);
+                }
+            });
         });
 
         noteContainer.addEventListener("drop", (event) => {
@@ -206,22 +262,12 @@ export default defineComponent({
         },
 
         startGame() {
-            // this.showMainGame = true;
-            // this.showAfterGame = false;
-            // this.showEndGame = false;
-            // this.showTimer = true;
-            // this.remainingTime = this.roundDuration;
-            // this.currentRound = 0;
+            this.gameStarted = true;
             this.Firststep();
         },
 
         Firststep() {
             this.firstStepGame = true;
-            const sourceArray: string[] = ["Idée 1", "Idée 2", "Idée 3", "Idée 4", "Idée 5"];
-            const userXideaArray: UserXidea[] = [];
-
-            // Appel de la fonction avec un idUser spécifié
-            this.takeRandomValueAndAddToUserXidea("user123", sourceArray, userXideaArray);
         },
         playRound() {
             this.timerInterval = window.setInterval(() => {
@@ -284,10 +330,11 @@ export default defineComponent({
         },
 
         submitIdea() {
-            this.userIdeas.push(this.userIdeaInput);
-            // Réinitialise la valeur de guessInput après l'avoir ajoutée au tableau Responses
+            // Émettre un événement "submitIdea" avec les données de l'utilisateur
+            this.socket.emit('submitIdea', this.userIdeaInput, this.player);
+
+            // Réinitialiser la valeur de userIdeaInput après l'avoir envoyée au serveur
             this.userIdeaInput = '';
-            console.log(this.userIdeas);
         },
 
         submitGuess() {
@@ -300,29 +347,29 @@ export default defineComponent({
             console.log("ff");
         },
 
-        takeRandomValueAndAddToUserXidea(idUser: string, sourceArray: string[], userXideaArray: UserXidea[]): void {
-            if (sourceArray.length === 0) {
-                console.log("Le tableau source est vide.");
-                return;
-            }
+        // takeRandomValueAndAddToUserXidea(idUser: string, sourceArray: string[], userXideaArray: UserXidea[]): void {
+        //     if (sourceArray.length === 0) {
+        //         console.log("Le tableau source est vide.");
+        //         return;
+        //     }
 
-            // Sélectionne un index aléatoire dans le tableau source
-            const randomIndex = Math.floor(Math.random() * sourceArray.length);
+        //     // Sélectionne un index aléatoire dans le tableau source
+        //     const randomIndex = Math.floor(Math.random() * sourceArray.length);
 
-            // Récupère la valeur à l'index aléatoire
-            const idea = sourceArray[randomIndex];
+        //     // Récupère la valeur à l'index aléatoire
+        //     const idea = sourceArray[randomIndex];
 
-            // Retire l'élément sélectionné du tableau source
-            sourceArray.splice(randomIndex, 1);
+        //     // Retire l'élément sélectionné du tableau source
+        //     sourceArray.splice(randomIndex, 1);
 
-            // Ajoute la valeur à userXidea avec l'idUser spécifié
-            userXideaArray.push({ idUser, idea });
-            console.log(`source array : ${sourceArray}`);
-            userXideaArray.forEach((item, index) => {
-                console.log(`[${index + 1}] IdUser: ${item.idUser}, Idea: ${item.idea}`);
-            });
-            // console.log(`Idée '${idea}' ajoutée à userXidea pour l'utilisateur '${idUser}'.`);
-        },
+        //     // Ajoute la valeur à userXidea avec l'idUser spécifié
+        //     userXideaArray.push({ idUser, idea });
+        //     console.log(`source array : ${sourceArray}`);
+        //     userXideaArray.forEach((item, index) => {
+        //         console.log(`[${index + 1}] IdUser: ${item.idUser}, Idea: ${item.idea}`);
+        //     });
+        //     // console.log(`Idée '${idea}' ajoutée à userXidea pour l'utilisateur '${idUser}'.`);
+        // },
     },
 });
 

@@ -26,9 +26,50 @@ const io = require("socket.io")(server, {
 });
 
 let rooms = [];
+let playersConnected = [];
+let userIdeas = [];
+let assignedIdeas = [];
 
 io.on('connection', (socket) => {
     console.log(`[connection] ${socket.id}`);
+    // playersConnected.push(socket.id);
+
+    socket.on('submitIdea', (idea, player) => {
+        rooms.forEach(room => {
+            room.players.forEach(p => {
+                if (p.roomId === room.id) {
+                    if (p.socketId !== socket.id && p.idea == false) {
+                        io.to(p.socketId).emit('newUserIdea', idea);
+                        userIdeas.push({ id: p.socketId, idea: idea });
+                        p.idea = true;
+                    }
+                    if (userIdeas.length === room.players.length) {
+                        console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
+                        io.emit('MainGame');
+                        console.log(`${userIdeas.length} / ${playersConnected.length}`);
+                        console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
+
+                    }
+                }
+
+            });
+        });
+        // socket.emit('ideaSubmitted');
+        console.log(userIdeas);
+    });
+
+    socket.on('play', () => {
+        // Émettre un événement vers tous les clients pour démarrer la partie
+        io.emit('startGame');
+        console.log('La partie démarre...');
+    });
+
+    socket.on('random attribute', () => {
+        const assignedIdea = assignRandomIdeas(socket.id);
+        // Envoyer l'idée attribuée à ce socket
+        io.emit('assigned idea', assignedIdea);
+        console.log(`serv : assigned idea : ${assignedIdea}`);
+    });
 
     socket.on('playerData', (player) => {
         console.log(`[playerData] ${player.username}`);
@@ -88,12 +129,41 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`[disconnect] ${socket.id}`);
         exitRoom(socket.id);
+        const playerIndex = playersConnected.indexOf(socket.id);
+        if (playerIndex !== -1) {
+            playersConnected.splice(playerIndex, 1);
+        }
+        const ideaIndex = userIdeas.findIndex(userIdea => userIdea.id === socket.id);
+        if (ideaIndex !== -1) {
+            userIdeas.splice(ideaIndex, 1);
+        }
     });
 
     socket.on('exit room', () => {
         exitRoom(socket.id);
     })
 })
+
+// function assignRandomIdeas() {
+//     assignedIdeas = [];
+//     // Mélanger les idées disponibles
+//     const shuffledIdeas = shuffleArray(userIdeas);
+//     // Assigner chaque idée à un joueur
+//     playersConnected.forEach((playerId, index) => {
+//         assignedIdeas.push({ id: playerId, idea: shuffledIdeas[index].idea });
+//     });
+//     console.log('Idées attribuées :', assignedIdeas);
+//     return assignedIdeas;
+// }
+
+// // Fonction pour mélanger un tableau
+// function shuffleArray(array) {
+//     for (let i = array.length - 1; i > 0; i--) {
+//         const j = Math.floor(Math.random() * (i + 1));
+//         [array[i], array[j]] = [array[j], array[i]];
+//     }
+//     return array;
+// }
 
 function exitRoom(socketId) {
     let room = null;
