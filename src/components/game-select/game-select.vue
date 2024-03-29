@@ -1,5 +1,5 @@
 <template>
-    <div class="content">
+    <div class="content" v-if="!game1">
         <section class="playersList">
             <h3>Players</h3>
             <div class="playersContainer" v-for="room in rooms" :key="room.id">
@@ -33,7 +33,7 @@
         </section>
         <main class="personalization-main">
             <section class="settings">
-                <p id="shareLink" @click="copy(`localhost:8080?room=${this.player.roomId}`)">Copier le lien d'invitation</p>
+                <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
                 <form>
                     <label for="nbPlayers">Number of players</label>
                     <select id="nbPlayers">
@@ -47,6 +47,7 @@
                     <br>
                     <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
                 </form>
+                <button @click="game1 = true">Start Game</button>
                 <div>
                     <h3>Game selection</h3>
 
@@ -86,11 +87,15 @@
             </section>
         </main>
     </div>
+
+
+    
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import io from 'socket.io-client';
+import {  } from "module";
 
 interface Room {
     id: string;
@@ -111,6 +116,7 @@ interface Player {
     roomId: string,
     socketId: string,
     username: string,
+    idea: boolean,
     turn: boolean,
     win: boolean,
 }
@@ -130,7 +136,7 @@ export default defineComponent({
             rooms: [] as Room[],
             currentRoom: '',
             player: {} as Player,
-            avatarPath: "",
+            game1: false,
         }
     },
 
@@ -138,7 +144,6 @@ export default defineComponent({
 
         this.socket.on('join room', (player: any) => {
             this.player = player;
-            this.avatarPath = `../../assets/${player.avatar}.png`;
         });
 
         this.socket.on('new host', (newHostId: string) => {
@@ -161,6 +166,9 @@ export default defineComponent({
         this.roundsNumber();
         this.playersNumber();
         this.updateAvatar();
+
+        console.log(this.player.avatar);
+        
     },
     methods: {
         updRooms() {
@@ -221,6 +229,29 @@ export default defineComponent({
                 }
             }
         },
+
+        displayHostMenu(socketId: string) {
+            const menuToDisplay = document.getElementById(socketId);
+
+            if (menuToDisplay) {
+                menuToDisplay.style.display = "flex";
+            }
+        },
+
+        setHost(player: object) {
+            this.player.host = false;
+            this.socket.emit("set host", player);
+        },
+
+        // isButtonClicked(buttons: NodeListOf<HTMLElement>, target: Node): boolean {
+        //     for (const button of buttons) {
+        //         if (button.contains(target)) {
+        //             return true;
+        //         }
+        //     }
+        //     return false;
+        // },
+
         toggleSelection(event: MouseEvent) {
             if (event.currentTarget instanceof HTMLElement) {
                 event.currentTarget.classList.toggle("selected");
@@ -261,6 +292,7 @@ export default defineComponent({
 <style scoped>
 .playerContainer img {
     width: 50px;
+    height: 50px;
     border-radius: 50%;
 }
 
@@ -350,7 +382,7 @@ ul li {
         margin: 2% 5% 0 5%;
         padding: 20px;
         display: flex;
-        flex-flow: wrap row;
+        flex-flow: wrap column;;
         justify-content: center;
         align-items: center;
     }

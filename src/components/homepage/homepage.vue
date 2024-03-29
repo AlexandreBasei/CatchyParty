@@ -43,6 +43,31 @@
                     <form @submit.prevent="joinRoom(room)">
                         <label for="username">Nom d'utilisateur : </label>
                         <input type="text" v-model="pseudo" required>
+                        <div class="avatar-choice">
+                            <h3>Your avatar</h3>
+                            <div class="avatar-container">
+                                <div class="avatar-selected">
+                                    <!-- <img class="avatar-option" alt="Avatar"
+                            v-bind:src="require(`${avatarPath}`)"> -->
+                                    <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar"
+                                        v-if="selectedAvatar === 'Avatar1'">
+
+                                    <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                                        v-if="selectedAvatar === 'Avatar2'">
+
+                                    <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                                        v-if="selectedAvatar === 'Avatar3'">
+                                </div>
+                            </div>
+                            <div class="avatar-options">
+                                <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar 1"
+                                    @click="selectAvatar('Avatar1')">
+                                <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                                    @click="selectAvatar('Avatar2')">
+                                <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                                    @click="selectAvatar('Avatar3')">
+                            </div>
+                        </div>
                         <button type="submit">Rejoindre</button>
                     </form>
                     <button @click="reload">Retourner à l'accueil</button>
@@ -62,7 +87,7 @@
         </section>
     </main>
 
-    <gameSelectVue v-if="homepage === false" :socket="socket"></gameSelectVue>
+    <gameSelect v-if="homepage === false" :socket="socket"></gameSelect>
 
     <div class="footer">
         <footerApp></footerApp>
@@ -73,7 +98,7 @@
 import footerApp from '../footer/footer.vue';
 import headerApp from '../header/header.vue';
 import io from 'socket.io-client';
-import gameSelectVue from '../game-select/game-select.vue';
+import gameSelect from '../game-select/game-select.vue';
 import { defineComponent, ref } from 'vue';
 
 interface Room {
@@ -94,7 +119,7 @@ export default defineComponent({
     components: {
         footerApp,
         headerApp,
-        gameSelectVue,
+        gameSelect,
     },
 
     data() {
@@ -116,6 +141,7 @@ export default defineComponent({
                 roomId: "",
                 username: "",
                 socketId: "",
+                idea: false,
                 turn: false,
                 win: false,
             },
@@ -138,6 +164,7 @@ export default defineComponent({
                 this.player.roomId = room.id;
                 this.player.username = this.pseudo;
                 this.player.socketId = this.socket.id ?? "";
+                this.player.avatar = this.selectedAvatar;
 
                 this.socket.emit('playerData', this.player);
                 this.homepage = false;
