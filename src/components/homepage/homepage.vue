@@ -108,8 +108,8 @@ interface Room {
         roomId: string,
         socketId: string,
         username: string,
-        turn: boolean,
-        win: boolean,
+        idea: boolean,
+        tabAttributed: boolean,
     }[];
 }
 
@@ -141,8 +141,7 @@ export default defineComponent({
                 username: "",
                 socketId: "",
                 idea: false,
-                turn: false,
-                win: false,
+                tabAttributed: false,
             },
             selectedAvatar: "Avatar1",
             roomId: "",
