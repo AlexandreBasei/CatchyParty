@@ -37,7 +37,7 @@
         </section>
         <main class="personalization-main">
             <section class="settings">
-                <form>
+                <form @submit.prevent="start('game1')">
                     <label for="nbPlayers">Number of players</label>
                     <select id="nbPlayers">
 
@@ -48,8 +48,9 @@
 
                     </select>
                     <br>
-                    <input type="submit" value="Select" class="submitBtn">
-                    <button class="startGame" @click="start('game1')" v-if="player.host">Start Game</button>
+                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
+                    <button type="submit" class="startGame" v-if="player.host">Start Game</button>
+                    
                     </form>
                 <div>
                     <h3>Game selection</h3>
@@ -202,12 +203,14 @@ export default defineComponent({
                     this.player.turn = false;
                     this.player.win = false;
                     this.socket.emit("exit room");
+
                     window.location.reload();
                 }
             });
         },
 
         kickPlayer(socketId: string) {
+            
             this.rooms.forEach(room => {
                 if (room.id === this.currentRoom) {
                     this.socket.emit("kick player", socketId);
