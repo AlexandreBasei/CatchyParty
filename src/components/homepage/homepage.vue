@@ -3,10 +3,10 @@
     <main v-if="homepage === true">
         <section class="personalization" v-if="homepage === true && !roomId">
             <form @submit.prevent="handleSubmit">
-                <input type="text" class="textInput" placeholder="Your username" v-model="pseudo" maxlength="15"
+                <input type="text" class="textInput" placeholder="Enter your username" v-model="pseudo" maxlength="15"
                     required>
                 <div class="avatar-choice">
-                    <h3>Your avatar</h3>
+                    <h3>Choose your avatar</h3>
                     <div class="avatar-container">
                         <div class="avatar-selected">
                             <!-- <img class="avatar-option" alt="Avatar"
@@ -36,15 +36,14 @@
             </form>
         </section>
 
-        <section v-else-if="roomId && homepage === true">
+        <section v-else-if="roomId && homepage === true" class="joiningRoom">
             <div v-for="room in rooms" :key="room.id">
                 <div v-if="room.id === roomId">
-                    <h1>Vous allez rejoindre la salle de {{ room.players[0].username }}</h1>
+                    <h1>You are joining {{ room.players[0].username }}'s room</h1>
                     <form @submit.prevent="joinRoom(room)">
-                        <label for="username">Nom d'utilisateur : </label>
-                        <input type="text" v-model="pseudo" required>
+                        <input type="text" placeholder="Enter your username" v-model="pseudo" required maxlength="15">
                         <div class="avatar-choice">
-                            <h3>Your avatar</h3>
+                            <h3>Choose your avatar</h3>
                             <div class="avatar-container">
                                 <div class="avatar-selected">
                                     <!-- <img class="avatar-option" alt="Avatar"
@@ -68,13 +67,13 @@
                                     @click="selectAvatar('Avatar3')">
                             </div>
                         </div>
-                        <button type="submit">Rejoindre</button>
+                        <button type="submit">Join</button>
                     </form>
-                    <button @click="reload">Retourner à l'accueil</button>
+                    <!-- <button @click="reload">Retourner à l'accueil</button> -->
                 </div>
                 <div v-else>
-                    <p>Le salon que vous essayez de rejoindre n'existe pas</p>
-                    <button @click="reload">Retourner à l'accueil</button>
+                    <p>The room you are trying to join does not exist</p>
+                    <!-- <button @click="reload">Retourner à l'accueil</button> -->
                 </div>
             </div>
         </section>
@@ -278,6 +277,22 @@ export default defineComponent({
     cursor: pointer;
 }
 
+.joiningRoom{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.joiningRoom input[type=text]{
+    margin-bottom: 10%;
+}
+
+.joiningRoom button[type=submit]{
+    margin: 10% auto;
+    font-weight: 600;
+}
+
 @media only screen and (max-width: 600px) {
 
     footer {
@@ -308,7 +323,8 @@ export default defineComponent({
         width: 30vh;
         background-color: var(--quaternary);
         border: 0;
-        color: white;
+        /* color: white; */
+        color: var(--tertiary);
         margin: 10px 0;
         padding: 5px;
         border-radius: 10px;
@@ -317,7 +333,8 @@ export default defineComponent({
     input[type=submit] {
         background-color: var(--quaternary);
         border: 0;
-        color: white;
+        /* color: white; */
+        color: var(--tertiary);
         margin: 10px 0;
         padding: 5px;
         border-radius: 10px;

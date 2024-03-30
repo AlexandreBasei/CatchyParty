@@ -13,16 +13,19 @@
                         <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="../../assets/Avatar3.png"
                             id="avatarImg" alt="Avatar">
 
-                        <p id="pseudoPlayer1">{{ rplayer.username }}</p>
-                        <span v-if="rplayer.host">👑</span>
-                        <button v-if="player.host && rplayer.socketId !== player.socketId"
-                            @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
-                            <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#000000"
-                                class="bi bi-three-dots-vertical">
-                                <path
-                                    d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
-                            </svg>
-                        </button>
+                        <p class="pseudoPlayer">
+                            <span v-if="rplayer.host">👑 </span>
+                            {{ rplayer.username }}
+                            <button v-if="player.host && rplayer.socketId !== player.socketId"
+                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
+                                <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
+                                    class="bi bi-three-dots-vertical">
+                                    <path
+                                        d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+                                </svg>
+                            </button>
+                        </p>
+
                         <div v-bind:id="rplayer.socketId" class="hostMenu">
                             <button @click="setHost(rplayer)">Define new room's host</button>
                             <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
@@ -30,10 +33,10 @@
                     </div>
                 </div>
             </div>
+            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
         </section>
         <main class="personalization-main">
             <section class="settings">
-                <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
                 <form>
                     <label for="nbPlayers">Number of players</label>
                     <select id="nbPlayers">
@@ -45,9 +48,9 @@
 
                     </select>
                     <br>
-                    <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
-                </form>
-                <button @click="start('game1')" v-if="player.host">Start Game</button>
+                    <input type="submit" value="Select" class="submitBtn">
+                    <button class="startGame" @click="start('game1')" v-if="player.host">Start Game</button>
+                    </form>
                 <div>
                     <h3>Game selection</h3>
 
@@ -89,7 +92,7 @@
     </div>
 
     <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
-    
+
 </template>
 
 <script lang="ts">
@@ -163,9 +166,9 @@ export default defineComponent({
             }
         });
 
-        this.socket.on('game start', (game:string) => {
+        this.socket.on('game start', (game: string) => {
             console.log("GAME1 START");
-            
+
             if (game === "game1") {
                 this.game1 = true;
                 this.socket.emit('sendPlayer:3', this.player);
@@ -179,7 +182,7 @@ export default defineComponent({
         this.roundsNumber();
         this.playersNumber();
         // this.updateAvatar();
-        
+
     },
     methods: {
         updRooms() {
@@ -249,9 +252,15 @@ export default defineComponent({
             }
         },
 
-        setHost(player: object) {
+        setHost(player: any) {
             this.player.host = false;
             this.socket.emit("set host", player);
+
+            const menuToDisplay = document.getElementById(player.socketId);
+
+            if (menuToDisplay) {
+                menuToDisplay.style.display = "none";
+            }
         },
 
         // isButtonClicked(buttons: NodeListOf<HTMLElement>, target: Node): boolean {
@@ -297,7 +306,7 @@ export default defineComponent({
         //     }
         // },
 
-        start(game:string) {
+        start(game: string) {
             if (game === "game1") {
                 this.socket.emit('game started', game);
             }
@@ -326,6 +335,21 @@ ul li {
     width: fit-content;
 }
 
+#shareLink, .startGame{
+    background-color: var(--quaternary);
+    color: var(--black);
+    font-weight: 600;
+    padding: 5%;
+    border-radius: 20px;
+    border-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#shareLink:hover, .startGame:hover {
+    transform: scale(1.03);
+}
+
 .hostMenuButton {
     background-color: transparent;
     border: none;
@@ -341,36 +365,28 @@ ul li {
     position: absolute;
     left: 100%;
     top: 100%;
-    width: 20vw;
+    width: 50%;
     flex-flow: wrap row;
     align-items: start;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--quaternary);
     border-radius: 15px;
     padding: 10px;
+    z-index: 10;
 }
 
 .hostMenu button {
-    background-color: transparent;
+    background-color: var(--quaternary);
     border: none;
     cursor: pointer;
 }
 
 .hostMenu button:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    opacity: .5;
 }
 
 .hostMenu button:first-child {
     border-bottom: 1px solid black;
-}
-
-#shareLink {
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#shareLink:active {
-    transform: scale(1.05);
 }
 
 @media only screen and (max-width: 600px) {
@@ -399,7 +415,8 @@ ul li {
         margin: 2% 5% 0 5%;
         padding: 20px;
         display: flex;
-        flex-flow: wrap column;;
+        flex-flow: wrap column;
+        ;
         justify-content: center;
         align-items: center;
     }
@@ -419,8 +436,8 @@ ul li {
         background-color: var(--tertiary);
         border-radius: 20px;
         margin: 2% 5% 0 5%;
-        padding: 20px;
-        width: 25%;
+        padding: 20px 40px;
+        width: 20%;
     }
 
     .settings {
