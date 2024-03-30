@@ -19,11 +19,12 @@
             <button @click="submitIdea()" :disabled="ideaSubmitted">SUBMIT TON IDEE LE S</button>
             <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
         </div>
-        <div v-for="idealex in assignedIdea" :key="idealex.id">
-            <div v-if="typeof idealex === 'object' && idealex.id">
-                <p>L'idée qui vous a été attribuée est : {{ idealex.idea }}</p>
+        <div v-for="(item, index) in assignedIdea" :key="index">
+            <div v-if="item.id === socket.id">
+                <p>L'idée qui vous a été attribuée est : {{ item.idea }}</p>
             </div>
         </div>
+
         <div class="main-game" v-show="showMainGame">
             <div id="piano">
                 <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
@@ -65,10 +66,13 @@ import io from 'socket.io-client';
 import { Howl } from 'howler';
 
 interface Notes {
-    id: string,
-    note: string,
-    duration: number,
-    interval: number,
+    userId: string,
+    infos: {
+        id: string,
+        note: string,
+        duration: number,
+        interval: number,
+    }
 }
 
 interface AssignedIdea {
@@ -121,6 +125,7 @@ export default defineComponent({
                 turn: false,
                 win: false,
                 idea: false,
+                tabAttributed: false,
             },
         }
     },
@@ -149,6 +154,10 @@ export default defineComponent({
             this.player.idea = true;
         });
 
+        this.socket.on('newTabToGuess', () => {
+            this.player.tabAttributed = true;
+        });
+
         this.socket.on('startGame', () => {
             this.startGame();
         });
@@ -156,7 +165,7 @@ export default defineComponent({
         this.socket.on('MainGame', (userIdeas: any) => {
             this.socket.emit('random attribute');
             this.assignedIdea = userIdeas;
-            console.log(this.assignedIdea);
+            console.log(`${this.assignedIdea}`);
             this.firstStepGame = false;
             this.showMainGame = true;
             this.showAfterGame = false;
@@ -172,18 +181,18 @@ export default defineComponent({
             event.preventDefault();
         });
 
-        this.socket.on('assigned idea', (assignedIdeas: AssignedIdea[]) => {
-            // Parcourir les idées attribuées pour trouver celle qui correspond à l'utilisateur actuel
-            assignedIdeas.forEach(idea => {
-                if (idea.id === this.socket.id) {
-                    // Mettre à jour l'idée attribuée pour l'utilisateur actuel
-                    this.assignedIdea = idea;
-                    this.assignedIdeaDone = this.assignedIdea.idea;
+        // this.socket.on('assigned idea', (assignedIdeas: AssignedIdea[]) => {
+        //     // Parcourir les idées attribuées pour trouver celle qui correspond à l'utilisateur actuel
+        //     assignedIdeas.forEach(idea => {
+        //         if (idea.id === this.socket.id) {
+        //             // Mettre à jour l'idée attribuée pour l'utilisateur actuel
+        //             this.assignedIdea = idea;
+        //             this.assignedIdeaDone = this.assignedIdea.idea;
 
-                    console.log('Assigned idea for current user:', this.assignedIdea.idea);
-                }
-            });
-        });
+        //             console.log('Assigned idea for current user:', this.assignedIdea.idea);
+        //         }
+        //     });
+        // });
 
         noteContainer.addEventListener("drop", (event) => {
             event.preventDefault();
@@ -223,7 +232,7 @@ export default defineComponent({
                 });
 
                 // Store the note and its duration
-                this.notesDuration.push({ id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) });
+                this.notesDuration.push({ userId: this.socket.id, infos:{ id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) }});
             }
         });
 
@@ -231,13 +240,13 @@ export default defineComponent({
             console.log(this.notesDuration);
             let currentTime = 0;
             this.notesDuration.forEach((item, index) => {
-                const sound = this.sounds[item.note];
+                const sound = this.sounds[item.infos.note];
                 if (sound) {
                     setTimeout(() => {
                         sound.play();
-                        setTimeout(() => sound.stop(), item.duration * 1000); // Stop playing after the specified duration
+                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
                     }, currentTime * 1000);
-                    currentTime += (item.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].interval.toString()) : 0));
+                    currentTime += (item.infos.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].infos.interval.toString()) : 0));
                 }
             });
         });
@@ -246,8 +255,8 @@ export default defineComponent({
     methods: {
         updateDuration(id: string, duration: number) {
             for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].id === id) {
-                    this.notesDuration[i].duration = duration;
+                if (this.notesDuration[i].infos.id === id) {
+                    this.notesDuration[i].infos.duration = duration;
                     break;
                 }
             }
@@ -255,8 +264,8 @@ export default defineComponent({
 
         updateInterval(id: string, interval: number) {
             for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].id === id) {
-                    this.notesDuration[i].interval = interval;
+                if (this.notesDuration[i].infos.id === id) {
+                    this.notesDuration[i].infos.interval = interval;
                     break;
                 }
             }
@@ -288,6 +297,8 @@ export default defineComponent({
                 this.timerInterGame = false;
                 if (this.remainingTime <= 0) {
                     clearInterval(this.timerInterval);
+
+                    this.socket.emit('sendTabNotes', this.notesDuration, this.player);
 
                     this.timerInterval = 0;
                     this.currentRound++;

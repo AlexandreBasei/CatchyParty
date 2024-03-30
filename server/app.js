@@ -29,6 +29,7 @@ let rooms = [];
 let playersConnected = [];
 let userIdeas = [];
 let assignedIdeas = [];
+let NotesToGuess = [];
 
 io.on('connection', (socket) => {
     console.log(`[connection] ${socket.id}`);
@@ -65,6 +66,42 @@ io.on('connection', (socket) => {
         }
         socket.emit('ideaSubmitted');
         console.log(userIdeas);
+    });
+
+    socket.on('sendTabNotes', (tabnotes, player) => {
+        let playersLENGTH = 0;
+        let isDone = false;
+        rooms.forEach(room => {
+            if (player.roomId === room.id) {
+                console.log("heyp");
+                room.players.forEach(p => {
+                    io.to(p.socketId).emit('newTabToGuess', tabnotes);
+                    NotesToGuess.push({ id: p.socketId, tabAttributed: tabnotes });
+                    if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
+                       
+                        console.log(NotesToGuess);
+                        p.tabAttributed = true;
+                        isDone = !isDone;
+                        console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
+                    }
+
+                    else{
+                        console.log("pas bon ça");
+                    }
+
+                    playersLENGTH = room.players.length;
+
+                });
+            }
+        });
+
+        if (NotesToGuess.length === playersLENGTH) {
+            console.log('Guess attributed c bon');
+            io.emit('MainGame', userIdeas);
+
+        }
+
+        console.log(NotesToGuess);
     });
 
     socket.on('sendPlayer:3', (player) => {
