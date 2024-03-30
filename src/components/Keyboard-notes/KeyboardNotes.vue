@@ -43,13 +43,13 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
-            <button id="play">Play</button>
+            <button id="play" @click="handlePlayClick">Play</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">Votre guess :</label>
             <input type="text" v-model="guessInput"
                 placeholder="Ecrivez la musique à laquelle correspond l'enchainement de notes...">
-            <button @click="playGuessNotes()">Jouer la suite !!!!!!!!!!!!!</button>
+            <button id="playGuessing" @click="handlePlayGuessingClick">Jouer la suite !!!!!!!!!!!!!</button>
         </div>
     </div>
     <div class="end-game" v-show="showEndGame">
@@ -202,7 +202,7 @@ export default defineComponent({
             this.player.idea = true;
         });
 
-        this.socket.on('newTabToGuess', (NotesToGuess:any) => {
+        this.socket.on('newTabToGuess', (NotesToGuess: any) => {
             this.tabnotes = NotesToGuess;
             console.log(this.tabnotes);
             this.player.tabAttributed = true;
@@ -285,21 +285,6 @@ export default defineComponent({
                 this.notesDuration.push({ userId: this.socket.id, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
             }
         });
-
-        document.getElementById("play")?.addEventListener("click", () => {
-            console.log(this.notesDuration);
-            let currentTime = 0;
-            this.notesDuration.forEach((item, index) => {
-                const sound = this.sounds[item.infos.note];
-                if (sound) {
-                    setTimeout(() => {
-                        sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
-                    }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].infos.interval.toString()) : 0));
-                }
-            });
-        });
     },
     //Ici les fonctions (méthodes)
     methods: {
@@ -321,26 +306,37 @@ export default defineComponent({
             }
         },
 
-        playGuessNotes() {
-            console.log(this.tabnotes);
-            let currentTime = 0;
-            this.tabnotes.forEach((item, index) => {
-                console.log(item);
-                const sound = this.sounds[item.infos.note];
-                if (sound) {
-                    setTimeout(() => {
-                        sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
-                    }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (this.tabnotes[index + 1] ? parseFloat(this.tabnotes[index + 1].infos.interval.toString()) : 0));
-                }
-            });
-        },
-
         noteID() {
             return Math.random().toString(36).substr(2, 9);
         },
 
+        playSounds(soundList:any) {
+            let currentTime = 0;
+            soundList.forEach((item:any, index:any) => {
+                console.log(item.infos.note);
+                const sound = new Howl({
+                src: [`./sounds/${item.infos.note}.mp3`] // Path to local audio files
+            });
+                if (sound) {
+                    setTimeout(() => {
+                        sound.play();
+                        setTimeout(() => sound.stop(), item.infos.duration * 1000);
+                    }, currentTime * 1000);
+                    currentTime += (item.infos.duration + (soundList[index + 1] ? parseFloat(soundList[index + 1].infos.interval.toString()) : 0));
+                }
+            });
+        },
+
+        handlePlayClick() {
+            console.log(this.notesDuration);
+            this.playSounds(this.notesDuration);
+        },
+
+        handlePlayGuessingClick() {
+            console.log(this.tabnotes);
+            this.playSounds(this.tabnotes);
+        },
+    
         playSound(note: string) {
             // Charger et jouer le son correspondant à la note
             const sound = new Howl({

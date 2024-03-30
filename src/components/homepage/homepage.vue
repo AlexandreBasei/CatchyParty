@@ -1,6 +1,5 @@
 <template>
     <headerApp></headerApp>
-    <p>{{ player }}</p>
     <main v-if="homepage === true">
         <section class="personalization" v-if="homepage === true && !roomId">
             <form @submit.prevent="handleSubmit">
