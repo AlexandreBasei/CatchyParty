@@ -49,7 +49,7 @@
             <label for="guess">Votre guess :</label>
             <input type="text" v-model="guessInput"
                 placeholder="Ecrivez la musique à laquelle correspond l'enchainement de notes...">
-            <button @click="PlayNotesDone()">Jouer la suite !!!!!!!!!!!!!</button>
+            <button @click="playGuessNotes()">Jouer la suite !!!!!!!!!!!!!</button>
         </div>
     </div>
     <div class="end-game" v-show="showEndGame">
@@ -78,6 +78,53 @@ interface Notes {
 interface AssignedIdea {
     id: string;
     idea: string;
+}
+
+interface Rewind {
+    userID: {
+        Manche1: {
+            from: {
+                userID: string,
+                idea: string,
+            },
+            musician: {
+                userIDafter: string,
+                Suite2Notes: [],
+            },
+            guesser: {
+                userIDguess: string,
+                guess: string,
+            }
+        },
+        Manche2: {
+            from: {
+                userID: string,
+                idea: string,
+            },
+            musician: {
+                userIDafter: string,
+                Suite2Notes: [],
+            },
+            guesser: {
+                userIDguess: string,
+                guess: string,
+            }
+        },
+        Manche3: {
+            from: {
+                userID: string,
+                idea: string,
+            },
+            musician: {
+                userIDafter: string,
+                Suite2Notes: [],
+            },
+            guesser: {
+                userIDguess: string,
+                guess: string,
+            }
+        },
+    }
 }
 
 export default defineComponent({
@@ -115,6 +162,7 @@ export default defineComponent({
             timerInterval: 0,
             secondsLeft: 0,
             assignedIdea: {} as AssignedIdea,
+            tabnotes: [] as Notes[],
             assignedIdeaDone: '',
             player: {
                 host: false,
@@ -154,7 +202,9 @@ export default defineComponent({
             this.player.idea = true;
         });
 
-        this.socket.on('newTabToGuess', () => {
+        this.socket.on('newTabToGuess', (NotesToGuess:any) => {
+            this.tabnotes = NotesToGuess;
+            console.log(this.tabnotes);
             this.player.tabAttributed = true;
         });
 
@@ -232,7 +282,7 @@ export default defineComponent({
                 });
 
                 // Store the note and its duration
-                this.notesDuration.push({ userId: this.socket.id, infos:{ id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) }});
+                this.notesDuration.push({ userId: this.socket.id, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
             }
         });
 
@@ -269,6 +319,21 @@ export default defineComponent({
                     break;
                 }
             }
+        },
+
+        playGuessNotes() {
+            console.log(this.tabnotes);
+            let currentTime = 0;
+            this.tabnotes.forEach((item, index) => {
+                const sound = this.sounds[item.infos.note];
+                if (sound) {
+                    setTimeout(() => {
+                        sound.play();
+                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
+                    }, currentTime * 1000);
+                    currentTime += (item.infos.duration + (this.tabnotes[index + 1] ? parseFloat(this.tabnotes[index + 1].infos.interval.toString()) : 0));
+                }
+            });
         },
 
         noteID() {

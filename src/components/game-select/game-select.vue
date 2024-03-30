@@ -105,8 +105,8 @@ interface Room {
         roomId: string,
         socketId: string,
         username: string,
-        turn: boolean,
-        win: boolean,
+        idea: boolean,
+        tabAttributed: boolean,
     }[];
 }
 
@@ -119,6 +119,7 @@ interface Player {
     idea: boolean,
     turn: boolean,
     win: boolean,
+    tabAttributed: boolean,
 }
 
 export default defineComponent({

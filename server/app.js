@@ -75,17 +75,18 @@ io.on('connection', (socket) => {
             if (player.roomId === room.id) {
                 console.log("heyp");
                 room.players.forEach(p => {
-                    io.to(p.socketId).emit('newTabToGuess', tabnotes);
-                    NotesToGuess.push({ id: p.socketId, tabAttributed: tabnotes });
+
                     if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
-                       
-                        console.log(NotesToGuess);
+                        
+                        NotesToGuess.push({ id: p.socketId, tabnotes: tabnotes });
+                        console.log(tabnotes);
                         p.tabAttributed = true;
+                        io.to(p.socketId).emit('newTabToGuess', tabnotes);
                         isDone = !isDone;
                         console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
                     }
 
-                    else{
+                    else {
                         console.log("pas bon ça");
                     }
 
@@ -97,8 +98,6 @@ io.on('connection', (socket) => {
 
         if (NotesToGuess.length === playersLENGTH) {
             console.log('Guess attributed c bon');
-            io.emit('MainGame', userIdeas);
-
         }
 
         console.log(NotesToGuess);
