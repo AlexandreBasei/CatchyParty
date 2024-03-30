@@ -325,6 +325,7 @@ export default defineComponent({
             console.log(this.tabnotes);
             let currentTime = 0;
             this.tabnotes.forEach((item, index) => {
+                console.log(item);
                 const sound = this.sounds[item.infos.note];
                 if (sound) {
                     setTimeout(() => {
