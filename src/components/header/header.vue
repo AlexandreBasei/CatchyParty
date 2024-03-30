@@ -1,8 +1,8 @@
 <template>
     <header>
-        <RouterLink to="/">
+        <!-- <RouterLink to="/"> -->
             <img alt="logo" src="../../assets/logo.svg" @click="reload">
-        </RouterLink>
+        <!-- </RouterLink> -->
 
     </header>
 </template>
@@ -16,18 +16,24 @@ header {
 header a {
     margin-top: 15px;
 }
+
+header img{
+    margin: 0 0 -8% 0;
+    width: 200px;
+    padding: 0;
+}
 </style>
 <script>
 export default ({
     name: 'headerApp',
 
     mounted() {
-        window.addEventListener("beforeunload", function (event) {
-            // Afficher l'alerte
-            var confirmationMessage = "Êtes-vous sûr de vouloir quitter cette page ? Vous quitterez la partie en cours";
-            (event || window.event).returnValue = confirmationMessage; // For IE and Firefox
-            return confirmationMessage; // For other browsers
-        });
+        // window.addEventListener("beforeunload", function (event) {
+        //     // Afficher l'alerte
+        //     var confirmationMessage = "Êtes-vous sûr de vouloir quitter cette page ? Vous quitterez la partie en cours";
+        //     (event || window.event).returnValue = confirmationMessage; // For IE and Firefox
+        //     return confirmationMessage; // For other browsers
+        // });
 
     },
     methods: {

@@ -1,6 +1,5 @@
 <template>
     <headerApp></headerApp>
-    <p>{{ player }}</p>
     <main v-if="homepage === true">
         <section class="personalization" v-if="homepage === true && !roomId">
             <form @submit.prevent="handleSubmit">
@@ -130,9 +129,9 @@ export default defineComponent({
             tutorialText: '',
             socket: io('http://localhost:3000'),
             steps: [
-                "Étape 1 : Do this...",
-                "Étape 2 : Now, this...",
-                "Étape 3 : And this..."
+                "Step 1 : Do this...",
+                "Step 2 : Now, this...",
+                "Step 3 : And this..."
             ],
             currentStep: 0,
             player: {
@@ -168,9 +167,6 @@ export default defineComponent({
                 this.socket.emit('playerData', this.player);
                 this.homepage = false;
                 this.roomId = "";
-            }
-            else {
-                alert("Veuillez entrer un nom d'utilisateur pour rejoindre une partie");
             }
         },
 

@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
+            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copy invitation link</p>
         </section>
         <main class="personalization-main">
             <section class="settings">
