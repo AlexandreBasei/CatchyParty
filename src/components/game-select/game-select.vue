@@ -49,7 +49,7 @@
                     </select>
                     <br>
                     <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button type="submit" class="startGame" v-if="player.host">Start Game</button>
+                    <button class="startGame" v-if="player.host">Start Game</button>
 
                 </form>
                 <div>
@@ -156,6 +156,8 @@ export default defineComponent({
         });
 
         this.socket.on('new host', (newHostId: string) => {
+            console.log('This.player.socketId', this.player.socketId);
+            
             if (this.player.socketId === newHostId) {
                 this.player.host = true;
             }
@@ -224,7 +226,6 @@ export default defineComponent({
                     this.socket.emit("exit room");
 
                     window.location.search = '';
-                    // window.location.reload();
                 }
             });
         },
