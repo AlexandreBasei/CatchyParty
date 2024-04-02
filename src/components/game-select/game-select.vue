@@ -50,8 +50,8 @@
                     <br>
                     <!-- <input type="submit" value="Select" class="submitBtn"> -->
                     <button type="submit" class="startGame" v-if="player.host">Start Game</button>
-                    
-                    </form>
+
+                </form>
                 <div>
                     <h3>Game selection</h3>
 
@@ -152,6 +152,7 @@ export default defineComponent({
 
         this.socket.on('join room', (player: any) => {
             this.player = player;
+            this.currentRoom = player.roomId;
         });
 
         this.socket.on('new host', (newHostId: string) => {
@@ -180,6 +181,19 @@ export default defineComponent({
             this.updRooms();
         }, 20);
 
+        document.addEventListener('click', (event: MouseEvent) => {
+            /*eslint no-undef: 0*/
+            const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
+            /*eslint no-undef: 0*/
+            const buttons = document.querySelectorAll('.hostMenuButton') as NodeListOf<HTMLElement>;
+
+            modals.forEach((modal) => {
+                if (!modal.contains(event.target as Node) && !this.isButtonClicked(buttons, event.target as Node)) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
         this.roundsNumber();
         this.playersNumber();
         // this.updateAvatar();
@@ -194,25 +208,36 @@ export default defineComponent({
             });
         },
 
+        resetPlayer() {
+            this.player.host = false;
+            this.player.username = "";
+            this.player.avatar = "Avatar1";
+            this.player.roomId = "";
+            this.player.idea = false;
+            this.player.tabAttributed = false;
+        },
+
         exitRoom() {
             this.rooms.forEach(room => {
                 if (room.id === this.currentRoom) {
-                    this.player.host = false;
-                    this.player.username = "";
-                    this.player.roomId = "";
-                    this.player.turn = false;
-                    this.player.win = false;
+                    this.resetPlayer();
                     this.socket.emit("exit room");
 
-                    window.location.reload();
+                    window.location.search = '';
+                    // window.location.reload();
                 }
             });
         },
 
         kickPlayer(socketId: string) {
-            
+
             this.rooms.forEach(room => {
+                console.log("roomId : ", room.id);
+                console.log("this roomId :", this.currentRoom);
+
+
                 if (room.id === this.currentRoom) {
+                    console.log("kick");
                     this.socket.emit("kick player", socketId);
                 }
             });
@@ -251,6 +276,15 @@ export default defineComponent({
             const menuToDisplay = document.getElementById(socketId);
 
             if (menuToDisplay) {
+                /*eslint no-undef: 0*/
+                const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
+                    
+                modals.forEach((modal) => {
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
                 menuToDisplay.style.display = "flex";
             }
         },
@@ -266,14 +300,16 @@ export default defineComponent({
             }
         },
 
-        // isButtonClicked(buttons: NodeListOf<HTMLElement>, target: Node): boolean {
-        //     for (const button of buttons) {
-        //         if (button.contains(target)) {
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // },
+        isButtonClicked(buttons: any, target: Node): boolean {
+            console.log("saas");
+
+            for (const button of buttons) {
+                if (button.contains(target)) {
+                    return true;
+                }
+            }
+            return false;
+        },
 
         toggleSelection(event: MouseEvent) {
             if (event.currentTarget instanceof HTMLElement) {
@@ -338,7 +374,8 @@ ul li {
     width: fit-content;
 }
 
-#shareLink, .startGame{
+#shareLink,
+.startGame {
     background-color: var(--quaternary);
     color: var(--black);
     font-weight: 600;
@@ -349,7 +386,8 @@ ul li {
     transition: all 0.2s ease;
 }
 
-#shareLink:hover, .startGame:hover {
+#shareLink:hover,
+.startGame:hover {
     transform: scale(1.03);
 }
 

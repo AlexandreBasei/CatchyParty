@@ -204,9 +204,9 @@ export default defineComponent({
             // this.avatarPath = `/img/${this.player.avatar}.png`;
         },
 
-        // reload() {
-        //     window.location.search = '?room=';
-        // },
+        reload() {
+            window.location.search = '?room=';
+        },
     },
     mounted() {
 
