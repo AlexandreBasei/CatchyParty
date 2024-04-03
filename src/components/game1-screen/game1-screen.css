@@ -1,17 +1,6 @@
-:root{
-    --primary: #28AFB0;
-    --secondary: #FF570A;
-    --tertiary: #19647E;
-    --quaternary: #F4D35E;
-    --quinary: #14121A;
-
-    --black: #14080E;
-    --white: #FFFFFF;
-}
-
 .song-card{
     background-color: var(--primary);
-    border-radius: 20px;
+    border-radius: var(--borderradius);
     width: 20vh;
 }
 
@@ -20,14 +9,6 @@
 
 
 @media only screen and (max-width: 600px) {
-    .content{
-        height: 100vh;
-        overflow: hidden;
-    }
-
-    #app{
-        overflow:hidden;
-    }
 
     .songCont{
         overflow-x: scroll;
@@ -43,7 +24,7 @@
     .game-main{
         height: 30vh;
         background-color: var(--tertiary);
-        border-radius: 20px;
+        border-radius: var(--borderradius);
         margin: 5% 5% 15% 5%;
     }
 
@@ -71,7 +52,7 @@
     .game-main{
         height: 30vh;
         background-color: var(--tertiary);
-        border-radius: 20px;
+        border-radius: var(--borderradius);
         position: relative;
     }
 

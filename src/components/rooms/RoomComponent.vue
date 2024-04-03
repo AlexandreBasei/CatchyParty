@@ -284,7 +284,7 @@ ul li{
     align-items: start;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
+    border-radius: var(--borderradius);
     padding: 10px;
 }
 

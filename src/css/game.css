@@ -1,0 +1,129 @@
+
+input[type=submit]:hover{
+    cursor: pointer;
+}
+
+
+/* main section{
+    width: 25%;
+} */
+
+.content{
+    width: 100%;
+    display: flex;
+}
+
+.personalization{
+    justify-content: center;
+    display: flex;
+    margin: 35px 0px;
+    text-align: center;
+}
+
+.personalization-main{
+    margin: 2% 5% 0 0%;
+    width: 80%;
+}
+
+.tutorial{
+    text-align: center;
+    width: 300px;
+    max-width: 90vw;
+    user-select: none;
+}
+
+.tutorial h2{
+    margin: 0;
+}
+
+.tutorial-box {
+    background-color: var(--primary);
+    padding: 20px;
+    margin: 20px auto;
+    border-radius: var(--borderradius);
+}
+
+.game-options{
+    display: flex;
+    flex-wrap: wrap;
+}
+.game {
+    flex: 30%;
+    padding: 10px;
+    margin: 5px;
+    border-radius: var(--borderradius);
+    cursor: pointer;
+    
+    background-color: var(--secondary);
+}
+.selected {
+    background-color: var(--secondary);
+}
+
+.playersContainer{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.playerContainer{
+    display: flex;
+    flex-flow: wrap column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.playerContainer div{
+    display: flex;
+    flex-flow: nowrap row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.playerContainer img{
+    margin: auto;
+}
+
+.playerContainer p{
+    text-align: center;
+    /* margin-top: 5px; */
+}
+
+.submitBtn{
+    margin-top: 35px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-weight: bold;
+}
+.submitBtn:hover{
+    transform: scale(1.1);
+}
+
+.settings{
+    text-align: center;
+}
+
+.settings button, .settings input[type=submit]{
+    margin-top: 10%;
+}
+
+.container{
+    margin: 0 5%;
+}
+
+.CGU-main{
+    overflow: auto;
+    display: grid;
+    gap: 20px;
+}
+
+.CGU-main section{
+    width: 100%;
+}
+
+.about-main{
+    gap: 10%;
+}

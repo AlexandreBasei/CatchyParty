@@ -18,8 +18,8 @@
         <footerApp></footerApp>
     </div>
 </template>
-<style lang="scss or less">
-    import './about.css';
+<style lang="css" scoped>
+    @import './about.css';
 </style>
 <script>
     import footerApp from '../footer/footer.vue';

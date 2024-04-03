@@ -1,29 +1,29 @@
+.footer{
+    width: 100%;
+    margin: 30px 0px;
+}
 footer{
-    /* position: fixed;
-    left: 0;
+    /* position: fixed; */
+    /* left: 0;
     bottom: 20px; */
     width: 100%;
 }
 
-footer p{
-    color: var(--white);
-}
-
 .footerLinks{
     display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     padding: 0 10%;
 }
 
 .footerLinks a{
-    flex: 0 0 33%;
+    flex: 0 0 30%;
+    color: var(--white);
     text-decoration: none;
 }
 
 .footerText{
-    /* position: fixed;
-    left: 0;
-    bottom: 0; */
     width: 100%; 
     text-align: center;
 }

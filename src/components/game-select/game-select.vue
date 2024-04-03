@@ -6,11 +6,11 @@
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
 
-                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="../../assets/Avatar1.png"
+                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="../../assets/Avatar2.png"
+                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_pink.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="../../assets/Avatar3.png"
+                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_red.svg"
                             id="avatarImg" alt="Avatar">
 
                         <p class="pseudoPlayer">
@@ -356,15 +356,18 @@ export default defineComponent({
 </script>
 
 <style scoped>
+@import url('./game-select.css');
+
+
 .playerContainer img {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
+    border-radius: var(--borderradius);
 }
 
 .personalization-main {
-    background-color: var(--tertiary);
-    border-radius: 20px;
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
 }
 
 ul {
@@ -375,19 +378,28 @@ ul li {
     width: fit-content;
 }
 
+#shareLink{
+    position: absolute;
+    transform: translate(-50%,-50%);
+    bottom: 0px;
+    left: 50%;
+}
+
 #shareLink,
 .startGame {
     background-color: var(--quaternary);
     color: var(--black);
     font-weight: 600;
     padding: 5%;
-    border-radius: 20px;
+    border-radius: var(--borderradius);
     border-color: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
 }
+#shareLink:hover{
+    transform: translate(-50%,-50%) scale(1.03);
+}
 
-#shareLink:hover,
 .startGame:hover {
     transform: scale(1.03);
 }
@@ -412,7 +424,7 @@ ul li {
     align-items: start;
     justify-content: center;
     background-color: var(--quaternary);
-    border-radius: 15px;
+    border-radius: var(--borderradius);
     padding: 10px;
     z-index: 10;
 }
@@ -429,6 +441,34 @@ ul li {
 
 .hostMenu button:first-child {
     border-bottom: 1px solid black;
+}
+
+
+
+.playersList {
+    background-color: var(--black);
+    border-radius: var(--borderradius);
+    margin: 2% 5% 0 5%;
+    padding: 20px 40px;
+    width: 20%;
+
+    position: relative
+}
+
+.playersList h3 {
+    text-align: center;
+}
+
+.game-container {
+    width: 30%;
+}
+
+.game-options {
+    justify-content: center;
+}
+
+.personalization-main {
+    padding: 5vh;
 }
 
 @media only screen and (max-width: 600px) {
@@ -453,19 +493,14 @@ ul li {
 
     .playersList {
         background-color: var(--tertiary);
-        border-radius: 20px;
+        border-radius: var(--borderradius);
         margin: 2% 5% 0 5%;
         padding: 20px;
         display: flex;
         flex-flow: wrap column;
-        ;
+        
         justify-content: center;
         align-items: center;
-    }
-
-    .playersList h3 {
-        margin: 0 0 15px 0;
-        text-align: center;
     }
 
     .playersList p {
@@ -473,31 +508,4 @@ ul li {
     }
 }
 
-@media only screen and (min-width: 1000px) {
-    .playersList {
-        background-color: var(--tertiary);
-        border-radius: 20px;
-        margin: 2% 5% 0 5%;
-        padding: 20px 40px;
-        width: 20%;
-    }
-
-    .settings {
-        width: auto;
-        display: flex;
-        gap: 10vh;
-    }
-
-    .game-container {
-        width: 30%;
-    }
-
-    .game-options {
-        justify-content: center;
-    }
-
-    .personalization-main {
-        padding: 5vh;
-    }
-}
 </style>

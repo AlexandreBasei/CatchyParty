@@ -11,22 +11,22 @@
                         <div class="avatar-selected">
                             <!-- <img class="avatar-option" alt="Avatar"
                             v-bind:src="require(`${avatarPath}`)"> -->
-                            <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar"
+                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
                                 v-if="selectedAvatar === 'Avatar1'">
 
-                            <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
                                 v-if="selectedAvatar === 'Avatar2'">
 
-                            <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
                                 v-if="selectedAvatar === 'Avatar3'">
                         </div>
                     </div>
                     <div class="avatar-options">
-                        <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar 1"
+                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar 1"
                             @click="selectAvatar('Avatar1')">
-                        <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar 2"
                             @click="selectAvatar('Avatar2')">
-                        <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar 3"
                             @click="selectAvatar('Avatar3')">
                     </div>
                 </div>
@@ -48,22 +48,22 @@
                                 <div class="avatar-selected">
                                     <!-- <img class="avatar-option" alt="Avatar"
                             v-bind:src="require(`${avatarPath}`)"> -->
-                                    <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar"
+                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
                                         v-if="selectedAvatar === 'Avatar1'">
 
-                                    <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
                                         v-if="selectedAvatar === 'Avatar2'">
 
-                                    <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
                                         v-if="selectedAvatar === 'Avatar3'">
                                 </div>
                             </div>
                             <div class="avatar-options">
-                                <img class="avatar-option" src="../../assets/Avatar1.png" alt="Avatar 1"
+                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
                                     @click="selectAvatar('Avatar1')">
-                                <img class="avatar-option" src="../../assets/Avatar2.png" alt="Avatar 2"
+                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
                                     @click="selectAvatar('Avatar2')">
-                                <img class="avatar-option" src="../../assets/Avatar3.png" alt="Avatar 3"
+                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
                                     @click="selectAvatar('Avatar3')">
                             </div>
                         </div>
@@ -228,13 +228,16 @@ export default defineComponent({
 
 <style scoped>
 .avatar-container {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    margin: 30px 0px;
+    /* position: relative;
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    border-radius: 2px;
     background-color: var(--black);
     margin: 0 auto 30px auto;
-    cursor: pointer;
+    cursor: pointer; */
 }
 
 .avatar-options {
@@ -242,12 +245,23 @@ export default defineComponent({
     gap: 5px;
 }
 
+.avatar-options .avatar-option {
+    background-color: transparent;
+}
+.avatar-options .avatar-option:hover {
+    background-color: var(--white);
+    cursor: pointer;
+    
+}
+
 .avatar-option,
 .player-icon {
     width: 60px;
     height: 60px;
-    border-radius: 50%;
-    transition: transform 0.3s;
+    border-radius: var(--borderradius);
+    /* transition: transform 0.3s; */
+    
+    transition: all 0.2s ease;;
 }
 
 .avatar-option:hover {
@@ -255,19 +269,22 @@ export default defineComponent({
 }
 
 .avatar-selected {
-    position: absolute;
+    /* position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     width: 80px;
     height: 80px;
-    border-radius: 50%;
+    border-radius: var(--borderradius);
     overflow: hidden;
+    border: 5px solid var(--black);
+    background-color: var(--primary);
 }
 
 .avatar-selected img {
     width: 100%;
     height: auto;
+    border-radius: 0px;
 }
 
 .email-icon {
@@ -290,6 +307,57 @@ export default defineComponent({
     font-weight: 600;
 }
 
+/* .personalization,
+.tutorial {
+    margin: auto;
+} */
+
+
+input{
+    padding: 20px 15px;
+    margin: 10px 0;
+    background-color: var(--tertiary);
+    border: 2px solid transparent;
+    border-radius: var(--borderradius);
+    width: 300px;
+    max-width: 90vw;
+    box-sizing: border-box;
+
+    transition: all 0.5s ease;
+}
+
+input:hover,
+input:focus{
+    border: 2px solid var(--black);
+    outline: none;
+}
+
+/* select,
+input[type=text],
+button {
+    width: 30vh;
+}
+
+input[type=submit] {
+    width: 30vh;
+} */
+
+.avatar-choice {
+    justify-content: center;
+    display: grid;
+    margin: 50px 0px;
+}
+
+.avatar-choice h3{
+    user-select: none;
+}
+
+.submit {
+    justify-content: center;
+    display: flex;
+    margin-top: 1em;
+}
+
 @media only screen and (max-width: 600px) {
 
     footer {
@@ -298,55 +366,4 @@ export default defineComponent({
     }
 }
 
-@media only screen and (min-width: 1000px) {
-    body {
-        height: 100vh;
-    }
-
-    .personalization,
-    .tutorial {
-        margin: auto;
-    }
-
-    .footer {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-
-    select,
-    input[type=text],
-    button {
-        width: 30vh;
-        background-color: var(--quaternary);
-        border: 0;
-        /* color: white; */
-        color: var(--tertiary);
-        margin: 10px 0;
-        padding: 5px;
-        border-radius: 10px;
-    }
-
-    input[type=submit] {
-        background-color: var(--quaternary);
-        border: 0;
-        /* color: white; */
-        color: var(--tertiary);
-        margin: 10px 0;
-        padding: 5px;
-        border-radius: 10px;
-        width: 30vh;
-    }
-
-    .avatar-choice {
-        justify-content: center;
-        display: grid;
-    }
-
-    .submit {
-        justify-content: center;
-        display: flex;
-        margin-top: 1em;
-    }
-}
 </style>

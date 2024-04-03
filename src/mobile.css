@@ -1,26 +1,5 @@
 @media only screen and (max-width: 600px) {
 
-    :root{
-        --primary: #28AFB0;
-        --secondary: #FF570A;
-        --tertiary: #19647E;
-        --quaternary: #F4D35E;
-        --quinary: #14121A;
-    
-        --black: #14080E;
-        --white: #FFFFFF;
-    }
-
-    /* elements */
-
-    body{
-        color: var(--white);
-        font-family: 'Montserrat', sans-serif;
-        background: linear-gradient(193deg, rgba(3, 172, 152, 1) 29%, rgba(51, 116, 193, 1) 57%, rgba(189, 255, 105, 1) 83%);
-        background-repeat: no-repeat;
-        display: inline-block;
-    }
-
     select, input[type=text], button{
         width: 30vh;
         background-color: var(--quaternary);
@@ -28,7 +7,7 @@
         color: white;
         margin: 10px 0;
         padding: 5px;
-        border-radius: 10px;
+        border-radius: var(--borderradius);
     }
 
     input[type=submit]{
@@ -37,7 +16,7 @@
         color: white;
         margin: 10px 0;
         padding: 5px;
-        border-radius: 10px;
+        border-radius: var(--borderradius);
         width: 30vh;
     }
 
@@ -78,26 +57,22 @@
         margin-top: 1em;
     }
 
-    .personalization{
+    /* .personalization{
         margin: auto;
         padding-top: 0;
     }
 
     .personalization form{
         display: block;
-    }
+    } */
 
-    .tutorial{
-        width: 40vh;
-    }
-
-    .settings{
+    /* .settings{
         width: 100%;
-    }
+    } */
 
-    .submitBtn{
+    /* .submitBtn{
         margin-top: 5vh;
-    }
+    } */
 
     .game-container{
         flex: 30%;

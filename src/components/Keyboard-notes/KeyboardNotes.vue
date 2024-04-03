@@ -11,12 +11,12 @@
         </div>
         <div class="Waiting-game" v-show="showWaitingGame">
             <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
-                :disabled="gameStarted">go tester</button>
+                :disabled="gameStarted">KeyBoard Notes</button>
         </div>
         <div class="first-step" v-show="firstStepGame">
-            <label for="userIdea">Entrez ce que vous souhaitez faire jouer à vos giga brows :</label>
-            <input type="text" v-model="userIdeaInput" placeholder="Depeche toi...">
-            <button @click="submitIdea()" :disabled="ideaSubmitted">SUBMIT TON IDEE LE S</button>
+            <label for="userIdea">Donnez le nom d'une musique :</label>
+            <input type="text" v-model="userIdeaInput" placeholder="Juste ici...">
+            <button @click="submitIdea()" :disabled="ideaSubmitted">Valider</button>
             <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
         </div>
         <div v-for="(item, index) in assignedIdea" :key="index">

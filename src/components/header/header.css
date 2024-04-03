@@ -1,8 +1,13 @@
 header{
     justify-content: center;
+    margin: 25px 0px;
     display: flex;
 }
 
-header a{
-    margin-top: 15px;
+header img{
+    width: 200px;
+}
+
+header img:hover{
+    cursor: pointer;
 }

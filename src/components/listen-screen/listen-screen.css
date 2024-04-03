@@ -1,14 +1,3 @@
-:root{
-    --primary: #28AFB0;
-    --secondary: #FF570A;
-    --tertiary: #19647E;
-    --quaternary: #F4D35E;
-    --quinary: #14121A;
-
-    --black: #14080E;
-    --white: #FFFFFF;
-}
-
 h1{
     color: var(--secondary);
     align-items: center;
