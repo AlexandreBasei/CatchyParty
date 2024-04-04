@@ -46,9 +46,9 @@
             <button id="play">Écouter votre musique</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
-            <label for="guess">Devinez la musique que vous avez entendue :</label>
+            <label for="guess">Quelle musique avez-vous entendue ?</label>
             <input type="text" v-model="guessInput"
-                placeholder="Ecrivez la musique à laquelle correspond l'enchainement de notes...">
+                placeholder="Nom de la musique">
             <button @click="playGuessNotes()">Écouter la musique</button>
         </div>
     </div>

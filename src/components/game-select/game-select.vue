@@ -33,58 +33,43 @@
                     </div>
                 </div>
             </div>
-            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copy invitation link</p>
+            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
         </section>
         <main class="personalization-main">
             <section class="settings">
                 <form @submit.prevent="start('game1')">
-                    <label for="nbPlayers">Number of players</label>
+                    <label for="nbPlayers">Nombre de joueurs</label>
                     <select id="nbPlayers">
 
                     </select>
                     <br>
-                    <label for="nbRounds">Number of rounds</label>
+                    <label for="nbRounds">Nombre de manches</label>
                     <select id="nbRounds">
 
                     </select>
                     <br>
                     <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button class="startGame" v-if="player.host">Start Game</button>
+                    <button class="startGame" v-if="player.host">Démarrer la partie</button>
 
                 </form>
                 <div>
-                    <h3>Game selection</h3>
+                    <h3>Sélection des jeux</h3>
 
                     <div class="game-options">
                         <div class="game-container">
                             <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
                                     alt="Game 1"></div>
-                            <p>Game1</p>
+                            <p>Keyboard-notes</p>
                         </div>
                         <div class="game-container">
                             <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
                                     alt="Game 2"></div>
-                            <p>Game2</p>
+                            <p>Classico</p>
                         </div>
                         <div class="game-container">
                             <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
                                     alt="Game 3"></div>
-                            <p>Game3</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 4"></div>
-                            <p>Game4</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 5"></div>
-                            <p>Game5</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 6"></div>
-                            <p>Game6</p>
+                            <p>What's the situation ?</p>
                         </div>
                     </div>
                 </div>
