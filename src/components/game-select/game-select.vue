@@ -37,42 +37,46 @@
         </section>
         <main class="personalization-main">
             <section class="settings">
-                <form @submit.prevent="start('game1')">
-                    <label for="nbPlayers">Nombre de joueurs</label>
-                    <select id="nbPlayers">
-
-                    </select>
-                    <br>
-                    <label for="nbRounds">Nombre de manches</label>
-                    <select id="nbRounds">
-
-                    </select>
-                    <br>
-                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button class="startGame" v-if="player.host">Démarrer la partie</button>
-
-                </form>
                 <div>
                     <h3>Sélection des jeux</h3>
 
                     <div class="game-options">
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 1"></div>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 1">
+                            </div>
                             <p>Keyboard-notes</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 2"></div>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 2">
+                            </div>
                             <p>Classico</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 3"></div>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 3">
+                            </div>
                             <p>What's the situation ?</p>
                         </div>
                     </div>
                 </div>
+
+                <form @submit.prevent="start('game1')">
+                    <div class="personalization-options">
+                        <div>
+                            <label for="nbPlayers">Nombre de joueurs</label>
+                            <select id="nbPlayers"></select>
+                        </div>
+                        <div>
+                            <label for="nbRounds">Nombre de manches</label>
+                            <select id="nbRounds"></select>
+                        </div>
+                    </div>
+
+                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
+                    <button class="startGame" v-if="player.host">Démarrer la partie</button>
+                </form>
             </section>
         </main>
     </div>

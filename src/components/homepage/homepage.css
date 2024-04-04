@@ -147,7 +147,7 @@ input,
     padding: 20px 15px;
     margin: 10px 0;
     background-color: var(--tertiary);
-    border: 2px solid transparent;
+    border: 2px solid var(--tertiary);
     color: var(--black);
     border-radius: var(--borderradius);
     width: 300px;
@@ -158,9 +158,9 @@ input,
 }
 
 input:hover,
-input:focus{
+input:focus,
+.submitBtn:hover{
     border: 2px solid var(--black);
-    outline: none;
 }
 
 /* select,

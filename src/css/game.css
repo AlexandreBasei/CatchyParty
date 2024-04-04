@@ -13,18 +13,6 @@ input[type=submit]:hover{
     display: flex;
 }
 
-.personalization{
-    justify-content: center;
-    display: flex;
-    margin: 35px 0px;
-    text-align: center;
-}
-
-.personalization-main{
-    margin: 2% 5% 0 0%;
-    width: 80%;
-}
-
 .tutorial{
     text-align: center;
     width: 300px;
@@ -46,6 +34,8 @@ input[type=submit]:hover{
 .game-options{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 20px 0px;
 }
 .game {
     flex: 30%;
@@ -56,8 +46,8 @@ input[type=submit]:hover{
     
     background-color: var(--secondary);
 }
-.selected {
-    background-color: var(--secondary);
+.game.selected {
+    background-color: var(--tertiary);
 }
 
 .playersContainer{
@@ -101,10 +91,6 @@ input[type=submit]:hover{
 
 .settings{
     text-align: center;
-}
-
-.settings button, .settings input[type=submit]{
-    margin-top: 10%;
 }
 
 .container{

@@ -3,7 +3,7 @@
     <main v-if="homepage === true">
         <section class="personalization"> 
             <form>
-                <input type="text" class="textInput" placeholder="Entrez votre nom d'utilisateur" v-model="pseudo" maxlength="15"
+                <input type="text" class="textInput" placeholder="Entre ton nom d'utilisateur" v-model="pseudo" maxlength="15"
                     required>
                 <div class="avatar-choice">
                     <h3 v-if="homepage === true && !roomId">Choisis un avatar</h3>

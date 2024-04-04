@@ -21,7 +21,7 @@
         </div>
         <div v-for="(item, index) in assignedIdea" :key="index">
             <div v-if="item.id === socket.id">
-                <p>L'idée qui vous a été attribuée est : {{ item.idea }}</p>
+                <p>L'idée qui t'a été attribuée est : {{ item.idea }}</p>
             </div>
         </div>
 
@@ -43,10 +43,10 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
-            <button id="play">Écouter votre musique</button>
+            <button id="play">Écoute ta musique</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
-            <label for="guess">Quelle musique avez-vous entendue ?</label>
+            <label for="guess">Quelle musique as-tu entendue ?</label>
             <input type="text" v-model="guessInput"
                 placeholder="Nom de la musique">
             <button @click="playGuessNotes()">Écouter la musique</button>
