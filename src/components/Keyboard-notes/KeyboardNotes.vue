@@ -14,7 +14,7 @@
                 :disabled="gameStarted">KeyBoard Notes</button>
         </div>
         <div class="first-step" v-show="firstStepGame">
-            <label for="userIdea">Donnez le nom d'une musique :</label>
+            <label for="userIdea">Entrez le nom d'une musique :</label>
             <input type="text" v-model="userIdeaInput" placeholder="Juste ici...">
             <button @click="submitIdea()" :disabled="ideaSubmitted">Valider</button>
             <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
@@ -43,17 +43,17 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
-            <button id="play">Play</button>
+            <button id="play">Écouter votre musique</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
-            <label for="guess">Votre guess :</label>
+            <label for="guess">Devinez la musique que vous avez entendue :</label>
             <input type="text" v-model="guessInput"
                 placeholder="Ecrivez la musique à laquelle correspond l'enchainement de notes...">
-            <button @click="playGuessNotes()">Jouer la suite !!!!!!!!!!!!!</button>
+            <button @click="playGuessNotes()">Écouter la musique</button>
         </div>
     </div>
     <div class="end-game" v-show="showEndGame">
-        <button id="play">END GAME</button>
+        <button id="play">Partie terminée</button>
     </div>
 </template>
 
