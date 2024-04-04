@@ -8,7 +8,7 @@
                 <div class="avatar-choice">
                     <h3 v-if="homepage === true && !roomId">Choisis un avatar</h3>
                     <div v-else v-for="room in rooms" :key="room.id">
-                        <h3 v-if="room.id === roomId">Tu es en train de rejoindre la salle de : {{ room.players[0].username }}</h3>
+                        <h3 v-if="room.id === roomId">Tu es en train de rejoindre la salle de {{ room.players[0].username }}</h3>
                     </div>
                     <div class="avatar-container">
                         <div class="avatar-selected">
@@ -33,84 +33,13 @@
                 </div>
                 <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">Jouer !</button>
                 <div v-else v-for="room in rooms" :key="room.id">
-                    <button @click="joinRoom(room)" class="submitBtn">Rejoindre la partie !</button>
+                    <button v-if="room.id === roomId" @click="joinRoom(room)" class="submitBtn">Rejoindre la partie !</button>
                 </div>
-            </form>
-        </section>        
-
-        <!-- <section class="personalization" v-if="homepage === true && !roomId">
-            <form @submit.prevent="handleSubmit">
-                <input type="text" class="textInput" placeholder="Entrez votre nom d'utilisateur" v-model="pseudo" maxlength="15"
-                    required>
-                <div class="avatar-choice">
-                    <h3>Choisis un avatar</h3>
-                    <div class="avatar-container">
-                        <div class="avatar-selected">
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
-                                v-if="selectedAvatar === 'Avatar1'">
-
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
-                                v-if="selectedAvatar === 'Avatar2'">
-
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
-                                v-if="selectedAvatar === 'Avatar3'">
-                        </div>
-                    </div>
-                    <div class="avatar-options">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar 1"
-                            @click="selectAvatar('Avatar1')">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar 2"
-                            @click="selectAvatar('Avatar2')">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar 3"
-                            @click="selectAvatar('Avatar3')">
-                    </div>
-                </div>
-                <button type="submit" class="submitBtn" id="submitBtn">Jouer !</button>
             </form>
         </section>
 
-        <section v-else-if="roomId && homepage === true" class="joiningRoom">
-            <div v-for="room in rooms" :key="room.id">
-                <div v-if="room.id === roomId">
-                    <h2>Vous êtes en train de rejoindre la salle de : {{ room.players[0].username }}</h2>
-                    <form @submit.prevent="joinRoom(room)">
-                        <input type="text" placeholder="Entre ton nom d'utilisateur" v-model="pseudo" required maxlength="15">
-                        <div class="avatar-choice">
-                            <h3>Choisis un avatar</h3>
-                            <div class="avatar-container">
-                                <div class="avatar-selected">
-                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
-                                        v-if="selectedAvatar === 'Avatar1'">
-
-                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
-                                        v-if="selectedAvatar === 'Avatar2'">
-
-                                    <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
-                                        v-if="selectedAvatar === 'Avatar3'">
-                                </div>
-                            </div>
-                            <div class="avatar-options">
-                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
-                                    @click="selectAvatar('Avatar1')">
-                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
-                                    @click="selectAvatar('Avatar2')">
-                                <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
-                                    @click="selectAvatar('Avatar3')">
-                            </div>
-                        </div>
-                        <button type="submit" class="submitBtn">Rejoindre la partie</button>
-                    </form>
-                </div>
-                <div v-else>
-                    <p>The room you are trying to join does not exist</p>
-                </div>
-            </div>
-        </section> -->
-
         <section class="tutorial" v-if="homepage === true">
-            <h3>
-                How to play ?
-            </h3>
+            <h3> Comment Jouer ? </h3>
             <div id="tutorial" class="tutorial-box">{{ tutorialText }}</div>
         </section>
     </main>

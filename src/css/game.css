@@ -81,9 +81,6 @@ input[type=submit]:hover{
     gap: 20px;
 }
 
-.playerContainer img{
-    margin: auto;
-}
 
 .playerContainer p{
     text-align: center;

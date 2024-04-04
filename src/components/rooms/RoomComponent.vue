@@ -60,7 +60,7 @@
                         <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
                     </div>
                 </li>
-                <p id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</p>
+                <button id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</button>
                 <button v-if="room.players.length > 1" @click="play">Démarrer la partie</button>
                 <button @click="exitRoom">Quitter la partie</button>
             </ul>
