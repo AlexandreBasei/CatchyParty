@@ -1,0 +1,25 @@
+body {
+    padding: 0;
+    margin: 0;
+    display: block;
+    background: linear-gradient(to right, #28AFB0, #3374C1);
+}
+
+.card-enonce {
+    background-color: #19647E;
+    border-radius: 20px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+.title {
+    color: white;
+}
+
+.enonce {
+    color: white;
+    
+}
