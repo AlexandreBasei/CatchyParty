@@ -30,20 +30,9 @@ export default ({
 </script>
 
 <style scoped>
-    :root{
-    --primary: #28AFB0;
-    --secondary: #FF570A;
-    --tertiary: #19647E;
-    --quaternary: #F4D35E;
-    --quinary: #14121A;
-
-    --black: #14080E;
-    --white: #FFFFFF;
-}
-
 .rulesCont{
     background: var( --tertiary);
-    border-radius: 20px;
+    border-radius: var(--borderradius);
     margin: 2vh;
     padding: 2vh;
 }
@@ -63,7 +52,7 @@ export default ({
 
     .rulesCont{
         background: var( --tertiary);
-        border-radius: 20px;
+        border-radius: var(--borderradius);
         margin: auto;
         padding: 2vh;
         width: 100vh;

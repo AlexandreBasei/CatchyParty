@@ -1,9 +1,9 @@
 <template>
 
-  <headerApp></headerApp>
+  <!-- <headerApp></headerApp>
 
   <home_page></home_page>
-  <footerApp></footerApp>
+  <footerApp></footerApp> -->
 
   <RouterView />
 </template>

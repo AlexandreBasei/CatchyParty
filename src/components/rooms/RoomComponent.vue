@@ -28,7 +28,7 @@
     <section v-else-if="roomId">
         <div v-for="room in rooms" :key="room.id">
             <div v-if="room.id === roomId">
-                <h1>Vous allez rejoindre la salle de {{ room.players[0].username }}</h1>
+                <h1>Tu vas rejoindre la salle de {{ room.players[0].username }}</h1>
                 <form @submit.prevent="joinRoom(room)">
                     <label for="username">Nom d'utilisateur : </label>
                     <input type="text" v-model="username" required>
@@ -41,7 +41,7 @@
 
     <!-- Affichage salle rejointe-->
     <section v-else-if="roomJoined">
-        <p>Vous avez rejoint un salon avec les joueurs suivants :</p>
+        <p>Tu as rejoint un salon avec les joueurs suivants :</p>
         <div v-for="room in rooms" :key="room.id">
             <ul v-if="room.id === currentRoom">
                 <li v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
@@ -60,7 +60,7 @@
                         <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
                     </div>
                 </li>
-                <p id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</p>
+                <button id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</button>
                 <button v-if="room.players.length > 1" @click="play">Démarrer la partie</button>
                 <button @click="exitRoom">Quitter la partie</button>
             </ul>
@@ -70,12 +70,12 @@
     <!-- Affichage salle n'existe pas -->
     <section v-if="!roomJoined && roomId">
         <div v-if="rooms.length === 0">
-            <p>Le salon que vous essayez de rejoindre n'existe pas</p>
+            <p>Le salon que tu essaies de rejoindre n'existe pas</p>
             <button @click="reload">Retourner à l'accueil</button>
         </div>
         <div v-for="room in rooms" :key="room.id">
             <div v-if="room.id !== roomId || !rooms">
-                <p>Le salon que vous essayez de rejoindre n'existe pas</p>
+                <p>Le salon que tu essaies de rejoindre n'existe pas</p>
                 <button @click="reload">Retourner à l'accueil</button>
             </div>
         </div>
@@ -284,7 +284,7 @@ ul li{
     align-items: start;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 15px;
+    border-radius: var(--borderradius);
     padding: 10px;
 }
 

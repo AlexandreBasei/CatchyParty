@@ -1,64 +1,214 @@
-.personalization-main{
+/* .personalization-main{
     background-color: var(--tertiary);
-    border-radius: 20px;
+    border-radius: var(--borderradius);
+} */
+
+.settings{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.settings form{
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+}
+
+.game-container{
+    width: 30%;
+}
+
+.playerContainer img {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--borderradius);
+    background-color: var(--white);
+}
+
+.personalization{
+    justify-content: center;
+    display: flex;
+    margin: 35px 0px;
+    text-align: center;
+}
+
+.personalization-main {
+    padding: 20px 40px;
+    position: relative;
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
+
+    margin: 2% 5% 0 0%;
+    width: 80%;
+}
+
+.personalization-options{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.personalization-options > div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+.personalization-options select{
+    background-color: var(--tertiary);
+    color: var(--black);
+    padding: 10px 5px;
+    border: 0px;
+    border-radius: var(--borderradius);
+}
+
+
+ul {
+    list-style-type: none;
+}
+
+ul li {
+    width: fit-content;
+}
+
+
+#shareLink,
+.startGame {
+    background-color: var(--quaternary);
+    color: var(--black);
+    font-weight: 600;
+    padding: 20px 15px;
+    border-radius: var(--borderradius);
+    border-color: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.startGame:hover {
+    transform: scale(1.03);
+}
+
+.hostMenuButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 0px;
+    height: 15px;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.playerContainer .hostMenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    width: 50%;
+    flex-flow: wrap row;
+    align-items: start;
+    justify-content: center;
+    background-color: var(--quaternary);
+    border-radius: var(--borderradius);
+    padding: 10px;
+    z-index: 10;
+}
+
+.hostMenu button {
+    background-color: var(--quaternary);
+    border: none;
+    cursor: pointer;
+}
+
+.hostMenu button:hover {
+    opacity: .5;
+}
+
+.hostMenu button:first-child {
+    border-bottom: 1px solid black;
+}
+
+
+
+.playersList {
+    background-color: var(--black);
+    border-radius: var(--borderradius);
+    margin: 2% 5% 0 5%;
+    padding: 20px 40px;
+    width: 20%;
+
+    position: relative
+}
+
+.playersList h3 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 600px) {
 
-.personalization-main{
-    height: auto;
-    margin: 5% 5% 15% 5%;
-}
+    .personalization-main {
+        height: auto;
+        margin: 5% 5% 15% 5%;
+    }
 
-header{
-    height: 10vh;
-}
+    header {
+        height: 10vh;
+    }
 
-footer{
-    height: 5vh;
-}
+    footer {
+        height: 5vh;
+    }
 
-.playersList{
-    background-color: var(--tertiary);
-    border-radius: 20px;
-    margin: 2% 5% 0 5%;
-    padding: 20px;
-}
+    .player-icon {
+        width: 20px;
+        height: 20px;
+    }
 
-.playersList h3{
-    margin: 0 0 15px 0;
-    text-align: center;
-}
-
-.playersList p{
-    margin: 0 0 0 0;
-}
-}
-
-@media only screen and (min-width: 1000px) {
-    .playersList{
+    .playersList {
         background-color: var(--tertiary);
-        border-radius: 20px;
+        border-radius: var(--borderradius);
         margin: 2% 5% 0 5%;
         padding: 20px;
-        width: 25%;
-    } 
-
-    .settings{
-        width: auto;
         display: flex;
-        gap: 10vh;
-    }
-
-    .game-container{
-        width: 30%;
-    }
-
-    .game-options{
+        flex-flow: wrap column;
+        
         justify-content: center;
+        align-items: center;
     }
 
-    .personalization-main{
-       padding: 5vh;
+    .playersList p {
+        margin: 0 0 0 0;
     }
 }
+
+/* @media only screen and (max-width: 600px) {
+
+    .personalization-main{
+        height: auto;
+        margin: 5% 5% 15% 5%;
+    }
+
+    header{
+        height: 10vh;
+    }
+
+    footer{
+        height: 5vh;
+    }
+
+    .playersList{
+        background-color: var(--tertiary);
+        border-radius: var(--borderradius);
+        margin: 2% 5% 0 5%;
+        padding: 20px;
+    }
+
+    .playersList h3{
+        margin: 0 0 15px 0;
+        text-align: center;
+    }
+
+    .playersList p{
+        margin: 0 0 0 0;
+    }
+} */

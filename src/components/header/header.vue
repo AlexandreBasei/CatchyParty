@@ -1,22 +1,15 @@
 <template>
     <header>
-        <RouterLink to="/">
-            <img alt="logo" src="../../assets/logo.svg" @click="reload">
-        </RouterLink>
-
+        <!-- <RouterLink to="/"> -->
+        <img alt="logo" src="@/assets/logo.svg" @click="reload">
+        <!-- </RouterLink> -->
     </header>
 </template>
 
 <style scoped>
-header {
-    justify-content: center;
-    display: flex;
-}
-
-header a {
-    margin-top: 15px;
-}
+    @import url('./header.css');
 </style>
+
 <script>
 export default ({
     name: 'headerApp',

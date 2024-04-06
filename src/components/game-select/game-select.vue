@@ -6,11 +6,11 @@
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
 
-                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="../../assets/Avatar1.png"
+                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="../../assets/Avatar2.png"
+                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_pink.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="../../assets/Avatar3.png"
+                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_red.svg"
                             id="avatarImg" alt="Avatar">
 
                         <p class="pseudoPlayer">
@@ -37,57 +37,46 @@
         </section>
         <main class="personalization-main">
             <section class="settings">
-                <form @submit.prevent="start('game1')">
-                    <label for="nbPlayers">Number of players</label>
-                    <select id="nbPlayers">
-
-                    </select>
-                    <br>
-                    <label for="nbRounds">Number of rounds</label>
-                    <select id="nbRounds">
-
-                    </select>
-                    <br>
-                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button type="submit" class="startGame" v-if="player.host">Start Game</button>
-                    
-                    </form>
                 <div>
-                    <h3>Game selection</h3>
+                    <h3>Sélection des jeux</h3>
 
                     <div class="game-options">
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 1"></div>
-                            <p>Game1</p>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 1">
+                            </div>
+                            <p>Keyboard-notes</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 2"></div>
-                            <p>Game2</p>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 2">
+                            </div>
+                            <p>Classico</p>
                         </div>
                         <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 3"></div>
-                            <p>Game3</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 4"></div>
-                            <p>Game4</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 5"></div>
-                            <p>Game5</p>
-                        </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection"><img src="../../assets/svg/img-jeu.png"
-                                    alt="Game 6"></div>
-                            <p>Game6</p>
+                            <div class="game" @click="toggleSelection">
+                                <img src="../../assets/svg/img-jeu.png" alt="Game 3">
+                            </div>
+                            <p>What's the situation ?</p>
                         </div>
                     </div>
                 </div>
+
+                <form @submit.prevent="start('game1')">
+                    <div class="personalization-options">
+                        <div>
+                            <label for="nbPlayers">Nombre de joueurs</label>
+                            <select id="nbPlayers"></select>
+                        </div>
+                        <div>
+                            <label for="nbRounds">Nombre de manches</label>
+                            <select id="nbRounds"></select>
+                        </div>
+                    </div>
+
+                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
+                    <button class="startGame" v-if="player.host">Démarrer la partie</button>
+                </form>
             </section>
         </main>
     </div>
@@ -152,9 +141,12 @@ export default defineComponent({
 
         this.socket.on('join room', (player: any) => {
             this.player = player;
+            this.currentRoom = player.roomId;
         });
 
         this.socket.on('new host', (newHostId: string) => {
+            console.log('This.player.socketId', this.player.socketId);
+            
             if (this.player.socketId === newHostId) {
                 this.player.host = true;
             }
@@ -180,6 +172,19 @@ export default defineComponent({
             this.updRooms();
         }, 20);
 
+        document.addEventListener('click', (event: MouseEvent) => {
+            /*eslint no-undef: 0*/
+            const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
+            /*eslint no-undef: 0*/
+            const buttons = document.querySelectorAll('.hostMenuButton') as NodeListOf<HTMLElement>;
+
+            modals.forEach((modal) => {
+                if (!modal.contains(event.target as Node) && !this.isButtonClicked(buttons, event.target as Node)) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
         this.roundsNumber();
         this.playersNumber();
         // this.updateAvatar();
@@ -194,25 +199,35 @@ export default defineComponent({
             });
         },
 
+        resetPlayer() {
+            this.player.host = false;
+            this.player.username = "";
+            this.player.avatar = "Avatar1";
+            this.player.roomId = "";
+            this.player.idea = false;
+            this.player.tabAttributed = false;
+        },
+
         exitRoom() {
             this.rooms.forEach(room => {
                 if (room.id === this.currentRoom) {
-                    this.player.host = false;
-                    this.player.username = "";
-                    this.player.roomId = "";
-                    this.player.turn = false;
-                    this.player.win = false;
+                    this.resetPlayer();
                     this.socket.emit("exit room");
 
-                    window.location.reload();
+                    window.location.search = '';
                 }
             });
         },
 
         kickPlayer(socketId: string) {
-            
+
             this.rooms.forEach(room => {
+                console.log("roomId : ", room.id);
+                console.log("this roomId :", this.currentRoom);
+
+
                 if (room.id === this.currentRoom) {
+                    console.log("kick");
                     this.socket.emit("kick player", socketId);
                 }
             });
@@ -251,6 +266,15 @@ export default defineComponent({
             const menuToDisplay = document.getElementById(socketId);
 
             if (menuToDisplay) {
+                /*eslint no-undef: 0*/
+                const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
+                    
+                modals.forEach((modal) => {
+                    if (modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+
                 menuToDisplay.style.display = "flex";
             }
         },
@@ -266,14 +290,16 @@ export default defineComponent({
             }
         },
 
-        // isButtonClicked(buttons: NodeListOf<HTMLElement>, target: Node): boolean {
-        //     for (const button of buttons) {
-        //         if (button.contains(target)) {
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // },
+        isButtonClicked(buttons: any, target: Node): boolean {
+            console.log("saas");
+
+            for (const button of buttons) {
+                if (button.contains(target)) {
+                    return true;
+                }
+            }
+            return false;
+        },
 
         toggleSelection(event: MouseEvent) {
             if (event.currentTarget instanceof HTMLElement) {
@@ -319,146 +345,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.playerContainer img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-}
-
-.personalization-main {
-    background-color: var(--tertiary);
-    border-radius: 20px;
-}
-
-ul {
-    list-style-type: none;
-}
-
-ul li {
-    width: fit-content;
-}
-
-#shareLink, .startGame{
-    background-color: var(--quaternary);
-    color: var(--black);
-    font-weight: 600;
-    padding: 5%;
-    border-radius: 20px;
-    border-color: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-#shareLink:hover, .startGame:hover {
-    transform: scale(1.03);
-}
-
-.hostMenuButton {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    width: 0px;
-    height: 15px;
-    margin: 0;
-    padding-right: 10px;
-}
-
-.hostMenu {
-    display: none;
-    position: absolute;
-    left: 100%;
-    top: 100%;
-    width: 50%;
-    flex-flow: wrap row;
-    align-items: start;
-    justify-content: center;
-    background-color: var(--quaternary);
-    border-radius: 15px;
-    padding: 10px;
-    z-index: 10;
-}
-
-.hostMenu button {
-    background-color: var(--quaternary);
-    border: none;
-    cursor: pointer;
-}
-
-.hostMenu button:hover {
-    opacity: .5;
-}
-
-.hostMenu button:first-child {
-    border-bottom: 1px solid black;
-}
-
-@media only screen and (max-width: 600px) {
-
-    .personalization-main {
-        height: auto;
-        margin: 5% 5% 15% 5%;
-    }
-
-    header {
-        height: 10vh;
-    }
-
-    footer {
-        height: 5vh;
-    }
-
-    .player-icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .playersList {
-        background-color: var(--tertiary);
-        border-radius: 20px;
-        margin: 2% 5% 0 5%;
-        padding: 20px;
-        display: flex;
-        flex-flow: wrap column;
-        ;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .playersList h3 {
-        margin: 0 0 15px 0;
-        text-align: center;
-    }
-
-    .playersList p {
-        margin: 0 0 0 0;
-    }
-}
-
-@media only screen and (min-width: 1000px) {
-    .playersList {
-        background-color: var(--tertiary);
-        border-radius: 20px;
-        margin: 2% 5% 0 5%;
-        padding: 20px 40px;
-        width: 20%;
-    }
-
-    .settings {
-        width: auto;
-        display: flex;
-        gap: 10vh;
-    }
-
-    .game-container {
-        width: 30%;
-    }
-
-    .game-options {
-        justify-content: center;
-    }
-
-    .personalization-main {
-        padding: 5vh;
-    }
-}
+    @import url('./game-select.css');
 </style>

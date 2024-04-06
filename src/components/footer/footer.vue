@@ -1,14 +1,15 @@
 <template>
   <footer>
     <div class="footerLinks">
-      <RouterLink to="/about">About</RouterLink>
+      <RouterLink to="/about">A propos</RouterLink>
       <RouterLink to="/cgu">CGU</RouterLink>
-      <RouterLink to="/contact">Contact</RouterLink>
+      <RouterLink to="/contact">Contacts</RouterLink>
+    </div>
+    <div class="footerText">
+      <p>&copy; 2024 The Socket Team. All rights reserved.</p>
     </div>
   </footer>
-  <div class="footerText">
-    <p>&copy; 2024 The Socket Team. All rights reserved.</p>
-  </div>
+
 </template>
 
 <script>
@@ -19,6 +20,8 @@ export default {
 };
 </script>
 
-<style lang="scss or less">
-    import "./footer.css";
+<style lang="css" scoped>
+  @import "./footer.css";
 </style>
+
+
