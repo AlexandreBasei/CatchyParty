@@ -344,6 +344,6 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
+<style lang="css" scoped>
     @import url('./game-select.css');
 </style>

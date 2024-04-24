@@ -12,8 +12,8 @@
         </section>
         <div class="content-2">
           <main class="game-main">
-            <img src="../../assets/svg/vilo.svg" class="vilo">
-            <img src="../../assets/svg/mus.svg" class="mus">
+            <img src="../../assets/svg/partinies/vilo.svg" class="vilo">
+            <img src="../../assets/svg/partinies/mus.svg" class="mus">
             <section class="description">
               <h3>Round 1</h3>
               <hr>
@@ -23,7 +23,7 @@
           <div class="songCont">
       <div class="song-cards">
           <div class="song-card">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <img src="../../assets/svg/icons/image.svg" alt="image">
             <p>Album title</p>
             <br>
             <p>Music title</p>
@@ -31,7 +31,7 @@
             <p>Artist's name</p>
           </div>
           <div class="song-card">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <img src="../../assets/svg/icons/image.svg" alt="image">
             <p>Album title</p>
             <br>
             <p>Music title</p>
@@ -39,7 +39,7 @@
             <p>Artist's name</p>
           </div>
           <div class="song-card">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <img src="../../assets/svg/icons/image.svg" alt="image">
             <p>Album title</p>
             <br>
             <p>Music title</p>
@@ -52,17 +52,15 @@
     </div>
   </div>
 
-  <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony">
+  <img src="../../assets/svg/extend/side2.svg" alt="symfony" class="symfony">
   <!-- <div class="footer">
         <footerApp></footerApp>
     </div> -->
 </template>
-<style lang="scss or less">
-    import './game1-screen.css';
-</style>
+
 <script lang="ts">
-    /* import footerApp from '../footer/footer.vue'; */
-    import headerApp from '../header/header.vue'; 
+    /* import footerApp from '../Footer/Footer.vue'; */
+    import headerApp from '../Header/Header.vue'; 
 
 export default({
   name: 'game1_screen',
@@ -72,3 +70,7 @@ export default({
   }
 });
 </script>
+
+<style lang="css" scoped>
+    @import './game1-screen.css';
+</style>

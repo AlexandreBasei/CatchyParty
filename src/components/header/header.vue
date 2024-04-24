@@ -1,14 +1,10 @@
 <template>
     <header>
-        <!-- <RouterLink to="/"> -->
-        <img alt="logo" src="@/assets/logo.svg" @click="reload">
-        <!-- </RouterLink> -->
+        <RouterLink to="/">
+            <img alt="logo" src="@/assets/svg/logo.svg" @click="reload">
+        </RouterLink>
     </header>
 </template>
-
-<style scoped>
-    @import url('./header.css');
-</style>
 
 <script>
 export default ({
@@ -30,3 +26,7 @@ export default ({
     }
 });
 </script>
+
+<style lang="css" scoped>
+    @import url('./header.css');
+</style>

@@ -10,7 +10,7 @@
                 </div>
             </div>
         </section>
-        <img src="../../assets/svg/Chronomètre.svg" alt="chrono" class="chrono">
+        <img src="../../assets/svg/chrono.svg" alt="chrono" class="chrono">
         <div class="content-2">
           <h2>Manager selection</h2>
           <main class="game-main">
@@ -23,9 +23,9 @@
           <div class="songCont">
       <div class="song-cards">
           <div>
-            <img src="../../assets/svg/couronne.svg" alt="crown">
+            <img src="../../assets/svg/icons/crownny.svg" alt="crown">
             <div class="song-card" id="manager">
-              <img src="../../assets/svg/image.svg" alt="image">
+              <img src="../../assets/svg/icons/image.svg" alt="image">
               <p>Album title</p>
               <br>
               <p>Music title</p>
@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="song-card">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <img src="../../assets/svg/icons/image.svg" alt="image">
             <p>Album title</p>
             <br>
             <p>Music title</p>
@@ -42,7 +42,7 @@
             <p>Artist's name</p>
           </div>
           <div class="song-card">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <img src="../../assets/svg/icons/image.svg" alt="image">
             <p>Album title</p>
             <br>
             <p>Music title</p>
@@ -55,24 +55,24 @@
     </div>
   </div>
 
-  <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony">
+  <img src="../../assets/svg/extend/side2.svg" alt="symfony" class="symfony">
   <!-- <div class="footer">
         <footerApp></footerApp>
     </div> -->
 </template>
 
 <script lang="ts">
-    /* import footerApp from '../footer/footer.vue'; */
-    import headerApp from '../header/header.vue'; 
-export default({
-  name: 'validation_screen',
-  components: {
-    /* footerApp, */
-    headerApp,
-  }
-});
+  /* import footerApp from '../Footer/Footer.vue'; */
+  import headerApp from '../Header/Header.vue'; 
+  export default({
+    name: 'validation_screen',
+    components: {
+      /* footerApp, */
+      headerApp,
+    }
+  });
 </script>
 
-<style lang="scss or less">
-    import './validation-screen.css';
+<style lang="css" scoped>
+    @import './validation-screen.css';
 </style>

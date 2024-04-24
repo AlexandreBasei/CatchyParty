@@ -15,11 +15,11 @@
     </p>
   </div>
   <input type="submit" value="Suivant" class="submitBtn" style="margin: auto;">
-  <img src="/img/symfony.svg" alt="symfony" class="symfony">
+  <img src="/img/extend/side2.svg" alt="symfony" class="symfony">
 </template>
 
 <script lang="ts">
-import headerApp from '../header/header.vue';
+import headerApp from '../Header/Header.vue';
 
 export default ({
   name: 'rules-screen',
@@ -29,36 +29,6 @@ export default ({
 });
 </script>
 
-<style scoped>
-.rulesCont{
-    background: var( --tertiary);
-    border-radius: var(--borderradius);
-    margin: 2vh;
-    padding: 2vh;
-}
-
-.rulesCont p{
-    text-align: left;
-}
-
-.submitBtn{
-    margin-top: 5vh !important;
-}
-
-@media only screen and (min-width: 1000px) {
-    .rulesCont p{
-        text-align: center;
-    }
-
-    .rulesCont{
-        background: var( --tertiary);
-        border-radius: var(--borderradius);
-        margin: auto;
-        padding: 2vh;
-        width: 100vh;
-    }
-    
-}
-
-
+<style lang="css" scoped>
+  @import "./rules-screen.css"
 </style>

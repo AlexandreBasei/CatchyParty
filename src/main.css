@@ -14,11 +14,8 @@
     --black: #161617;
     --white: #F9FAFA;
 
-
     --borderradius: 30px;
 }
-
-
 
 body{
     color: var(--white);
@@ -40,14 +37,12 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/svg/motif.svg'), linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
+    background-image: url('@/assets/svg/extend/motif.svg'), linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
     background-repeat: repeat;
     background-size: 200px 200px, cover;
     z-index: -1;
     opacity: 0.05;
 }
-
-
 body::-webkit-scrollbar {
     width: 10px;
     background-color: var(--black);
@@ -57,6 +52,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: var(--tertiary)
 }
+
 
 #app{
     font-family: 'Montserrat', sans-serif;
@@ -68,6 +64,8 @@ body::-webkit-scrollbar-thumb {
 
     min-height: 100vh;
 }
+
+
 
 input{
     font-family: 'Montserrat', sans-serif;

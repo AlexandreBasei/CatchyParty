@@ -1,6 +1,6 @@
 const searchSong = require('./searchSong');
-const { checkOptions } = require('./utils');
-const extractLyrics = require('./utils/extractLyrics');
+const { checkOptions } = require('../utils');
+const extractLyrics = require('../utils/extractLyrics');
 
 /**
  * @param {({apiKey: string, title: string, artist: string, optimizeQuery: boolean}|string)} arg - options object, or Genius URL

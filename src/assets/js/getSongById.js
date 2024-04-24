@@ -1,5 +1,5 @@
 const axios = require('axios');
-const extractLyrics = require('./utils/extractLyrics');
+const extractLyrics = require('../utils/extractLyrics');
 
 const url = 'https://api.genius.com/songs/';
 

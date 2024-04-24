@@ -1,15 +1,16 @@
 <template>
 
 </template>
-<style lang="scss or less">
-    import './game4-screen.css';
-</style>
+
 <script lang="ts">
+  export default({
+    name: 'game4_screen',
+    components: {
 
-export default({
-  name: 'game4_screen',
-  components: {
-
-  }
-});
+    }
+  });
 </script>
+
+<style lang="css" scoped>
+  @import './game4-screen.css';
+</style>

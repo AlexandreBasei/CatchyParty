@@ -1,5 +1,5 @@
 const searchSong = require('./searchSong');
-const { checkOptions } = require('./utils');
+const { checkOptions } = require('../utils');
 
 /**
  * @param {{apiKey: string, title: string, artist: string, optimizeQuery: boolean}} options

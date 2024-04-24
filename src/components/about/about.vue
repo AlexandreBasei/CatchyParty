@@ -18,12 +18,10 @@
         <footerApp></footerApp>
     </div>
 </template>
-<style lang="css" scoped>
-    @import './about.css';
-</style>
+
 <script>
-    import footerApp from '../footer/footer.vue';
-    import headerApp from '../header/header.vue'; 
+    import footerApp from '../Footer/Footer.vue';
+    import headerApp from '../Header/Header.vue'; 
 
     export default({
     name: 'aboutApp',
@@ -33,3 +31,7 @@
     }
     });
 </script>
+
+<style lang="css" scoped>
+    @import './about.css';
+</style>

@@ -1,6 +1,6 @@
 const searchSong = require('./searchSong');
-const extractLyrics = require('./utils/extractLyrics');
-const { checkOptions } = require('./utils');
+const extractLyrics = require('../utils/extractLyrics');
+const { checkOptions } = require('../utils');
 
 /**
  * @param {{apiKey: string, title: string, artist: string, optimizeQuery: boolean}} options

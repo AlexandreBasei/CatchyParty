@@ -42,12 +42,10 @@
         <footerApp></footerApp>
     </div>
 </template>
-<style lang="scss or less">
-    import './cgu.css';
-</style>
+
 <script>
-    import footerApp from '../footer/footer.vue';
-    import headerApp from '../header/header.vue';
+    import footerApp from '../Footer/Footer.vue';
+    import headerApp from '../Header/Header.vue';
 
     export default({
     name: 'cguApp',
@@ -57,3 +55,7 @@
     }
     });
 </script>
+
+<style lang="css" scoped>
+    @import './cgu.css';
+</style>

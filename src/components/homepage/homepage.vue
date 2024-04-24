@@ -52,138 +52,138 @@
 </template>
 
 <script lang="ts">
-import footerApp from '../footer/footer.vue';
-import headerApp from '../header/header.vue';
-import io from 'socket.io-client';
-import gameSelect from '../game-select/game-select.vue';
-import { defineComponent, ref } from 'vue';
+    import footerApp from '../Footer/Footer.vue';
+    import headerApp from '../Header/Header.vue';
+    import io from 'socket.io-client';
+    import gameSelect from '../Game-select/Game-select.vue';
+    import { defineComponent, ref } from 'vue';
 
-interface Room {
-    id: string;
-    players: {
-        host: boolean,
-        avatar: string,
-        roomId: string,
-        socketId: string,
-        username: string,
-        idea: boolean,
-        tabAttributed: boolean,
-    }[];
-}
+    interface Room {
+        id: string;
+        players: {
+            host: boolean,
+            avatar: string,
+            roomId: string,
+            socketId: string,
+            username: string,
+            idea: boolean,
+            tabAttributed: boolean,
+        }[];
+    }
 
-export default defineComponent({
-    name: 'home_page',
-    components: {
-        footerApp,
-        headerApp,
-        gameSelect,
-    },
+    export default defineComponent({
+        name: 'home_page',
+        components: {
+            footerApp,
+            headerApp,
+            gameSelect,
+        },
 
-    data() {
-        return {
-            homepage: true,
-            rooms: [] as Room[],
-            pseudo: '',
-            tutorialText: '',
-            socket: io('http://localhost:3000'),
-            steps: [
-                "Step 1 : Do this...",
-                "Step 2 : Now, this...",
-                "Step 3 : And this..."
-            ],
-            currentStep: 0,
-            player: {
-                host: false,
-                avatar: "Avatar 1",
+        data() {
+            return {
+                homepage: true,
+                rooms: [] as Room[],
+                pseudo: '',
+                tutorialText: '',
+                socket: io('http://localhost:3000'),
+                steps: [
+                    "Step 1 : Do this...",
+                    "Step 2 : Now, this...",
+                    "Step 3 : And this..."
+                ],
+                currentStep: 0,
+                player: {
+                    host: false,
+                    avatar: "Avatar 1",
+                    roomId: "",
+                    username: "",
+                    socketId: "",
+                    idea: false,
+                    tabAttributed: false,
+                },
+                selectedAvatar: "Avatar1",
                 roomId: "",
-                username: "",
-                socketId: "",
-                idea: false,
-                tabAttributed: false,
+            }
+        },
+
+        methods: {
+            updRooms() {
+                this.socket.emit('get rooms');
+
+                this.socket.on('list rooms', (rooms: Room[]) => {
+                    this.rooms = rooms;
+                });
             },
-            selectedAvatar: "Avatar1",
-            roomId: "",
-        }
-    },
 
-    methods: {
-        updRooms() {
-            this.socket.emit('get rooms');
+            joinRoom(room: Room) {
+                if (this.pseudo) {
+                    this.player.roomId = room.id;
+                    this.player.username = this.pseudo;
+                    this.player.socketId = this.socket.id ?? "";
+                    this.player.avatar = this.selectedAvatar;
 
-            this.socket.on('list rooms', (rooms: Room[]) => {
-                this.rooms = rooms;
-            });
-        },
+                    this.socket.emit('playerData', this.player);
+                    this.homepage = false;
+                    this.roomId = "";
+                }
+            },
 
-        joinRoom(room: Room) {
-            if (this.pseudo) {
-                this.player.roomId = room.id;
-                this.player.username = this.pseudo;
-                this.player.socketId = this.socket.id ?? "";
-                this.player.avatar = this.selectedAvatar;
+            handleSubmit() {
+                if (this.pseudo) {
+                    this.player.host = true;
+                    this.player.username = this.pseudo;
+                    this.player.socketId = this.socket.id ?? "";
+                    this.player.avatar = this.selectedAvatar;
 
-                this.socket.emit('playerData', this.player);
-                this.homepage = false;
-                this.roomId = "";
-            }
-        },
+                    this.socket.emit('playerData', this.player);
 
-        handleSubmit() {
-            if (this.pseudo) {
-                this.player.host = true;
-                this.player.username = this.pseudo;
-                this.player.socketId = this.socket.id ?? "";
-                this.player.avatar = this.selectedAvatar;
-
-                this.socket.emit('playerData', this.player);
-
-                this.homepage = false;
-            }
-        },
-        nextStep() {
-            this.currentStep++;
-            if (this.currentStep < this.steps.length) {
-                this.tutorialText = this.steps[this.currentStep];
-                setTimeout(this.nextStep, 5000);
-            } else {
-                setTimeout(() => {
-                    this.currentStep = 0;
+                    this.homepage = false;
+                }
+            },
+            nextStep() {
+                this.currentStep++;
+                if (this.currentStep < this.steps.length) {
                     this.tutorialText = this.steps[this.currentStep];
                     setTimeout(this.nextStep, 5000);
-                }, 5000);
+                } else {
+                    setTimeout(() => {
+                        this.currentStep = 0;
+                        this.tutorialText = this.steps[this.currentStep];
+                        setTimeout(this.nextStep, 5000);
+                    }, 5000);
+                }
+            },
+            selectAvatar(avatarName: string) {
+                localStorage.setItem('selectedAvatar', avatarName);
+                var options = document.querySelector('.avatar-options');
+                // options.style.display = 'none';
+
+                this.selectedAvatar = avatarName;
+                // this.avatarPath = `/img/${this.player.avatar}.png`;
+            },
+
+            reload() {
+                window.location.search = '?room=';
+            },
+        },
+        mounted() {
+
+            if (this.homepage) {
+                setInterval(() => {
+                    this.updRooms();
+                }, 20);
             }
-        },
-        selectAvatar(avatarName: string) {
-            localStorage.setItem('selectedAvatar', avatarName);
-            var options = document.querySelector('.avatar-options');
-            // options.style.display = 'none';
 
-            this.selectedAvatar = avatarName;
-            // this.avatarPath = `/img/${this.player.avatar}.png`;
-        },
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const roomId = urlParams.get('room');
+            this.roomId = roomId ?? "";
 
-        reload() {
-            window.location.search = '?room=';
-        },
-    },
-    mounted() {
-
-        if (this.homepage) {
-            setInterval(() => {
-                this.updRooms();
-            }, 20);
+            this.nextStep();
         }
-
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const roomId = urlParams.get('room');
-        this.roomId = roomId ?? "";
-
-        this.nextStep();
-    }
-})
+    })
 </script>
 
-<style scoped>
-@import url("./homepage.css");
+<style lang="css" scoped>
+    @import url("./homepage.css");
 </style>

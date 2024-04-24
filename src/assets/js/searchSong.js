@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { checkOptions, getTitle } = require('./utils');
+const { checkOptions, getTitle } = require('../utils');
 
 const searchUrl = 'https://api.genius.com/search?q=';
 
