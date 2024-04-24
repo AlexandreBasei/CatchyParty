@@ -1,25 +1,215 @@
-body {
-    padding: 0;
-    margin: 0;
-    display: block;
-    background: linear-gradient(to right, #28AFB0, #3374C1);
+.song-card{
+    background-color: var(--secondary);
+    border-radius: 20px;
+    width: 20vh;
 }
 
-.card-enonce {
-    background-color: #19647E;
-    border-radius: 20px;
-    width: 80%;
-    display: flex;
+.song-card:hover {
+    background-color: var(--tertiary);
+    color: var(--black);
+}
+
+.playersList {
+    background-color: var(--primary);
+    z-index: 1;
+}
+
+.playersContainer {
     flex-direction: column;
     align-items: center;
-    margin: auto;
 }
 
-.title {
-    color: white;
+.playerContainer {
+    display: flex;
+    align-items: center;
+    margin-top: 10px; 
+    flex-direction: row;
+    justify-content: space-around;
+    height: 10vh;
+    width: 13vw;
 }
 
-.enonce {
-    color: white;
-    
+.player-icon {
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%; 
+    object-fit: cover; 
+    margin-right: 10px; 
+}
+
+.pseudoPlayer {
+    margin: 0; 
+    font-weight: bold; 
+}
+
+
+
+.rect-container {
+    position: relative;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.colored-rectangle {
+    width: 100%; 
+    height: 12vh; 
+    background-color: var(--secondary); 
+    border-radius: 20px; 
+    margin: 0 auto;
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    z-index: -1; 
+}
+
+@media only screen and (max-width: 600px) {
+    .content{
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #app{
+        overflow:hidden;
+    }
+
+    .songCont{
+        overflow-x: scroll;
+    }
+
+    .song-cards{
+        display: flex;
+        gap: 1em;
+        margin-left: 5%;
+        width: 150%;
+    }
+
+    .song-card {
+        height: 20vh;
+    }
+
+    .game-main{
+        height: 15vh;
+        background-color: var(--primary);
+        border-radius: 20px;
+        margin: 5% 5% 15% 5%;
+    }
+
+    .vilo, .mus{
+       display: none;
+    }
+
+    .symfony{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+
+    .playersList {
+        width: 80%;
+        margin: 120px auto auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .playersContainer {
+        flex-direction: row;
+    }
+
+    .playerContainer {
+        flex-flow: column;
+    }
+
+    .rect-container {
+        margin-top: 0;
+    }
+
+    .colored-rectangle {
+        width: 90px;
+        margin: 0;
+    }
+
+    input[type="submit"] {
+        margin-top: 30px !important;
+    }
+
+    main section {
+        width: 100%;
+    }
+
+    main {
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+}
+
+@media only screen and (min-width: 1000px) {
+    .song-cards{
+        display: flex;
+        gap: 1em;
+        justify-content:center;
+        margin-bottom: 5vh;
+    }
+
+    .game-main{
+        height: 40vh;
+        background-color: var(--primary);
+        border-radius: 20px;
+        position: relative;
+    }
+
+    .content-2{
+        width: 80%;
+        margin: 2% 5% 0 0%;
+    }
+
+    .songCont{
+        margin-top: 10vh;
+    }
+
+    h3{
+        margin-top: 0;
+    }
+
+    .symfony{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+        width: 100vh;
+    }
+
+    .description{
+        width: 90%;;
+        padding: 1% 5% 0;
+    }
+
+    .vilo{
+        position: absolute;
+        right: 0;
+    }
+
+    .mus{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20vh;
+        rotate: 25deg;
+    }
+
+    .submitBtn{
+        margin-top: 5vh;
+    }
+
+    .inviteBtn {
+        width: 200px;
+        padding: 10px;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }

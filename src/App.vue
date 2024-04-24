@@ -1,11 +1,10 @@
 <template>
-
+  <WtsComponent></WtsComponent>
   <!-- <headerApp></headerApp>
-
   <home_page></home_page>
   <footerApp></footerApp> -->
 
-  <RouterView />
+ <!--  <RouterView />  -->
 </template>
 
 <script lang="ts">
@@ -15,10 +14,12 @@ import footerApp from './components/footer/footer.vue';
 import headerApp from './components/header/header.vue';
 import home_page from './components/homepage/homepage.vue';
 import cguApp from './components/CGU/cgu.vue';
+import WtsComponent from './components/Wts/WtsComponent.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
+    WtsComponent,
     // footerApp,
     // headerApp,
     // home_page,

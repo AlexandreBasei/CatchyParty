@@ -1,0 +1,53 @@
+{
+    "situations": [
+        {
+            "id": 1,
+            "description": "Situation 1"
+        },
+
+        {
+            "id": 2,
+            "description": "Situation 2"
+        },
+
+        {
+            "id": 3,
+            "description": "Situation 3"
+        },
+
+        {
+            "id": 4,
+            "description": "Situation 4"
+        }
+    ],
+
+    "musics": [
+       {
+        "id": 1,
+        "title": "titre1",
+        "artiste": "artiste1",
+        "album": "album1"
+       },
+       
+       {
+        "id": 2,
+        "title": "titre2",
+        "artiste": "artiste2",
+        "album": "album2"
+       },
+
+       {
+        "id": 3,
+        "title": "titre3",
+        "artiste": "artiste3",
+        "album": "album3"
+       },
+
+       {
+        "id": 4,
+        "title": "titre4",
+        "artiste": "artiste4",
+        "album": "album4"
+       }
+    ]
+}

@@ -15,6 +15,7 @@ import rules_screen from "../components/rules-screen/rules-screen.vue";
 import listen_screen from "../components/listen-screen/listen-screen.vue";
 import ending_screen from "../components/ending-screen/ending-screen.vue";
 
+
 const BASE_URL = "/";
 
 const router = createRouter({
