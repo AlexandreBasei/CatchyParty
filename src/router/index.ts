@@ -10,7 +10,7 @@ import game1_screen from "@/components/Game1-screen/Game1-screen.vue";
 // import game4_screen from "@/components/Game4-screen/Game4-screen.vue";
 // import game5_screen from "@/components/Game5-screen/Game5-screen.vue";
 // import game6_screen from "@/components/Game6-screen/Game6-screen.vue";
-import validation_screen from "@/components/validation-screen/validation-screen.vue";
+import validation_screen from "@/components/Validation-screen/Validation-screen.vue";
 import rules_screen from "@/components/Rules-screen/Rules-screen.vue";
 import listen_screen from "@/components/Listen-screen/Listen-screen.vue";
 import ending_screen from "@/components/Ending-screen/Ending-screen.vue";
