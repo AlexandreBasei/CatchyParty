@@ -1,0 +1,55 @@
+
+ul{
+    list-style-type: none;
+}
+
+ul li{
+    width: fit-content;
+}
+
+.hostMenuButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    width: 0px;
+    height: 15px;
+    margin: 0;
+    padding-right: 10px;
+}
+
+.hostMenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    width: 20vw;
+    flex-flow: wrap row;
+    align-items: start;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: var(--borderradius);
+    padding: 10px;
+}
+
+.hostMenu button{
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.hostMenu button:hover{
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.hostMenu button:first-child{
+    border-bottom: 1px solid black;
+}
+
+#shareLink {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#shareLink:active {
+    transform: scale(1.05);
+}
