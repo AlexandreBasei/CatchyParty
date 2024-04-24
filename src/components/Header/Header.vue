@@ -2,7 +2,7 @@
     <header>
         <RouterLink to="/" class="headerLink">
         <!-- <img alt="logo" src="@/assets/logo.svg" @click="reload"> -->
-        <img alt="logo" src="@/assets/logo.svg">
+        <img alt="logo" src="@/assets/svg/logo.svg">
         </RouterLink>
     </header>
 </template>
