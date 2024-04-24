@@ -11,9 +11,9 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import footerApp from './components/footer/footer.vue';
-import headerApp from './components/header/header.vue';
-import langApp from './components/lang/lang.vue';
+import footerApp from '@/components/Footer/Footer.vue';
+import headerApp from '@/components/Header/Header.vue';
+import langApp from '@/components/lang/lang.vue';
 
 export default defineComponent({
   name: 'App',
