@@ -8,6 +8,10 @@ header img{
     width: 200px;
 }
 
+header .headerLink{
+    display: flex;
+}
+
 header img:hover{
     cursor: pointer;
 }

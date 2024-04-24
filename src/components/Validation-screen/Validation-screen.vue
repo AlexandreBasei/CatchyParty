@@ -1,5 +1,4 @@
 <template>
-  <headerApp></headerApp>
   <div class="content">
         <section class="playersList">
             <h3>Players</h3>
@@ -56,21 +55,15 @@
   </div>
 
   <img src="../../assets/svg/extend/side2.svg" alt="symfony" class="symfony">
-  <!-- <div class="footer">
-        <footerApp></footerApp>
-    </div> -->
 </template>
 
-<script lang="ts">
-  /* import footerApp from '../Footer/Footer.vue'; */
-  import headerApp from '../Header/Header.vue'; 
-  export default({
-    name: 'validation_screen',
-    components: {
-      /* footerApp, */
-      headerApp,
-    }
-  });
+<script lang="ts"> 
+export default({
+  name: 'validation_screen',
+  components: {
+
+  }
+});
 </script>
 
 <style lang="css" scoped>
