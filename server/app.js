@@ -6,8 +6,8 @@ const path = require('path');
 const axios = require('axios');
 var cors = require('cors');
 
-const getLyrics = require("../src/assets/getLyrics");
-const getSong = require("../src/assets/getSong");
+const getLyrics = require("../src/assets/js/getLyrics");
+const getSong = require("../src/assets/js/getSong");
 
 const app = express();
 const server = http.createServer(app);

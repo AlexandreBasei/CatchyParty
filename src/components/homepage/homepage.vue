@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import io from 'socket.io-client';
-import gameSelect from '../game-select/game-select.vue';
+import gameSelect from '../game-select/Game-select.vue';
 import { defineComponent, ref } from 'vue';
 
 interface Room {
