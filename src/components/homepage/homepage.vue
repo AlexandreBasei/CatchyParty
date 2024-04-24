@@ -1,14 +1,13 @@
 <template>
-    <headerApp></headerApp>
     <main v-if="homepage === true">
         <section class="personalization"> 
             <form>
-                <input type="text" class="textInput" placeholder="Entre ton nom d'utilisateur" v-model="pseudo" maxlength="15"
+                <input type="text" class="textInput" :placeholder="$t('UTILISATEUR')" v-model="pseudo" maxlength="15"
                     required>
                 <div class="avatar-choice">
-                    <h3 v-if="homepage === true && !roomId">Choisis un avatar</h3>
+                    <h3 v-if="homepage === true && !roomId">{{ $t('AVATAR') }}</h3>
                     <div v-else v-for="room in rooms" :key="room.id">
-                        <h3 v-if="room.id === roomId">Tu es en train de rejoindre la salle de {{ room.players[0].username }}</h3>
+                        <h3 v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
                     </div>
                     <div class="avatar-container">
                         <div class="avatar-selected">
@@ -31,29 +30,27 @@
                             @click="selectAvatar('Avatar3')">
                     </div>
                 </div>
-                <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">Jouer !</button>
+                <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">{{ $t('JOUER') }}</button>
                 <div v-else v-for="room in rooms" :key="room.id">
-                    <button v-if="room.id === roomId" @click="joinRoom(room)" class="submitBtn">Rejoindre la partie !</button>
+                    <button v-if="room.id === roomId" @click="joinRoom(room)" class="submitBtn">{{ $t('REJOINDRE_PARTIE') }}</button>
                 </div>
             </form>
         </section>
 
         <section class="tutorial" v-if="homepage === true">
-            <h3> Comment Jouer ? </h3>
+            <h3> {{ $t('COMMENT_JOUER') }} </h3>
             <div id="tutorial" class="tutorial-box">{{ tutorialText }}</div>
         </section>
     </main>
 
     <gameSelect v-if="!homepage" :socket="socket"></gameSelect>
 
-    <div class="footer">
+    <!-- <div class="footer">
         <footerApp></footerApp>
-    </div>
+    </div> -->
 </template>
 
 <script lang="ts">
-import footerApp from '../footer/footer.vue';
-import headerApp from '../header/header.vue';
 import io from 'socket.io-client';
 import gameSelect from '../game-select/game-select.vue';
 import { defineComponent, ref } from 'vue';
@@ -68,28 +65,34 @@ interface Room {
         username: string,
         idea: boolean,
         tabAttributed: boolean,
+        lang: string,
     }[];
 }
 
 export default defineComponent({
     name: 'home_page',
     components: {
-        footerApp,
-        headerApp,
         gameSelect,
+
     },
 
     data() {
         return {
             homepage: true,
+            lang: '',
             rooms: [] as Room[],
             pseudo: '',
             tutorialText: '',
             socket: io('http://localhost:3000'),
-            steps: [
-                "Step 1 : Do this...",
-                "Step 2 : Now, this...",
-                "Step 3 : And this..."
+            stepsFr: [
+                "Étape 1 : Choisir un pseudo...",
+                "Étape 2 : Choisir un avatar...",
+                "Étape 3 : Et choisissez vos jeux !"
+            ],
+            stepsEn: [
+                "Step 1 : Choose a username...",
+                "Step 2 : Choose a avatar...",
+                "Step 3 : And select your games !"
             ],
             currentStep: 0,
             player: {
@@ -140,16 +143,29 @@ export default defineComponent({
                 this.homepage = false;
             }
         },
-        nextStep() {
+        nextStepFr() {
             this.currentStep++;
-            if (this.currentStep < this.steps.length) {
-                this.tutorialText = this.steps[this.currentStep];
-                setTimeout(this.nextStep, 5000);
+            if (this.currentStep < this.stepsFr.length) {
+                this.tutorialText = this.stepsFr[this.currentStep];
+                setTimeout(this.nextStepFr, 5000);
             } else {
                 setTimeout(() => {
                     this.currentStep = 0;
-                    this.tutorialText = this.steps[this.currentStep];
-                    setTimeout(this.nextStep, 5000);
+                    this.tutorialText = this.stepsFr[this.currentStep];
+                    setTimeout(this.nextStepFr, 5000);
+                }, 5000);
+            }
+        },
+        nextStepEn() {
+            this.currentStep++;
+            if (this.currentStep < this.stepsEn.length) {
+                this.tutorialText = this.stepsEn[this.currentStep];
+                setTimeout(this.nextStepEn, 5000);
+            } else {
+                setTimeout(() => {
+                    this.currentStep = 0;
+                    this.tutorialText = this.stepsEn[this.currentStep];
+                    setTimeout(this.nextStepEn, 5000);
                 }, 5000);
             }
         },
@@ -165,8 +181,20 @@ export default defineComponent({
         reload() {
             window.location.search = '?room=';
         },
+
+        changeLanguage() {
+            this.$i18n.locale = localStorage.getItem('lang') || 'fr'
+        },
     },
     mounted() {
+
+        const getLang = localStorage.getItem('lang');
+        if(getLang){
+            this.lang = getLang;
+        }else{
+            this.lang = 'fr';
+            localStorage.setItem('lang',this.lang);
+        }
 
         if (this.homepage) {
             setInterval(() => {
@@ -179,7 +207,12 @@ export default defineComponent({
         const roomId = urlParams.get('room');
         this.roomId = roomId ?? "";
 
-        this.nextStep();
+        if(this.lang == 'fr'){
+            this.nextStepFr();
+        }else{
+            this.nextStepEn();
+        }
+        this.changeLanguage();
     }
 })
 </script>

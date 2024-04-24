@@ -1,12 +1,12 @@
 <template>
   <footer>
     <div class="footerLinks">
-      <RouterLink to="/about">A propos</RouterLink>
-      <RouterLink to="/cgu">CGU</RouterLink>
-      <RouterLink to="/contact">Contacts</RouterLink>
+      <RouterLink to="/about">{{ $t('A_PROPOS') }}</RouterLink>
+      <RouterLink to="/cgu">{{ $t('CGU') }}</RouterLink>
+      <RouterLink to="/contact">{{ $t('CONTACTS') }}</RouterLink>
     </div>
     <div class="footerText">
-      <p>&copy; 2024 The Socket Team. All rights reserved.</p>
+      <p>&copy; {{ $t('TOUT_DROIT_RESERVE') }}</p>
     </div>
   </footer>
 
@@ -16,7 +16,15 @@
 import { RouterLink, RouterView } from 'vue-router';
 
 export default {
-  name: 'footerApp'
+  name: 'footerApp',
+  data() {
+    return {
+      lang: ''
+    };
+  },
+  mounted() {
+    this.lang = localStorage.getItem('lang');
+  }
 };
 </script>
 

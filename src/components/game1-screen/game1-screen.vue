@@ -1,5 +1,4 @@
 <template>
-  <headerApp></headerApp>
   <div class="content">
         <section class="playersList">
             <h3>Players</h3>
@@ -61,14 +60,11 @@
     import './game1-screen.css';
 </style>
 <script lang="ts">
-    /* import footerApp from '../footer/footer.vue'; */
-    import headerApp from '../header/header.vue'; 
 
 export default({
   name: 'game1_screen',
   components: {
-        /* footerApp, */
-        headerApp,
+
   }
 });
 </script>

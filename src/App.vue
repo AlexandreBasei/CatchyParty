@@ -1,11 +1,11 @@
 <template>
 
-  <!-- <headerApp></headerApp>
-
-  <home_page></home_page>
-  <footerApp></footerApp> -->
-
+  <headerApp></headerApp>
+  <langApp></langApp>
   <RouterView />
+  <div class="footer">
+    <footerApp></footerApp>
+  </div>
 </template>
 
 <script lang="ts">
@@ -13,16 +13,14 @@ import { defineComponent, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import footerApp from './components/footer/footer.vue';
 import headerApp from './components/header/header.vue';
-import home_page from './components/homepage/homepage.vue';
-import cguApp from './components/CGU/cgu.vue';
+import langApp from './components/lang/lang.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    // footerApp,
-    // headerApp,
-    // home_page,
-    // cguApp
+    footerApp,
+    headerApp,
+    langApp
   }
 });
 </script>
