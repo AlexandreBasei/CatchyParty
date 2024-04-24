@@ -1,5 +1,4 @@
 <template>
-  <headerApp></headerApp>
   <div class="rulesCont">
     <h3>Rules</h3>
     <hr>
@@ -19,12 +18,10 @@
 </template>
 
 <script lang="ts">
-import headerApp from '../Header/Header.vue';
-
 export default ({
   name: 'rules-screen',
   components: {
-    headerApp,
+
   }
 });
 </script>

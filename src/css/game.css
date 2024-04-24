@@ -97,16 +97,6 @@ input[type=submit]:hover{
     margin: 0 5%;
 }
 
-.CGU-main{
-    overflow: auto;
-    display: grid;
-    gap: 20px;
-}
-
-.CGU-main section{
-    width: 100%;
-}
-
 .about-main{
     gap: 10%;
 }

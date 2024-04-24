@@ -1,5 +1,4 @@
 <template>
-  <headerApp></headerApp>
   <div class="content">
     <section class="playersList">
       <h3>Winner</h3>
@@ -47,11 +46,10 @@
 </template>
 
 <script lang="ts">
-import headerApp from '../Header/Header.vue';
 export default ({
   name: 'ending-screen',
   components: {
-    headerApp,
+    
   }
 });
 </script>
