@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <h1>Listen ...</h1>
+    <h1>{{ $t('ECOUTE') }}</h1>
   </div>
 </template>
 

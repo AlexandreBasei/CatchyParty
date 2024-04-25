@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <section class="playersList">
-      <h3>Winner</h3>
+      <h3>{{ $t('GAGNANT') }}</h3>
       <hr>
       <div class="rewardCont">
         <div class="rewards">
@@ -9,32 +9,32 @@
           <img src="../../assets/svg/icons/icon-profile.svg" alt="icon">
         </div>
         <div>
-          <p>New gold note for $NAME</p>
+          <p>{{ $t('NOTE_D_OR') }}$NAME</p>
           <img src="../../assets/svg/trophy.png">
         </div>
       </div>
-      <p class="textP">Lyric of music</p>
+      <p class="textP">{{ $t('PAROLES_DE_LA_MUSIQUE') }}</p>
       <div class="secRewardsCont">
         <div class="secRewards">
           <div class="players">
             <img src="../../assets/svg/icons/icon-profile.svg" alt="icon">
-            <p>Name</p>
+            <p>{{ $t('NOM') }}</p>
           </div>
-          <p>Score</p>
+          <p>{{ $t('SCORE') }}</p>
         </div>
         <div class="secRewards">
           <div class="players">
             <img src="../../assets/svg/icons/icon-profile.svg" alt="icon">
-            <p>Name</p>
+            <p>{{ $t('NOM') }}</p>
           </div>
-          <p>Score</p>
+          <p>{{ $t('SCORE') }}</p>
         </div>
         <div class="secRewards">
           <div class="players">
             <img src="../../assets/svg/icons/icon-profile.svg" alt="icon">
-            <p>Name</p>
+            <p>{{ $t('NOM') }}</p>
           </div>
-          <p>Score</p>
+          <p>{{ $t('SCORE') }}</p>
         </div>
       </div>
     </section>

@@ -1,7 +1,7 @@
 <template>
     <!-- Affichage accueil -->
     <section v-if="!roomJoined && !roomId">
-        <h1>Créer ou rejoindre un salon</h1>
+        <h1>{{ $t('CREER_OU_REJOINDRE_SALON') }}</h1>
 
         <div v-if="rooms.length > 0">
             <ul>
@@ -9,18 +9,18 @@
                     {{ room.players.length }} / 10
                     - Salon de {{ room.players[0].username }}
                     - {{ room.id }}
-                    <button @click="joinRoom(room)">Rejoindre</button>
+                    <button @click="joinRoom(room)">{{ $t('REJOINDRE') }}</button>
                 </li>
             </ul>
         </div>
         <div v-else>
-            <p>Aucun salon disponible pour le moment</p>
+            <p>{{ $t('AUCUN_SALON_DISPONIBLE') }}</p>
         </div>
 
         <form @submit.prevent="createRoom">
-            <label for="username">Nom d'utilisateur : </label>
+            <label for="username">{{ $t('NOM_UTILISATEUR') }}</label>
             <input type="text" v-model="username" required>
-            <button type="submit">Créer un salon</button>
+            <button type="submit">{{ $t('CREER_SALON') }}</button>
         </form>
     </section>
 
@@ -28,20 +28,20 @@
     <section v-else-if="roomId">
         <div v-for="room in rooms" :key="room.id">
             <div v-if="room.id === roomId">
-                <h1>Tu vas rejoindre la salle de {{ room.players[0].username }}</h1>
+                <h1>{{ $t('REJOINDRE_LA_SALLE') }}{{ room.players[0].username }}</h1>
                 <form @submit.prevent="joinRoom(room)">
-                    <label for="username">Nom d'utilisateur : </label>
+                    <label for="username">{{ $t('NOM_UTILISATEUR') }}</label>
                     <input type="text" v-model="username" required>
-                    <button type="submit">Rejoindre</button>
+                    <button type="submit">{{ $t('REJOINDRE') }}</button>
                 </form>
-                <button @click="reload">Retourner à l'accueil</button>
+                <button @click="reload">{{ $t('RETOURNER_A_ACCUEIL') }}</button>
             </div>
         </div>
     </section>
 
     <!-- Affichage salle rejointe-->
     <section v-else-if="roomJoined">
-        <p>Tu as rejoint un salon avec les joueurs suivants :</p>
+        <p>{{ $t('TU_AS_REJOINT_UN_SALON') }}</p>
         <div v-for="room in rooms" :key="room.id">
             <ul v-if="room.id === currentRoom">
                 <li v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
@@ -56,13 +56,13 @@
                         </svg>
                     </button>
                     <div v-bind:id="rplayer.socketId" class="hostMenu">
-                        <button @click="setHost(rplayer)">Define new room's host</button>
-                        <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
+                        <button @click="setHost(rplayer)">{{ $t('CREER_OU_REJOINDRE_SALON') }}</button>
+                        <button style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                     </div>
                 </li>
-                <button id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">Copier le lien d'invitation</button>
-                <button v-if="room.players.length > 1" @click="play">Démarrer la partie</button>
-                <button @click="exitRoom">Quitter la partie</button>
+                <button id="shareLink" @click="copy(`localhost:8080?room=${currentRoom}`)">{{ $t('COPIER_LIEN') }}</button>
+                <button v-if="room.players.length > 1" @click="play">{{ $t('DEMARRER_PARTIE') }}</button>
+                <button @click="exitRoom">{{ $t('QUITTER_PARTIE') }}</button>
             </ul>
         </div>
     </section>
@@ -70,13 +70,13 @@
     <!-- Affichage salle n'existe pas -->
     <section v-if="!roomJoined && roomId">
         <div v-if="rooms.length === 0">
-            <p>Le salon que tu essaies de rejoindre n'existe pas</p>
-            <button @click="reload">Retourner à l'accueil</button>
+            <p>{{ $t('SALON_EXISTE_PAS') }}</p>
+            <button @click="reload">{{ $t('RETOURNER_A_ACCUEIL') }}</button>
         </div>
         <div v-for="room in rooms" :key="room.id">
             <div v-if="room.id !== roomId || !rooms">
-                <p>Le salon que tu essaies de rejoindre n'existe pas</p>
-                <button @click="reload">Retourner à l'accueil</button>
+                <p>{{ $t('SALON_EXISTE_PAS') }}</p>
+                <button @click="reload">{{ $t('RETOURNER_A_ACCUEIL') }}</button>
             </div>
         </div>
 
