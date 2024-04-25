@@ -2,26 +2,26 @@
     <div>
         <!-- Affichage du temps restant -->
         <div id="timer" v-show="timerInGame">
-            Temps restant : {{ remainingTime }} secondes
+            {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
         </div>
 
         <!-- Affichage du temps restant dans le décompte des 30 secondes -->
         <div id="countdown" v-show="timerInterGame">
-            Temps restant : {{ secondsLeft }} secondes
+            {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
         </div>
         <div class="Waiting-game" v-show="showWaitingGame">
             <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
-                :disabled="gameStarted">KeyBoard Notes</button>
+                :disabled="gameStarted">{{ $t('KEYBOARD_NOTES') }}</button>
         </div>
         <div class="first-step" v-show="firstStepGame">
-            <label for="userIdea">Entrez le nom d'une musique :</label>
-            <input type="text" v-model="userIdeaInput" placeholder="Juste ici...">
-            <button @click="submitIdea()" :disabled="ideaSubmitted">Valider</button>
-            <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
+            <label for="userIdea">{{ $t('ENTREZ_NOM_MUSIQUE') }}</label>
+            <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')">
+            <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
+            <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
         <div v-for="(item, index) in assignedIdea" :key="index">
             <div v-if="item.id === socket.id">
-                <p>L'idée qui t'a été attribuée est : {{ item.idea }}</p>
+                <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
             </div>
         </div>
 
@@ -43,17 +43,17 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
-            <button id="play">Écoute ta musique</button>
+            <button id="play">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
-            <label for="guess">Quelle musique as-tu entendue ?</label>
+            <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
             <input type="text" v-model="guessInput"
                 placeholder="Nom de la musique">
-            <button @click="playGuessNotes()">Écouter la musique</button>
+            <button @click="playGuessNotes()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
         </div>
     </div>
     <div class="end-game" v-show="showEndGame">
-        <button id="play">Partie terminée</button>
+        <button id="play">{{ $t('PARTIE_TERMINEE') }}</button>
     </div>
 </template>
 

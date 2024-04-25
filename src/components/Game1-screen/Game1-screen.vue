@@ -1,7 +1,7 @@
 <template>
   <div class="content">
         <section class="playersList">
-            <h3>Players</h3>
+            <h3>{{ $t('JOUEURS') }}</h3>
             <div class="playersContainer">
                 <div class="playerContainer">
                     <img class="player-icon" id="avatarImg" alt="player 1">
@@ -14,7 +14,7 @@
             <img src="../../assets/svg/partinies/vilo.svg" class="vilo">
             <img src="../../assets/svg/partinies/mus.svg" class="mus">
             <section class="description">
-              <h3>Round 1</h3>
+              <h3>{{ $t('ROUND_1') }}</h3>
               <hr>
               <p>Blabla</p>
             </section>
@@ -23,27 +23,27 @@
       <div class="song-cards">
           <div class="song-card">
             <img src="../../assets/svg/icons/image.svg" alt="image">
-            <p>Album title</p>
+            <p>{{ $t('TITRE_DE_L_ALBUM') }}</p>
             <br>
-            <p>Music title</p>
+            <p>{{ $t('TITRE_DE_LA_MUSIQUE') }}</p>
             <br>
-            <p>Artist's name</p>
+            <p>{{ $t('NOM_DE_L_ARTISTE') }}</p>
           </div>
           <div class="song-card">
             <img src="../../assets/svg/icons/image.svg" alt="image">
-            <p>Album title</p>
+            <p>{{ $t('TITRE_DE_L_ALBUM') }}</p>
             <br>
-            <p>Music title</p>
+            <p>{{ $t('TITRE_DE_LA_MUSIQUE') }}</p>
             <br>
-            <p>Artist's name</p>
+            <p>{{ $t('NOM_DE_L_ARTISTE') }}</p>
           </div>
           <div class="song-card">
             <img src="../../assets/svg/icons/image.svg" alt="image">
-            <p>Album title</p>
+            <p>{{ $t('TITRE_DE_L_ALBUM') }}</p>
             <br>
-            <p>Music title</p>
+            <p>{{ $t('TITRE_DE_LA_MUSIQUE') }}</p>
             <br>
-            <p>Artist's name</p>
+            <p>{{ $t('NOM_DE_L_ARTISTE') }}</p>
           </div>
         </div>
         <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
