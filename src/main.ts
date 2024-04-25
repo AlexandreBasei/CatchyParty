@@ -9,10 +9,10 @@ const app = createApp(App)
 
 // configure i18n
 const i18n = createI18n({
-    locale: localStorage.getItem('lang') || 'fr',
-    fallbackLocale: "fr",
-    messages: { fr, en },
-  });
+  locale: localStorage.getItem('lang') || 'fr',
+  fallbackLocale: "fr",
+  messages: { fr, en },
+});
 
 app.use(router)
 app.use(i18n);

@@ -7,46 +7,51 @@
         <img src="@/assets/united-kingdom.png" alt="france" class="lang">
     </div>
 </template>
+
 <script lang="ts">
+    import { defineComponent } from 'vue';
 
-interface Lang {
-        lang: string,
-}
+    interface LangComponent {
+        lang: string;
+        changeLangToEn(): void;
+        changeLangToFr(): void;
+    }
 
-export default {
-  name: 'langApp',
-  data() {
-    return {
-      lang: ''
-    };
-  },
-  methods: {
-    changeLangToEn(){
-            if(this.lang == 'fr'){
-                this.lang = 'en';
-                localStorage.setItem('lang',this.lang);
-                location.reload();
-            }
+    export default defineComponent({
+        name: 'langApp',
+        data(): LangComponent {
+            return {
+                lang: 'fr',
+            } as LangComponent;
         },
-    changeLangToFr(){
-        if(this.lang == 'en'){
-            this.lang = 'fr';
-            localStorage.setItem('lang',this.lang);
-            location.reload();
+        methods: {
+            changeLangToEn(this: LangComponent){
+                if(this.lang == 'fr'){
+                    this.lang = 'en';
+                    localStorage.setItem('lang',this.lang);
+                    location.reload();
+                }
+            },
+            changeLangToFr(this: LangComponent){
+                if(this.lang == 'en'){
+                    this.lang = 'fr';
+                    localStorage.setItem('lang',this.lang);
+                    location.reload();
+                }
+            },
+        },
+        mounted(this: LangComponent) {
+            const getLang = localStorage.getItem('lang');
+                if(getLang){
+                    this.lang = getLang;
+                }else{
+                    this.lang = 'fr';
+                    localStorage.setItem('lang',this.lang);
+                }
         }
-    },
-  },
-  mounted() {
-    const getLang = localStorage.getItem('lang');
-        if(getLang){
-            this.lang = getLang;
-        }else{
-            this.lang = 'fr';
-            localStorage.setItem('lang',this.lang);
-        }
-  }
-}
+    });
 </script>
-<style scoped>
-@import url("./lang.css");
+
+<style lang="css" scoped>
+    @import url("./lang.css");
 </style>
