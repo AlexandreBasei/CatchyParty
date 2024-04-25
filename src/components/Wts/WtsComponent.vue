@@ -112,6 +112,6 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss or less">
-    import './style.css';
+<style lang="css" scoped>
+    @import './style.css';
 </style>

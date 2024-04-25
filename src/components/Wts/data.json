@@ -2,22 +2,52 @@
     "situations": [
         {
             "id": 1,
-            "description": "Situation 1"
+            "description": "Vous avez accidentellement envoyé un texto embarrassant à la mauvaise personne. Quelle musique représentre votre réaction ?"
         },
 
         {
             "id": 2,
-            "description": "Situation 2"
+            "description": "Vous vous êtes retrouvé coincé dans un ascenseur avec une personne que vous trouvez attirante. Quelle musique représentre votre réaction ?"
         },
 
         {
             "id": 3,
-            "description": "Situation 3"
+            "description": "Vous avez réalisé que vous portiez votre vêtement à l'envers toute la journée. Quelle musique représentre votre réaction ?"
         },
 
         {
             "id": 4,
-            "description": "Situation 4"
+            "description": "Vous avez dit 'je t'aime' à quelqu'un pour la première fois mais cette personne n'a pas répondu. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 5,
+            "description": "Vous avez glissé et êtes tombé en public dans le hall d’entrée de votre école. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 6,
+            "description": "Vous avez ri à voix haute pendant un moment sérieux. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 7,
+            "description": "Vous avez décidé de faire une blague à votre meilleur ami en lui envoyant un message disant que vous aviez gagné à la loterie et que vous alliez partager votre fortune avec lui. Cependant, votre ami a pris votre message au sérieux et est maintenant en train de planifier comment dépenser l'argent que vous n'avez pas. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 8,
+            "description": "Vous êtes en train de faire un footing et tout d’un coup, vous croisez le mari de votre ami en compagnie féminine dans le même parc que vous. Quelle musique représente votre  réaction ?"
+        },
+
+        {
+            "id": 9,
+            "description": "Vous êtes entrain de travailler depuis plusieurs heures mais vous n’avez pas remarqué que vous n’aviez plus de batterie, votre ordinateur s'éteint sans que vous puissiez enregistrer votre travail. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 10,
+            "description": "Actuellement dans votre dernière année d’étude, vous devez faire un travail de groupe pour valider votre année mais vous vous retrouvez avec la personne qui ne travaille jamais et qui compromet votre validation de diplôme.  Quelle musique représente votre réaction ?"
         }
     ],
 
