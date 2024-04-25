@@ -1,7 +1,7 @@
 <template>
     <div class="content" v-if="!game1">
         <section class="playersList">
-            <h3>Players</h3>
+            <h3>{{ $t('JOUEURS') }}</h3>
             <div class="playersContainer" v-for="room in rooms" :key="room.id">
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
@@ -22,25 +22,25 @@
                         </p>
 
                         <div v-bind:id="rplayer.socketId" class="hostMenu">
-                            <button @click="setHost(rplayer)">Define new room's host</button>
-                            <button style="color: red;" @click="kickPlayer(rplayer.socketId)">Kick this player</button>
+                            <button @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
+                            <button style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">Copier le lien d'invitation</p>
+            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</p>
         </section>
         <main class="personalization-main">
             <section class="settings">
                 <div>
-                    <h3>Sélection des jeux</h3>
+                    <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
                     <div class="game-options">
                         <div class="game-container">
                             <div class="game" @click="toggleSelection">
                                 <img src="../../assets/svg/img-jeu.png" alt="Game 1">
                             </div>
-                            <p>Keyboard-notes</p>
+                            <p>{{ $t('KEYBOARD_NOTES') }}</p>
                         </div>
                         <div class="game-container">
                             <div class="game" @click="toggleSelection">
@@ -59,17 +59,18 @@
 
                 <form @submit.prevent="start('game1')">
                     <div class="personalization-options">
-                        <!-- <div>
-                            <label for="nbPlayers">Nombre de joueurs</label>
-                            <select id="nbPlayers"></select>
-                        </div> -->
                         <div>
-                            <label for="nbRounds">Nombre de manches</label>
+                            <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
+                            <select id="nbPlayers"></select>
+                        </div>
+                        <div>
+                            <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
                             <select id="nbRounds"></select>
                         </div>
                     </div>
 
-                    <button class="startGame" v-if="player.host">Démarrer la partie</button>
+                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
+                    <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
                 </form>
             </section>
         </main>
