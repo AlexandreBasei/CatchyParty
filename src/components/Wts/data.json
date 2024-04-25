@@ -54,30 +54,128 @@
     "musics": [
        {
         "id": 1,
-        "title": "titre1",
-        "artiste": "artiste1",
-        "album": "album1"
+        "title": "La Vie En Rose",
+        "artiste": "Edith Piaf",
+        "album": "La Vie En Rose"
        },
        
        {
         "id": 2,
-        "title": "titre2",
-        "artiste": "artiste2",
-        "album": "album2"
+        "title": "Ne Me Quitte Pas",
+        "artiste": "Jacques Brel",
+        "album": "Les Marquises"
        },
 
        {
         "id": 3,
-        "title": "titre3",
-        "artiste": "artiste3",
-        "album": "album3"
+        "title": "Je T'aime... Moi Non Plus",
+        "artiste": "Serge Gainsbourg",
+        "album": "Histoire de Melody Nelson"
        },
 
        {
         "id": 4,
-        "title": "titre4",
-        "artiste": "artiste4",
-        "album": "album4"
+        "title": "La Bohème",
+        "artiste": "Charles Aznavour",
+        "album": "La Bohème"
+       },
+
+       {
+        "id": 5,
+        "title": "Non, je ne regrette rien",
+        "artiste": "Édith Piaf",
+        "album": "Édith Piaf à l'Olympia"
+       },
+
+       {
+        "id": 6,
+        "title": "Les Copains d'abord",
+        "artiste": "Georges Brassens",
+        "album": "Les Copains d'abord"
+       },
+
+       {
+        "id": 7,
+        "title": "Que je t'aime",
+        "artiste": "Johnny Hallyday",
+        "album": "Johnny Hallyday à l'Olympia"
+       },
+
+       {
+        "id": 8,
+        "title": "Désenchantée",
+        "artiste": "Mylène Farmer",
+        "album": "Ainsi soit je..."
+       },
+
+       {
+        "id": 9,
+        "title": "Allumer le feu",
+        "artiste": "Johnny Hallyday",
+        "album": "Ce que je sais"
+       },
+
+       {
+        "id": 10,
+        "title": "La Nuit je mens",
+        "artiste": "Alain Bashung",
+        "album": "Bleu pétrole"
+       },
+
+       {
+        "id": 11,
+        "title": "La groupie du pianiste",
+        "artiste": "Michel Berger",
+        "album": "Beauséjour"
+       },
+
+       {
+        "id": 12,
+        "title": "Je dans le Mia",
+        "artiste": "IAM",
+        "album": "L'École du micro d'argent"
+       },
+
+       {
+        "id": 13,
+        "title": "J'ai demandé à la lune",
+        "artiste": "Indochine",
+        "album": "Paradize"
+       },
+
+       {
+        "id": 14,
+        "title": "J't'emmène au vent",
+        "artiste": "Louise Attaque",
+        "album": "Louise Attaque"
+       },
+
+       {
+        "id": 15,
+        "title": "Résiste",
+        "artiste": "France Gall",
+        "album": "Babacar"
+       },
+
+       {
+        "id": 16,
+        "title": "La puissance",
+        "artiste": "Rohff",
+        "album": "La Vie avant la mort"
+       },
+
+       {
+        "id": 17,
+        "title": "Maman ne le sait pas",
+        "artiste": "Ninho",
+        "album": "Comme prévu"
+       },
+
+       {
+        "id": 18,
+        "title": "Zoo",
+        "artiste": "Kaaris",
+        "album": "Or noir"
        }
     ]
 }

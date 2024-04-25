@@ -36,21 +36,33 @@
         <div class="song-cards">
           <div class="song-card" v-if="musics[0]">
             <img src="../../assets/svg/image.svg" alt="image">
-            <p>{{ musics[0].album }}</p> <!-- Affiche le nom de l'album de la première musique -->
             <p>{{ musics[0].title }}</p> <!-- Affiche le titre de la première musique -->
             <p>{{ musics[0].artiste }}</p> <!-- Affiche le nom de l'artiste de la première musique -->
+            <p>{{ musics[0].album }}</p> <!-- Affiche le nom de l'album de la première musique -->
           </div>
           <div class="song-card" v-if="musics[1]">
             <img src="../../assets/svg/image.svg" alt="image">
-            <p>{{ musics[1].album }}</p> <!-- Affiche le nom de l'album de la deuxième musique -->
             <p>{{ musics[1].title }}</p> <!-- Affiche le titre de la deuxième musique -->
             <p>{{ musics[1].artiste }}</p> <!-- Affiche le nom de l'artiste de la deuxième musique -->
+            <p>{{ musics[1].album }}</p> <!-- Affiche le nom de l'album de la deuxième musique -->
           </div>
           <div class="song-card" v-if="musics[2]">
             <img src="../../assets/svg/image.svg" alt="image">
-            <p>{{ musics[2].album }}</p> <!-- Affiche le nom de l'album de la troisième musique -->
             <p>{{ musics[2].title }}</p> <!-- Affiche le titre de la troisième musique -->
             <p>{{ musics[2].artiste }}</p> <!-- Affiche le nom de l'artiste de la troisième musique -->
+            <p>{{ musics[2].album }}</p> <!-- Affiche le nom de l'album de la troisième musique -->
+          </div>
+          <div class="song-card" v-if="musics[3]">
+            <img src="../../assets/svg/image.svg" alt="image">
+            <p>{{ musics[3].title }}</p> <!-- Affiche le titre de la troisième musique -->
+            <p>{{ musics[3].artiste }}</p> <!-- Affiche le nom de l'artiste de la troisième musique -->
+            <p>{{ musics[3].album }}</p> <!-- Affiche le nom de l'album de la troisième musique -->
+          </div>
+          <div class="song-card" v-if="musics[4]">
+            <img src="../../assets/svg/image.svg" alt="image">
+            <p>{{ musics[4].title }}</p> <!-- Affiche le titre de la troisième musique -->
+            <p>{{ musics[4].artiste }}</p> <!-- Affiche le nom de l'artiste de la troisième musique -->
+            <p>{{ musics[4].album }}</p> <!-- Affiche le nom de l'album de la troisième musique -->
           </div>
 
           </div>
@@ -107,7 +119,7 @@ export default defineComponent({
     musics.sort(() => Math.random() - 0.5);
 
     // Assigner les trois premières musiques à la propriété musics pour chaque div song-card
-    this.musics = musics.slice(0, 3);
+    this.musics = musics.slice(0, 5);
   }
 });
 </script>
