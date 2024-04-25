@@ -1,0 +1,14 @@
+.profile-picture {
+    width: 55px;
+    aspect-ratio: 1/1;
+    display: flex;
+    gap: 5px;
+
+    position: relative;
+}
+
+
+.profile-picture > .avatar-part{
+    position: absolute;
+    width: 100%;
+}
