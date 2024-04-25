@@ -1,125 +1,67 @@
-main{
+form.homepage-form{
+    display: flex;
+    width: 80%;
+    justify-content: space-around;
+    flex-wrap: wrap-reverse;
+}
+
+.avatar-choice {
+    justify-content: center;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
+.avatar-choice h3{
+    user-select: none;
+}
 
 .avatar-container {
     position: relative;
-    width: 100px;
-    height: 100px;
     border-radius: var(--borderradius);
-    margin: 0 auto 30px auto;
     cursor: pointer;
-}
-.avatar-options {
+
     display: flex;
-    gap: 5px;
+    justify-content: center;
+    margin: 30px 0px;
 }
 
-.submitBtn{
-    background-color: var(--quaternary);
-    border: 0;
-    color: white;
-    margin: 10px 0;
-    padding: 5px;
-    border-radius: var(--borderradius);
-    width: 30vh;
-    cursor: pointer;
+ul.arrows{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
 }
+ul.arrows > *{
+    width: 30px;
+    height: 30px;
+    color: var(--black);
+    font-weight: bold;
+    background-color: var(--tertiary);
+    border-radius: var(--borderradius);
+    border: 0px;
 
-.avatar-option, .player-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--borderradius);
-    transition: transform 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition: all 0.2s ease;
 }
-.avatar-option:hover {
+ul.arrows button:disabled{
+    background-color: var(--grey);
+}
+ul.arrows >*:hover {
     transform: scale(1.1);
 }
-.avatar-selected {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
-    border-radius: var(--borderradius);
-    overflow: hidden;
-}
-.avatar-selected img {
-    width: 100%;
-    height: auto;
-}
+
 
 .email-icon{
     cursor: pointer;
 }
 
-.avatar-container {
+.inputs-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 30px 0px;
-    /* position: relative;
-    width: 100px;
-    height: 100px;
-    border-radius: 2px;
-    background-color: var(--black);
-    margin: 0 auto 30px auto;
-    cursor: pointer; */
 }
-
-.avatar-options {
-    display: flex;
-    gap: 5px;
-}
-
-.avatar-options .avatar-option {
-    background-color: transparent;
-}
-.avatar-options .avatar-option:hover {
-    background-color: var(--white);
-    cursor: pointer;
-    
-}
-
-.avatar-option,
-.player-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: var(--borderradius);
-    /* transition: transform 0.3s; */
-    
-    transition: all 0.2s ease;;
-}
-
-.avatar-option:hover {
-    transform: scale(1.1);
-}
-
-.avatar-selected {
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-    width: 80px;
-    height: 80px;
-    border-radius: var(--borderradius);
-    overflow: hidden;
-    border: 5px solid var(--black);
-    background-color: var(--primary);
-}
-
-.avatar-selected img {
-    width: 100%;
-    height: auto;
-    border-radius: 0px;
-}
-
-.email-icon {
-    cursor: pointer;
-}
-
 .joiningRoom{
     width: 100vw;
     display: flex;
@@ -136,19 +78,14 @@ main{
     font-weight: 600;
 }
 
-/* .personalization,
-.tutorial {
-    margin: auto;
-} */
-
-
+.submitBtn {
+    background-color: var(--tertiary);
+    border: 2px solid var(--tertiary);
+}
 input,
 .submitBtn{
     padding: 20px 15px;
     margin: 10px 0;
-    background-color: var(--tertiary);
-    border: 2px solid var(--tertiary);
-    color: var(--black);
     border-radius: var(--borderradius);
     width: 300px;
     max-width: 90vw;
@@ -163,85 +100,3 @@ input:focus,
     border: 2px solid var(--black);
 }
 
-/* select,
-input[type=text],
-button {
-    width: 30vh;
-}
-
-input[type=submit] {
-    width: 30vh;
-} */
-
-.avatar-choice {
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 50px 0px;
-}
-
-.avatar-choice h3{
-    user-select: none;
-}
-
-.submit {
-    justify-content: center;
-    display: flex;
-    margin-top: 1em;
-}
-
-@media only screen and (max-width: 600px) {
-
-    footer {
-        display: grid;
-        align-items: center;
-    }
-}
-
-
-/* @media only screen and (max-width: 600px) {
-
-    footer{
-        display: grid;
-        align-items: center;
-    }
-} */
-
-/* @media only screen and (min-width: 1000px) {
-
-    .personalization, .tutorial{
-        margin: auto;
-    }
-
-    select, input[type=text], button{
-        width: 30vh;
-        background-color: var(--quaternary);
-        border: 0;
-        color: white;
-        margin: 10px 0;
-        padding: 5px;
-        border-radius: var(--borderradius);
-    }
-
-    .submitBtn{
-        background-color: var(--quaternary);
-        border: 0;
-        color: white;
-        margin: 10px 0;
-        padding: 5px;
-        border-radius: var(--borderradius);
-        width: 30vh;
-    }
-
-    .avatar-choice{
-        justify-content: center;
-        display: grid;
-    }
-
-    .submit{
-        justify-content: center;
-        display: flex;
-        margin-top: 1em;
-    }
-} */

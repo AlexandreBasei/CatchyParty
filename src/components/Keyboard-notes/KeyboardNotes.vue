@@ -166,7 +166,7 @@ export default defineComponent({
             assignedIdeaDone: '',
             player: {
                 host: false,
-                avatar: "Avatar 1",
+                avatar: [0,0,0],
                 roomId: "",
                 username: "",
                 socketId: "",

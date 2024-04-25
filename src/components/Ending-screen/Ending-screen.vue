@@ -46,12 +46,12 @@
 </template>
 
 <script lang="ts">
-export default ({
-  name: 'ending-screen',
-  components: {
-    
-  }
-});
+  export default ({
+    name: 'ending-screen',
+    components: {
+      
+    }
+  });
 </script>
 
 <style lang="css" scoped>
