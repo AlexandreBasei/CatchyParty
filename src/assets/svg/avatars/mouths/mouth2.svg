@@ -5,9 +5,6 @@
 	 id="Calque_1" xmlns:krita="http://krita.org/namespaces/svg/krita" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="240px" height="240px"
 	 viewBox="0 0 240 240" enable-background="new 0 0 240 240" xml:space="preserve">
-<path fill="#332F2F" d="M165.083,151.107c6.109-8.837,9.696-19.551,9.696-31.107c0-30.254-24.525-54.78-54.779-54.78
-	S65.22,89.746,65.22,120c0,11.557,3.587,22.271,9.697,31.107c-26.111,17.92-43.86,50.924-44.648,88.893h179.463
-	C208.943,202.031,191.194,169.027,165.083,151.107z"/>
-<path fill="#070707" d="M120,174.779c-18.731,0-35.258-9.406-45.137-23.748c8.423,17.661,25.467,29.748,45.137,29.748
-	c19.669,0,36.712-12.086,45.135-29.746C155.257,165.373,138.73,174.779,120,174.779z"/>
+<path id="shape5_1_" fill="none" stroke="#F0F0F0" stroke-width="2.4" stroke-linecap="round" stroke-miterlimit="1" d="
+	M111.66,127.721c9.329,8.059,7.769-6.353,18.6,2.205"/>
 </svg>

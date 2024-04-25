@@ -10,25 +10,32 @@
                         <h3 v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
                     </div>
                     <div class="avatar-container">
-                        <div class="avatar-selected">
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
-                                v-if="selectedAvatar === 'Avatar1'">
+                        <ul class="arrows">
+                            <button @click="previousAvatarPart('eyes')" :disabled="avatarData[0] === 0">&lt;</button>
+                            <button @click="previousAvatarPart('mouth')" :disabled="avatarData[1] === 0">&lt;</button>
+                        </ul>
 
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
-                                v-if="selectedAvatar === 'Avatar2'">
-
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
-                                v-if="selectedAvatar === 'Avatar3'">
+                        <div class="current-avatar">
+                            <img :src="bodySrc" class="avatar-part"/>
+                            <img :src="eyesSrc" class="avatar-part"/>
+                            <img :src="mouthSrc" class="avatar-part"/>
                         </div>
+
+                        <ul class="arrows">
+                            <button @click="nextAvatarPart('eyes')" :disabled="avatarData[0] === maxEyesIndex-1">&gt;</button>
+                            <button @click="nextAvatarPart('mouth')" :disabled="avatarData[1] === maxMouthIndex-1">&gt;</button>
+                        </ul>
                     </div>
-                    <div class="avatar-options">
+                    
+                    <input type="color" v-model="avatarColor" @change="updateAvatarColor" />
+                    <!-- <div class="avatar-options">
                         <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar 1"
                             @click="selectAvatar('Avatar1')">
                         <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar 2"
                             @click="selectAvatar('Avatar2')">
                         <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar 3"
                             @click="selectAvatar('Avatar3')">
-                    </div>
+                    </div> -->
                 </div>
                 <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">{{ $t('JOUER') }}</button>
                 <div v-else v-for="room in rooms" :key="room.id">
@@ -54,6 +61,9 @@
 import io from 'socket.io-client';
 import gameSelect from '../Game-select/Game-select.vue';
 import { defineComponent, ref } from 'vue';
+
+import eyesFolder from '@/assets/svg/avatars/eyes';
+import mouthFolder from '@/assets/svg/avatars/mouths';
 
 interface Room {
     id: string;
@@ -106,9 +116,51 @@ export default defineComponent({
             },
             selectedAvatar: "Avatar1",
             roomId: "",
+
+            avatarData: [0, 0, "#ffffff"] as [number, number, string],
+            currentAvatar: {},
+            maxEyesIndex: eyesFolder.length,
+            maxMouthIndex: mouthFolder.length
         }
     },
+    mounted() {        
+        const getLang = localStorage.getItem('lang');
+        if(getLang){
+            this.lang = getLang;
+        } else{
+            this.lang = 'fr';
+            localStorage.setItem('lang',this.lang);
+        }
 
+        if (this.homepage) {
+            setInterval(() => {
+                this.updRooms();
+            }, 20);
+        }
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const roomId = urlParams.get('room');
+        this.roomId = roomId ?? "";
+
+        if(this.lang == 'fr'){
+            this.nextStepFr();
+        }else{
+            this.nextStepEn();
+        }
+        this.changeLanguage();
+    },
+    computed: {        
+        bodySrc() {
+            return require(`@/assets/svg/avatars/profile_base.svg`);
+        },
+        eyesSrc() {
+            return require(`@/assets/svg/avatars/eyes/eyes${this.avatarData[0]}.svg`);
+        },
+        mouthSrc() {
+            return require(`@/assets/svg/avatars/mouths/mouth${this.avatarData[1]}.svg`);
+        },
+    },
     methods: {
         updRooms() {
             this.socket.emit('get rooms');
@@ -169,13 +221,31 @@ export default defineComponent({
                 }, 5000);
             }
         },
-        selectAvatar(avatarName: string) {
-            localStorage.setItem('selectedAvatar', avatarName);
-            var options = document.querySelector('.avatar-options');
-            // options.style.display = 'none';
+        // selectAvatar(avatarName: string) {
+        //     localStorage.setItem('selectedAvatar', avatarName);
+        //     var options = document.querySelector('.avatar-options');
+        //     // options.style.display = 'none';
 
-            this.selectedAvatar = avatarName;
-            // this.avatarPath = `/img/${this.player.avatar}.png`;
+        //     this.selectedAvatar = avatarName;
+        //     // this.avatarPath = `/img/${this.player.avatar}.png`;
+        // },
+        previousAvatarPart(part: string) {
+            if (part === 'eyes' && this.avatarData[0] > 0) {
+                this.avatarData[0]--;
+            } else if (part === 'mouth' && this.avatarData[1] > 0) {
+                this.avatarData[1]--;
+            }
+            console.log(this.avatarData)
+        },
+        nextAvatarPart(part: string) {
+            if (part === 'eyes' && this.avatarData[0] < this.maxEyesIndex - 1) {
+                this.avatarData[0]++;
+            } else if (part === 'mouth' && this.avatarData[1] < this.maxMouthIndex - 1) {
+                this.avatarData[1]++;
+            }
+        },
+        updateAvatarColor() {
+            console.log("color!")
         },
 
         reload() {
@@ -186,37 +256,9 @@ export default defineComponent({
             this.$i18n.locale = localStorage.getItem('lang') || 'fr'
         },
     },
-    mounted() {
-
-        const getLang = localStorage.getItem('lang');
-        if(getLang){
-            this.lang = getLang;
-        }else{
-            this.lang = 'fr';
-            localStorage.setItem('lang',this.lang);
-        }
-
-        if (this.homepage) {
-            setInterval(() => {
-                this.updRooms();
-            }, 20);
-        }
-
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const roomId = urlParams.get('room');
-        this.roomId = roomId ?? "";
-
-        if(this.lang == 'fr'){
-            this.nextStepFr();
-        }else{
-            this.nextStepEn();
-        }
-        this.changeLanguage();
-    }
 })
 </script>
 
 <style scoped>
-@import url("./homepage.css");
+    @import url("./homepage.css");
 </style>

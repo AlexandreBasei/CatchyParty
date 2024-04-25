@@ -8,9 +8,9 @@
 
                         <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_pink.svg"
+                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
                             id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_red.svg"
+                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
                             id="avatarImg" alt="Avatar">
 
                         <p class="pseudoPlayer">
