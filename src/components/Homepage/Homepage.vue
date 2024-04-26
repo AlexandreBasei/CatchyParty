@@ -1,8 +1,6 @@
 <template>
     <langApp v-if="homepage === true"></langApp>
-    <div v-if="homepage === false">
-        <button @click="back()" class="backBtn">{{ $t('RETOUR') }}</button>
-    </div>
+    <button v-if="homepage === false" @click="back()" class="backBtn">{{ $t('RETOUR') }}</button>
     <form v-if="homepage === true" class="homepage-form">
         <div class="inputs-container">
             <input type="text" class="textInput" :placeholder="$t('UTILISATEUR')" v-model="pseudo" maxlength="15">
@@ -46,7 +44,7 @@ import gameSelect from '../Game-select/Game-select.vue';
 import ProfilePicture from '@/components/ProfilePicture/ProfilePicture.vue';
 import { defineComponent, ref } from 'vue';
 
-import langApp from '@/components/lang/lang.vue';
+import langApp from '@/components/Lang/Lang.vue';
 
 import bodyFolder from '@/assets/svg/avatars/bodies';
 import eyesFolder from '@/assets/svg/avatars/eyes';

@@ -103,6 +103,9 @@
     border-radius: var(--borderradius);
 }
 
+.game-container p {
+    font-size: 80%;
+}
 
 ul {
     list-style-type: none;
@@ -114,7 +117,8 @@ ul li {
 
 
 #shareLink,
-.startGame {
+.startGame,
+.shareLink {
     background-color: var(--tertiary);
     color: var(--black);
     font-weight: 600;
@@ -123,6 +127,10 @@ ul li {
     border-color: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
+}
+
+.shareLink, #shareLink{
+    width: 100%;
 }
 
 .startGame:hover {

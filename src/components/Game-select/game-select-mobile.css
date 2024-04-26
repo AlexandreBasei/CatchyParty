@@ -35,4 +35,23 @@
     .settings form{
         flex-wrap: wrap;
     }
+
+    .content{
+        flex-wrap: wrap;
+        width: 100%;
+        display: block;
+        gap: 0;
+    }
+
+    .personalization-options > div{
+        flex-wrap: wrap;
+    }
+
+    .game{
+        height: 20vh;
+    }
+
+    select, input[type=text], button{
+        width: 100%;
+    }
 }
