@@ -28,41 +28,39 @@
                     </div>
                 </div>
             </div>
-            <p id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</p>
+            <button id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
         </section>
-        <main class="personalization-main">
-            <section class="settings">
-                <div>
-                    <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
+        <section class="personalization-main">
+            <div class="settings">
+                <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
-                    <div class="game-options">
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection">
-                                <img src="../../assets/svg/img-jeu.png" alt="Game 1">
-                            </div>
-                            <p>{{ $t('KEYBOARD_NOTES') }}</p>
+                <div class="game-options">
+                    <div class="game-container">
+                        <div class="game">
+                            <img src="@/assets/svg/partinies/solar.svg" alt="Game 1">
                         </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection">
-                                <img src="../../assets/svg/img-jeu.png" alt="Game 2">
-                            </div>
-                            <p>Classico</p>
+                        <p>{{ $t('KEYBOARD_NOTES') }}</p>
+                    </div>
+                    <div class="game-container">
+                        <div class="game">
+                            <img src="@/assets/svg/partinies/vilo.svg" alt="Game 2">
                         </div>
-                        <div class="game-container">
-                            <div class="game" @click="toggleSelection">
-                                <img src="../../assets/svg/img-jeu.png" alt="Game 3">
-                            </div>
-                            <p>What's the situation ?</p>
+                        <p>Classico</p>
+                    </div>
+                    <div class="game-container">
+                        <div class="game">
+                            <img src="@/assets/svg/partinies/blingbling.svg" alt="Game 3">
                         </div>
+                        <p>What's the situation ?</p>
                     </div>
                 </div>
 
                 <form @submit.prevent="start('game1')">
                     <div class="personalization-options">
-                        <div>
+                        <!-- <div>
                             <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
                             <select id="nbPlayers"></select>
-                        </div>
+                        </div> -->
                         <div>
                             <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
                             <select id="nbRounds"></select>
@@ -72,8 +70,8 @@
                     <!-- <input type="submit" value="Select" class="submitBtn"> -->
                     <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
                 </form>
-            </section>
-        </main>
+            </div>
+        </section>
     </div>
 
     <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
@@ -296,12 +294,6 @@ export default defineComponent({
                 }
             }
             return false;
-        },
-
-        toggleSelection(event: MouseEvent) {
-            if (event.currentTarget instanceof HTMLElement) {
-                event.currentTarget.classList.toggle("selected");
-            }
         },
         // updateAvatar() {
         //     var img = document.getElementById('avatarImg');
