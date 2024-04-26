@@ -113,6 +113,7 @@ interface Player {
 
 export default defineComponent({
     name: 'game_select',
+    homepage:'',
     components: {
         Kbnotes,
         ProfilePicture
@@ -135,7 +136,6 @@ export default defineComponent({
     },
 
     mounted() {
-
         this.socket.on('join room', (player: any) => {
             this.player = player;
             this.currentRoom = player.roomId;
