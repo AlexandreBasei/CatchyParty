@@ -1,3 +1,4 @@
+<!-- Ajouter .white-profile lors de l'appel du Component s'il faut un background blanc -->
 <template>
   <div class="profile-picture" :style="{ width: width + 'px' }">
     <img :src="bodySrc" class="avatar-part"/>
