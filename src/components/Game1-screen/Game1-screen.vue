@@ -52,21 +52,17 @@
   </div>
 
   <img src="../../assets/svg/extend/side2.svg" alt="symfony" class="symfony">
-  <!-- <div class="footer">
-        <footerApp></footerApp>
-    </div> -->
 </template>
 
 <script lang="ts">
+  export default({
+    name: 'game1_screen',
+    components: {
 
-export default({
-  name: 'game1_screen',
-  components: {
-
-  }
-});
+    }
+  });
 </script>
 
 <style lang="css" scoped>
-    @import './game1-screen.css';
+  @import './game1-screen.css';
 </style>

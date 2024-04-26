@@ -1,59 +1,51 @@
 <template>
-    <main v-if="homepage === true">
-        <section class="personalization"> 
-            <form>
-                <input type="text" class="textInput" :placeholder="$t('UTILISATEUR')" v-model="pseudo" maxlength="15"
-                    required>
-                <div class="avatar-choice">
-                    <h3 v-if="homepage === true && !roomId">{{ $t('AVATAR') }}</h3>
-                    <div v-else v-for="room in rooms" :key="room.id">
-                        <h3 v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
-                    </div>
-                    <div class="avatar-container">
-                        <div class="avatar-selected">
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar1"
-                                v-if="selectedAvatar === 'Avatar1'">
+    <form v-if="homepage === true" class="homepage-form">
+        <div class="inputs-container">
+            <input type="text" class="textInput" :placeholder="$t('UTILISATEUR')" v-model="pseudo" maxlength="15">
 
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar2"
-                                v-if="selectedAvatar === 'Avatar2'">
+            <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">{{ $t('JOUER') }}</button>
+            <div v-else v-for="room in rooms" :key="room.id">
+                <button v-if="room.id === roomId" @click="joinRoom(room)" class="submitBtn">{{ $t('REJOINDRE_PARTIE') }}</button>
+            </div>
+        </div>
 
-                            <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar3"
-                                v-if="selectedAvatar === 'Avatar3'">
-                        </div>
-                    </div>
-                    <div class="avatar-options">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base.svg" alt="Avatar 1"
-                            @click="selectAvatar('Avatar1')">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_pink.svg" alt="Avatar 2"
-                            @click="selectAvatar('Avatar2')">
-                        <img class="avatar-option" src="@/assets/svg/avatars/profile_base_ex_red.svg" alt="Avatar 3"
-                            @click="selectAvatar('Avatar3')">
-                    </div>
-                </div>
-                <button v-if="homepage === true && !roomId" class="submitBtn" @click="handleSubmit()">{{ $t('JOUER') }}</button>
-                <div v-else v-for="room in rooms" :key="room.id">
-                    <button v-if="room.id === roomId" @click="joinRoom(room)" class="submitBtn">{{ $t('REJOINDRE_PARTIE') }}</button>
-                </div>
-            </form>
-        </section>
+        <div class="avatar-choice">
+            <h3 v-if="homepage === true && !roomId">{{ $t('AVATAR') }}</h3>
+            <div v-else v-for="room in rooms" :key="room.id">
+                <h3 v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
+            </div>
+            
+            <div class="avatar-container">
+                <ul class="arrows">
+                    <button type="button" @click="previousAvatarPart('eyes')" :disabled="avatarData[1] === 0">&lt;</button>
+                    <button type="button" @click="previousAvatarPart('mouth')" :disabled="avatarData[2] === 0">&lt;</button>
+                    <button type="button" @click="previousAvatarPart('body')" :disabled="avatarData[0] === 0">&lt;</button>
+                </ul>
 
-        <section class="tutorial" v-if="homepage === true">
-            <h3> {{ $t('COMMENT_JOUER') }} </h3>
-            <div id="tutorial" class="tutorial-box">{{ tutorialText }}</div>
-        </section>
-    </main>
+                <ProfilePicture :width="200" :bodyIndex="avatarData[0]" :eyesIndex="avatarData[1]" :mouthIndex="avatarData[2]" />
+
+                <ul class="arrows">
+                    <button type="button" @click="nextAvatarPart('eyes')" :disabled="avatarData[1] === maxEyesIndex-1">&gt;</button>
+                    <button type="button" @click="nextAvatarPart('mouth')" :disabled="avatarData[2] === maxMouthIndex-1">&gt;</button>
+                    <button type="button" @click="nextAvatarPart('body')" :disabled="avatarData[0] === maxBodyIndex-1">&gt;</button>
+                </ul>
+            </div>
+        </div>
+    </form>
 
     <gameSelect v-if="!homepage" :socket="socket"></gameSelect>
-
-    <!-- <div class="footer">
-        <footerApp></footerApp>
-    </div> -->
 </template>
 
 <script lang="ts">
 import io from 'socket.io-client';
 import gameSelect from '../Game-select/Game-select.vue';
+import ProfilePicture from '@/components/ProfilePicture/ProfilePicture.vue';
 import { defineComponent, ref } from 'vue';
+
+import bodyFolder from '@/assets/svg/avatars/bodies';
+import eyesFolder from '@/assets/svg/avatars/eyes';
+import mouthFolder from '@/assets/svg/avatars/mouths';
+
 
 interface Room {
     id: string;
@@ -73,7 +65,7 @@ export default defineComponent({
     name: 'home_page',
     components: {
         gameSelect,
-
+        ProfilePicture
     },
 
     data() {
@@ -97,18 +89,60 @@ export default defineComponent({
             currentStep: 0,
             player: {
                 host: false,
-                avatar: "Avatar 1",
+                avatar: [0,0,0],
                 roomId: "",
                 username: "",
                 socketId: "",
                 idea: false,
                 tabAttributed: false,
             },
-            selectedAvatar: "Avatar1",
             roomId: "",
+
+            avatarData: [0, 0, 0] as [number, number, number],
+            currentAvatar: {},
+            maxBodyIndex: bodyFolder.length,
+            maxEyesIndex: eyesFolder.length,
+            maxMouthIndex: mouthFolder.length
         }
     },
+    mounted() {        
+        const getLang = localStorage.getItem('lang');
+        if(getLang){
+            this.lang = getLang;
+        } else{
+            this.lang = 'fr';
+            localStorage.setItem('lang',this.lang);
+        }
 
+        if (this.homepage) {
+            setInterval(() => {
+                this.updRooms();
+            }, 20);
+        }
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const roomId = urlParams.get('room');
+        this.roomId = roomId ?? "";
+
+        if(this.lang == 'fr'){
+            this.nextStepFr();
+        }else{
+            this.nextStepEn();
+        }
+        this.changeLanguage();
+    },
+    computed: {        
+        bodySrc() {
+            return require(`@/assets/svg/avatars/bodies/body${this.avatarData[0]}.svg`);
+        },
+        eyesSrc() {
+            return require(`@/assets/svg/avatars/eyes/eyes${this.avatarData[1]}.svg`);
+        },
+        mouthSrc() {
+            return require(`@/assets/svg/avatars/mouths/mouth${this.avatarData[2]}.svg`);
+        },
+    },
     methods: {
         updRooms() {
             this.socket.emit('get rooms');
@@ -123,7 +157,7 @@ export default defineComponent({
                 this.player.roomId = room.id;
                 this.player.username = this.pseudo;
                 this.player.socketId = this.socket.id ?? "";
-                this.player.avatar = this.selectedAvatar;
+                this.player.avatar = this.avatarData;
 
                 this.socket.emit('playerData', this.player);
                 this.homepage = false;
@@ -136,11 +170,13 @@ export default defineComponent({
                 this.player.host = true;
                 this.player.username = this.pseudo;
                 this.player.socketId = this.socket.id ?? "";
-                this.player.avatar = this.selectedAvatar;
+                this.player.avatar = this.avatarData;
 
                 this.socket.emit('playerData', this.player);
 
                 this.homepage = false;
+            } else {
+                alert("Tu dois entrer un pseudo !")
             }
         },
         nextStepFr() {
@@ -169,13 +205,24 @@ export default defineComponent({
                 }, 5000);
             }
         },
-        selectAvatar(avatarName: string) {
-            localStorage.setItem('selectedAvatar', avatarName);
-            var options = document.querySelector('.avatar-options');
-            // options.style.display = 'none';
-
-            this.selectedAvatar = avatarName;
-            // this.avatarPath = `/img/${this.player.avatar}.png`;
+        
+        previousAvatarPart(part: string) {
+            if (part === 'body' && this.avatarData[0] > 0) {
+                this.avatarData[0]--;
+            } else if (part === 'eyes' && this.avatarData[1] > 0) {
+                this.avatarData[1]--;
+            } else if (part === 'mouth' && this.avatarData[2] > 0) {
+                this.avatarData[2]--;
+            }
+        },
+        nextAvatarPart(part: string) {
+            if (part === 'body' && this.avatarData[0] < this.maxBodyIndex - 1) {
+                this.avatarData[0]++;
+            } else if (part === 'eyes' && this.avatarData[1] < this.maxEyesIndex - 1) {
+                this.avatarData[1]++;
+            } else if (part === 'mouth' && this.avatarData[2] < this.maxMouthIndex - 1) {
+                this.avatarData[2]++;
+            }
         },
 
         reload() {
@@ -186,37 +233,9 @@ export default defineComponent({
             this.$i18n.locale = localStorage.getItem('lang') || 'fr'
         },
     },
-    mounted() {
-
-        const getLang = localStorage.getItem('lang');
-        if(getLang){
-            this.lang = getLang;
-        }else{
-            this.lang = 'fr';
-            localStorage.setItem('lang',this.lang);
-        }
-
-        if (this.homepage) {
-            setInterval(() => {
-                this.updRooms();
-            }, 20);
-        }
-
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const roomId = urlParams.get('room');
-        this.roomId = roomId ?? "";
-
-        if(this.lang == 'fr'){
-            this.nextStepFr();
-        }else{
-            this.nextStepEn();
-        }
-        this.changeLanguage();
-    }
 })
 </script>
 
 <style scoped>
-@import url("./homepage.css");
+    @import url("./homepage.css");
 </style>

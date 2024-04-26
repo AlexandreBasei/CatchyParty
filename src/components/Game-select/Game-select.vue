@@ -6,12 +6,7 @@
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
 
-                        <img v-if="rplayer.avatar === 'Avatar1'" class="player-icon" src="@/assets/svg/avatars/profile_base.svg"
-                            id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar2'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_pink.svg"
-                            id="avatarImg" alt="Avatar">
-                        <img v-else-if="rplayer.avatar === 'Avatar3'" class="player-icon" src="@/assets/svg/avatars/profile_base_ex_red.svg"
-                            id="avatarImg" alt="Avatar">
+                        <ProfilePicture :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
                         <p class="pseudoPlayer">
                             <span v-if="rplayer.host">👑 </span>
@@ -88,13 +83,14 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import io from 'socket.io-client';
-import Kbnotes from "../Keyboard-notes/KeyboardNotes.vue";
+import Kbnotes from "@/components/Keyboard-notes/KeyboardNotes.vue";
+import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
 
 interface Room {
     id: string;
     players: {
         host: boolean,
-        avatar: string,
+        avatar: [number,number,number],
         roomId: string,
         socketId: string,
         username: string,
@@ -105,7 +101,7 @@ interface Room {
 
 interface Player {
     host: boolean,
-    avatar: string,
+    avatar: [number,number,number],
     roomId: string,
     socketId: string,
     username: string,
@@ -119,6 +115,7 @@ export default defineComponent({
     name: 'game_select',
     components: {
         Kbnotes,
+        ProfilePicture
     },
 
     props: {
@@ -202,7 +199,7 @@ export default defineComponent({
         resetPlayer() {
             this.player.host = false;
             this.player.username = "";
-            this.player.avatar = "Avatar1";
+            this.player.avatar = [0,0,0];
             this.player.roomId = "";
             this.player.idea = false;
             this.player.tabAttributed = false;

@@ -12,6 +12,7 @@
     --quaternary: #3374C1;
 
     --black: #161617;
+    --grey: #9aa3a3;
     --white: #F9FAFA;
 
     --borderradius: 30px;
@@ -69,6 +70,27 @@ body::-webkit-scrollbar-thumb {
 
 input{
     font-family: 'Montserrat', sans-serif;
+    border-radius: var(--borderradius);
+    background-color: var(--primary);
+    border: 2px solid var(--primary);
+    color: var(--white);
+}
+input::placeholder {
+    color: var(--white);
+    opacity: 0.7;
+}
+
+input::-moz-placeholder {
+    color: var(--white);
+    opacity: 0.7;
+}
+
+input:-ms-input-placeholder {
+    color: var(--white);
+    opacity: 0.7;
+}
+button{
+    border: 0px;
 }
 
 .content h3{    
@@ -76,4 +98,8 @@ input{
     font-size: 1.1rem;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--white);
+}
+
+ul{
+    padding: 0px;
 }
