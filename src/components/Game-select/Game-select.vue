@@ -113,7 +113,6 @@ interface Player {
 export default defineComponent({
     name: 'game_select',
     homepage:'',
-    copied: false,
     components: {
         Kbnotes,
         ProfilePicture
@@ -131,6 +130,7 @@ export default defineComponent({
             rooms: [] as Room[],
             currentRoom: '',
             player: {} as Player,
+            copied: false,
             game1: false,
         }
     },
