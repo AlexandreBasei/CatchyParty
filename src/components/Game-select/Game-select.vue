@@ -28,7 +28,8 @@
                     </div>
                 </div>
             </div>
-            <button id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
+            <button v-if="!copied" id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
+            <button v-if="copied" class="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIE') }}</button>
         </section>
         <section class="personalization-main">
             <div class="settings">
@@ -111,6 +112,8 @@ interface Player {
 
 export default defineComponent({
     name: 'game_select',
+    homepage:'',
+    copied: false,
     components: {
         Kbnotes,
         ProfilePicture
@@ -133,7 +136,6 @@ export default defineComponent({
     },
 
     mounted() {
-
         this.socket.on('join room', (player: any) => {
             this.player = player;
             this.currentRoom = player.roomId;
@@ -230,6 +232,7 @@ export default defineComponent({
 
         copy(text: string) {
             navigator.clipboard.writeText(text);
+            this.copied = true;
         },
 
         playersNumber() {
@@ -335,4 +338,5 @@ export default defineComponent({
 
 <style lang="css" scoped>
     @import url('./game-select.css');
+    @import url('./game-select-mobile.css');
 </style>

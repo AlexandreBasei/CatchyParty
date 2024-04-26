@@ -78,6 +78,16 @@ ul.arrows >*:hover {
     font-weight: 600;
 }
 
+.backBtn{
+    padding: 5px 15px;
+    border-radius: var(--borderradius);
+    width: 100px;
+    background-color: var(--tertiary);
+    border: 2px solid var(--tertiary);
+    transition: all 0.5s ease;
+    color: var(--black);
+}
+
 .submitBtn {
     background-color: var(--tertiary);
     border: 2px solid var(--tertiary);
@@ -98,5 +108,13 @@ input:hover,
 input:focus,
 .submitBtn:hover{
     border: 2px solid var(--black);
+}
+
+@media only screen and (min-width: 1000px) {
+
+    .backBtn{
+        margin-bottom: 2vh;
+    }
+    
 }
 

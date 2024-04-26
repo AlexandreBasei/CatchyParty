@@ -36,4 +36,5 @@
 
 <style lang="css" scoped>
     @import './about.css';
+    @import './about-mobile.css';
 </style>

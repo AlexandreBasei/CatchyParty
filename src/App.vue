@@ -1,7 +1,6 @@
 <template>
 
   <headerApp></headerApp>
-  <langApp></langApp>
   <RouterView />
   <div class="footer">
     <footerApp></footerApp>
@@ -13,14 +12,12 @@ import { defineComponent, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import footerApp from '@/components/Footer/Footer.vue';
 import headerApp from '@/components/Header/Header.vue';
-import langApp from '@/components/Lang/Lang.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     footerApp,
     headerApp,
-    langApp
   }
 });
 </script>

@@ -57,9 +57,11 @@
     </div>
 </template>
 
-<script lang="ts">
+<style lang="css" scoped>
+    @import url('./KeyboardNotes.css');
+</style>
 
-import './style.css';
+<script lang="ts">
 
 import { defineComponent } from 'vue';
 import io from 'socket.io-client';

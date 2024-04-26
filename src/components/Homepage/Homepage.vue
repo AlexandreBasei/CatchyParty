@@ -1,4 +1,6 @@
 <template>
+    <langApp v-if="homepage === true"></langApp>
+    <button v-if="homepage === false" @click="back()" class="backBtn">{{ $t('RETOUR') }}</button>
     <form v-if="homepage === true" class="homepage-form">
         <div class="inputs-container">
             <input type="text" class="textInput" :placeholder="$t('UTILISATEUR')" v-model="pseudo" maxlength="15">
@@ -42,6 +44,8 @@ import gameSelect from '../Game-select/Game-select.vue';
 import ProfilePicture from '@/components/ProfilePicture/ProfilePicture.vue';
 import { defineComponent, ref } from 'vue';
 
+import langApp from '@/components/Lang/Lang.vue';
+
 import bodyFolder from '@/assets/svg/avatars/bodies';
 import eyesFolder from '@/assets/svg/avatars/eyes';
 import mouthFolder from '@/assets/svg/avatars/mouths';
@@ -65,7 +69,8 @@ export default defineComponent({
     name: 'home_page',
     components: {
         gameSelect,
-        ProfilePicture
+        ProfilePicture,
+        langApp
     },
 
     data() {
@@ -105,7 +110,8 @@ export default defineComponent({
             maxMouthIndex: mouthFolder.length
         }
     },
-    mounted() {        
+    mounted() {    
+        localStorage.setItem('homepage', JSON.stringify(this.homepage));
         const getLang = localStorage.getItem('lang');
         if(getLang){
             this.lang = getLang;
@@ -161,6 +167,7 @@ export default defineComponent({
 
                 this.socket.emit('playerData', this.player);
                 this.homepage = false;
+                localStorage.setItem('homepage', JSON.stringify(this.homepage));
                 this.roomId = "";
             }
         },
@@ -175,6 +182,7 @@ export default defineComponent({
                 this.socket.emit('playerData', this.player);
 
                 this.homepage = false;
+                localStorage.setItem('homepage', JSON.stringify(this.homepage));
             } else {
                 alert("Tu dois entrer un pseudo !")
             }
@@ -229,6 +237,10 @@ export default defineComponent({
             window.location.search = '?room=';
         },
 
+        back(){
+            this.homepage = true;
+        },
+
         changeLanguage() {
             this.$i18n.locale = localStorage.getItem('lang') || 'fr'
         },
@@ -238,4 +250,5 @@ export default defineComponent({
 
 <style scoped>
     @import url("./homepage.css");
+    @import url("./homepage-mobile.css");
 </style>
