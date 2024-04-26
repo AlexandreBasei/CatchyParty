@@ -1,5 +1,6 @@
 .profile-picture {
-    width: 55px;
+    min-width: 55px;
+    width: 75px;
     aspect-ratio: 1/1;
     display: flex;
     gap: 5px;

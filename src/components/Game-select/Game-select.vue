@@ -8,7 +8,7 @@
 
                         <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
-                        <p class="pseudoPlayer">
+                        <span class="pseudoPlayer">
                             <span v-if="rplayer.host">👑 </span>
                             {{ rplayer.username }}
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
@@ -19,7 +19,7 @@
                                         d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                                 </svg>
                             </button>
-                        </p>
+                        </span>
 
                         <div v-bind:id="rplayer.socketId" class="hostMenu">
                             <button @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
@@ -30,47 +30,49 @@
             </div>
             <button id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
         </section>
-        <section class="personalization-main">
-            <div class="settings">
+        <section class="personalization-section">
+            <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
                 <div class="game-options">
-                    <div class="game-container">
+                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
+
+                    <div class="game-container" v-for="game in games" :key="game.id">
                         <div class="game">
-                            <img src="@/assets/svg/partinies/solar.svg" alt="Game 1">
+                            <img :src="resolveImagePath(game.image)" :alt="game.name">
                         </div>
-                        <p>{{ $t('KEYBOARD_NOTES') }}</p>
+                        <p>{{ game.name }}</p>
                     </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/vilo.svg" alt="Game 2">
-                        </div>
-                        <p>Classico</p>
-                    </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/blingbling.svg" alt="Game 3">
-                        </div>
-                        <p>What's the situation ?</p>
-                    </div>
+
+                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
                 </div>
-
-                <form @submit.prevent="start('game1')">
-                    <div class="personalization-options">
-                        <!-- <div>
-                            <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
-                            <select id="nbPlayers"></select>
-                        </div> -->
-                        <div>
-                            <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
-                            <select id="nbRounds"></select>
-                        </div>
-                    </div>
-
-                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
-                </form>
+                
+                
+                <div class="games-rounds">
+                    <h3>Déroulement de la Partie</h3>
+                </div>
             </div>
+
+            <form @submit.prevent="start('game1')">
+                <!-- <div class="personalization-options">
+                    <div>
+                        <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
+                        <select id="nbPlayers"></select>
+                    </div>
+                    <div>
+                        <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
+                        <select id="nbRounds"></select>
+                    </div>
+                </div> -->
+
+                <!-- <input type="submit" value="Select" class="submitBtn"> -->
+                <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+
+                <div class="messages">
+                    <span>Pas assez de joueurs (0)</span>
+                    <span>Pas de jeux (0)</span>
+                </div>
+            </form>
         </section>
     </div>
 
@@ -129,6 +131,12 @@ export default defineComponent({
             currentRoom: '',
             player: {} as Player,
             game1: false,
+
+            games: [
+                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: "assets/svg/partinies/solar.svg" },
+                { id: 2, name: "Classico", image: "assets/svg/partinies/vilo.svg" },
+                { id: 3, name: "What's the situation ?", image: "assets/svg/partinies/blingbling.svg" }
+            ]
         }
     },
 
@@ -186,6 +194,9 @@ export default defineComponent({
 
     },
     methods: {
+        resolveImagePath(image: string) {
+            return require("@/"+image);
+        },
         updRooms() {
             this.socket.emit('get rooms');
 
