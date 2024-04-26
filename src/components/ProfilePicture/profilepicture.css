@@ -5,10 +5,16 @@
     gap: 5px;
 
     position: relative;
+    border-radius: var(--borderradius);
+    overflow: hidden;
 }
 
 
 .profile-picture > .avatar-part{
     position: absolute;
     width: 100%;
+}
+
+.white-profile.profile-picture{
+    background-color: var(--white);
 }
