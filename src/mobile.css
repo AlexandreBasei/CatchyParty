@@ -27,7 +27,6 @@
     /* main */
 
     main{
-        flex-wrap: wrap;
         height: 75vh;
         text-align: center;
         padding: 20px 15px;

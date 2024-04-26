@@ -16,3 +16,17 @@
 .CGU-main p{
     text-align: justify;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .CGU-main{
+        gap: 10%;
+        justify-content: center;
+        overflow: auto;
+        display: grid;
+    }
+
+    .CGU-main section{
+        width: 100%;
+    }
+}

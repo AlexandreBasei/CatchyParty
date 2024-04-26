@@ -149,6 +149,7 @@ ul li {
     .personalization-main {
         height: auto;
         margin: 5% 5% 15% 5%;
+        width: 70%;
     }
 
     header {
@@ -171,7 +172,7 @@ ul li {
         padding: 20px;
         display: flex;
         flex-flow: wrap column;
-        
+        width: 80%;
         justify-content: center;
         align-items: center;
     }
