@@ -252,4 +252,5 @@ export default defineComponent({
 
 <style scoped>
     @import url("./homepage.css");
+    @import url("./homepage-mobile.css");
 </style>
