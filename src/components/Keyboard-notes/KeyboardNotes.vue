@@ -20,9 +20,9 @@
             <p v-if="ideaSubmitted">En attente des autres joueurs...</p>
         </div>
         <div v-for="(item, index) in assignedIdea" :key="index">
-            <!-- <div v-if="item.id === socket.id">
+            <div v-if="item.id === socket.id">
                 <p>L'idée qui t'a été attribuée est : {{ item.idea }}</p>
-            </div> -->
+            </div>
         </div>
 
         <div class="main-game" v-show="showMainGame">
