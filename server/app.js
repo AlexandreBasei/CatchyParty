@@ -8,6 +8,7 @@ var cors = require('cors');
 
 const getLyrics = require("../src/assets/js/getLyrics");
 const getSong = require("../src/assets/js/getSong");
+const { log } = require('console');
 
 const app = express();
 const server = http.createServer(app);
@@ -35,18 +36,22 @@ io.on('connection', (socket) => {
     console.log(`[connection] ${socket.id}`);
     // playersConnected.push(socket.id);
 
+    socket.on('update rooms', (newRooms) => {
+        rooms = newRooms;
+    })
+
     socket.on('submitIdea', (idea, player) => {
         let playersLENGTH = 0;
         let isDone = false;
         rooms.forEach(room => {
             console.log(`${player.roomId} + ${room.id}`);
             if (player.roomId === room.id) {
-                console.log("hey");
                 room.players.forEach(p => {
-
+                    console.log("ROOM", room.players);
                     if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
                         userIdeas.push({ id: p.socketId, idea: idea });
+                        console.log("USER IDEA", userIdeas);
                         p.idea = true;
                         isDone = !isDone;
                         console.log(`${userIdeas.length} / ${playersLENGTH}`);
@@ -61,8 +66,16 @@ io.on('connection', (socket) => {
 
         if (userIdeas.length === playersLENGTH) {
             console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
+            rooms.forEach(room => {
+                if (player.roomId === room.id) {
+                    room.players.forEach(p => {
+                        p.idea = false;
+                        isDone = false;
+                    });
+                }
+            });
             io.emit('MainGame', userIdeas);
-
+            userIdeas = [];
         }
         socket.emit('ideaSubmitted');
         console.log(userIdeas);
@@ -77,7 +90,7 @@ io.on('connection', (socket) => {
                 room.players.forEach(p => {
 
                     if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
-                        
+
                         NotesToGuess.push({ id: p.socketId, tabnotes: tabnotes });
                         console.log(tabnotes);
                         p.tabAttributed = true;

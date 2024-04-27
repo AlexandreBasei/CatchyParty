@@ -4,7 +4,6 @@
         <div id="timer" v-show="timerInGame">
             {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
         </div>
-
         <!-- Affichage du temps restant dans le décompte des 30 secondes -->
         <div id="countdown" v-show="timerInterGame">
             {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
@@ -19,6 +18,7 @@
             <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
             <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
+        <h1>{{ assignedIdea }}</h1>
         <div v-for="(item, index) in assignedIdea" :key="index">
             <div v-if="item.id === socket.id">
                 <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
@@ -47,7 +47,7 @@
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
-            <input type="text" v-model="guessInput"
+            <input type="text" v-model="userIdeaInput"
                 placeholder="Nom de la musique">
             <button @click="playGuessNotes()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
         </div>
@@ -159,7 +159,7 @@ export default defineComponent({
             maxRounds: 3,
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 30, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 30,
             timerInterval: 0,
             secondsLeft: 0,
@@ -216,6 +216,7 @@ export default defineComponent({
 
         this.socket.on('MainGame', (userIdeas: any) => {
             this.socket.emit('random attribute');
+            
             this.assignedIdea = userIdeas;
             console.log(`${this.assignedIdea}`);
             this.firstStepGame = false;
@@ -370,8 +371,8 @@ export default defineComponent({
 
                     this.timerInterval = 0;
                     this.currentRound++;
-
-
+                    this.resetRound();
+                    
                     if (this.currentRound < this.maxRounds) {
                         // Démarre le prochain tour si ce n'est pas le dernier
                         this.showMainGame = false;
@@ -379,15 +380,16 @@ export default defineComponent({
                         this.timerInGame = false;
                         this.timerInterGame = true;
 
-                        this.secondsLeft = 10;
+                        this.secondsLeft = 20;
 
                         // Décompte des 30 secondes sur le front-end
                         const countdownInterval = setInterval(() => {
                             if (this.secondsLeft <= 0) {
-                                this.submitGuess();
+                                this.submitIdea();
                                 console.log(this.Responses);
                                 clearInterval(countdownInterval); // Arrêter le deuxième timer une fois les 30 secondes écoulées
                                 console.log("c'est bon mon gars");
+                                
                                 this.showMainGame = true;
                                 this.showAfterGame = false; // Cacher la div après 30 secondes
                                 this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
@@ -412,8 +414,22 @@ export default defineComponent({
                 }
             }, 1000);
         },
+        
+        resetRound() {
+            this.player.idea = false;
+            this.player.tabAttributed = false;
+            this.tabnotes = [] as Notes[];
+            this.notesDuration = [] as Notes[];
 
+            const noteContainer = document.getElementById("note-container");
 
+            if (noteContainer) {
+                while (noteContainer.firstChild) {
+                    noteContainer.removeChild(noteContainer.firstChild);
+                }
+            }
+
+        },
 
         formatTime(seconds: number): string {
             const minutes: number = Math.floor(seconds / 60);
@@ -427,12 +443,6 @@ export default defineComponent({
 
             // Réinitialiser la valeur de userIdeaInput après l'avoir envoyée au serveur
             this.userIdeaInput = '';
-        },
-
-        submitGuess() {
-            this.Responses.push(this.guessInput);
-            // Réinitialise la valeur de guessInput après l'avoir ajoutée au tableau Responses
-            this.guessInput = '';
         },
 
         PlayNotesDone() {
