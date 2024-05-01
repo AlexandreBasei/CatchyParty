@@ -31,9 +31,10 @@ let playersConnected = [];
 let userIdeas = [];
 let assignedIdeas = [];
 let NotesToGuess = [];
+let rewindAll = [];
 
 io.on('connection', (socket) => {
-    console.log(`[connection] ${socket.id}`);
+    // console.log(`[connection] ${socket.id}`);
     // playersConnected.push(socket.id);
 
     socket.on('update rooms', (newRooms) => {
@@ -44,18 +45,19 @@ io.on('connection', (socket) => {
         let playersLENGTH = 0;
         let isDone = false;
         rooms.forEach(room => {
-            console.log(`${player.roomId} + ${room.id}`);
+            // console.log(`${player.roomId} + ${room.id}`);
             if (player.roomId === room.id) {
                 room.players.forEach(p => {
-                    console.log("ROOM", room.players);
+                    // console.log("ROOM", room.players);
                     if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
-                        userIdeas.push({ id: p.socketId, idea: idea });
-                        console.log("USER IDEA", userIdeas);
+                        userIdeas.push({ senderId: player.socketId, receiverId: p.socketId, idea: idea });
+                        console.log(userIdeas);
+                        // console.log("USER IDEA", userIdeas);
                         p.idea = true;
                         isDone = !isDone;
-                        console.log(`${userIdeas.length} / ${playersLENGTH}`);
-                        console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
+                        // console.log(`${userIdeas.length} / ${playersLENGTH}`);
+                        // console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
                     }
 
                     playersLENGTH = room.players.length;
@@ -65,7 +67,7 @@ io.on('connection', (socket) => {
         });
 
         if (userIdeas.length === playersLENGTH) {
-            console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
+            // console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
             rooms.forEach(room => {
                 if (player.roomId === room.id) {
                     room.players.forEach(p => {
@@ -78,7 +80,7 @@ io.on('connection', (socket) => {
             userIdeas = [];
         }
         socket.emit('ideaSubmitted');
-        console.log(userIdeas);
+        // console.log(userIdeas);
     });
 
     socket.on('sendTabNotes', (tabnotes, player) => {
@@ -86,21 +88,21 @@ io.on('connection', (socket) => {
         let isDone = false;
         rooms.forEach(room => {
             if (player.roomId === room.id) {
-                console.log("heyp");
+                // console.log("heyp");
                 room.players.forEach(p => {
 
                     if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
 
                         NotesToGuess.push({ id: p.socketId, tabnotes: tabnotes });
-                        console.log(tabnotes);
+                        // console.log(tabnotes);
                         p.tabAttributed = true;
-                        io.to(p.socketId).emit('newTabToGuess', tabnotes);
+                        io.to(p.socketId).emit('newTabToGuess', tabnotes, player.socketId);
                         isDone = !isDone;
-                        console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
+                        // console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
                     }
 
                     else {
-                        console.log("pas bon ça");
+                        // console.log("pas bon ça");
                     }
 
                     playersLENGTH = room.players.length;
@@ -110,10 +112,10 @@ io.on('connection', (socket) => {
         });
 
         if (NotesToGuess.length === playersLENGTH) {
-            console.log('Guess attributed c bon');
+            // console.log('Guess attributed c bon');
         }
 
-        console.log(NotesToGuess);
+        // console.log(NotesToGuess);
     });
 
     socket.on('sendPlayer:3', (player) => {
@@ -121,7 +123,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('game started', (game) => {
-        console.log("This game start : ", game);
+        // console.log("This game start : ", game);
         if (game === "game1") {
             io.emit('game start', game);
         }
@@ -130,21 +132,27 @@ io.on('connection', (socket) => {
     socket.on('play', () => {
         // Émettre un événement vers tous les clients pour démarrer la partie
         io.emit('startGame');
-        console.log('La partie démarre...');
+        // console.log('La partie démarre...');
     });
 
     socket.on('random attribute', () => {
-        console.log("hihi ^^");
+        // console.log("hihi ^^");
     });
 
+    socket.on('rewind', (rewind) => {
+        rewindAll.push(rewind);
+        console.log("REWIND", rewindAll);
+        io.emit('final rewind', rewindAll);
+    })
+
     socket.on('playerData', (player) => {
-        console.log(`[playerData] ${player.username}`);
+        // console.log(`[playerData] ${player.username}`);
 
         let room = null;
 
         if (player.roomId === "") {
             room = createRoom(player);
-            console.log(`[create room ] - ${room.id} - ${player.username}`);
+            // console.log(`[create room ] - ${room.id} - ${player.username}`);
         }
         else {
             room = rooms.find(r => r.id === player.roomId);
@@ -175,7 +183,7 @@ io.on('connection', (socket) => {
                     if (p.socketId === player.socketId && p.host !== true) {
                         p.host = true;
                         io.to(player.socketId).emit('new host', p.socketId);
-                        console.log(`[new host] - ${r.id} - ${player.username}`);
+                        // console.log(`[new host] - ${r.id} - ${player.username}`);
                     }
                 })
             }
@@ -192,7 +200,7 @@ io.on('connection', (socket) => {
     // });
 
     socket.on('disconnect', () => {
-        console.log(`[disconnect] ${socket.id}`);
+        // console.log(`[disconnect] ${socket.id}`);
         exitRoom(socket.id);
         const playerIndex = playersConnected.indexOf(socket.id);
         if (playerIndex !== -1) {
@@ -217,7 +225,7 @@ io.on('connection', (socket) => {
 //     playersConnected.forEach((playerId, index) => {
 //         assignedIdeas.push({ id: playerId, idea: shuffledIdeas[index].idea });
 //     });
-//     console.log('Idées attribuées :', assignedIdeas);
+    console.log('Idées attribuées :', assignedIdeas);
 //     return assignedIdeas;
 // }
 
@@ -246,7 +254,7 @@ function exitRoom(socketId) {
                         const randomIndex = Math.floor(Math.random() * r.players.length);
                         const randomPlayer = r.players[randomIndex];
                         randomPlayer.host = true;
-                        console.log(`[new host] - ${r.id} - ${randomPlayer.username}`);
+                        // console.log(`[new host] - ${r.id} - ${randomPlayer.username}`);
                     }
                 }
             }
@@ -304,7 +312,7 @@ function searchSong(artistName, songTitle, callback) {
             try {
                 // Parse the JSON response
                 const searchData = JSON.parse(body);
-                console.log(response);
+                // console.log(response);
                 // Check if there are any search results
                 if (searchData.response.hits.length > 0) {
                     // Extract the first search result (assuming it's the most relevant)
@@ -412,16 +420,16 @@ app.get('/lyrics', async (req, res) => {
             optimizeQuery: true
         };
 
-        console.log(options);
+        // console.log(options);
 
         getLyrics(options).then((lyrics) => {
-            console.log(lyrics); // Affiche les paroles dans la console
+            // console.log(lyrics); // Affiche les paroles dans la console
             io.to(socketId).emit('get lyrics', lyrics);
         });
 
-        getSong(options).then((song) =>
-            console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
-        );
+        // getSong(options).then((song) =>
+        //     console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
+        // );
     } catch (err) {
         console.error("Erreur lors de la récupération des données : ", err);
         return res.sendStatus(500);
@@ -449,5 +457,5 @@ app.get('/', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
+    // console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });

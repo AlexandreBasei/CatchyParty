@@ -1,5 +1,9 @@
 <template>
     <div>
+        <h1>{{ rewind }}</h1>
+        <div class="end-game" v-show="showEndGame">
+            <h2 id="play">{{ $t('PARTIE_TERMINEE') }}</h2>
+        </div>
         <!-- Affichage du temps restant -->
         <div id="timer" v-show="timerInGame">
             {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
@@ -8,19 +12,18 @@
         <div id="countdown" v-show="timerInterGame">
             {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
         </div>
-        <div class="Waiting-game" v-show="showWaitingGame">
+        <!-- <div class="Waiting-game" v-show="showWaitingGame">
             <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
                 :disabled="gameStarted">{{ $t('KEYBOARD_NOTES') }}</button>
-        </div>
+        </div> -->
         <div class="first-step" v-show="firstStepGame">
             <label for="userIdea">{{ $t('ENTREZ_NOM_MUSIQUE') }}</label>
             <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')">
             <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
             <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
-        <h1>{{ assignedIdea }}</h1>
         <div v-for="(item, index) in assignedIdea" :key="index">
-            <div v-if="item.id === socket.id">
+            <div v-if="item.receiverId === socket.id">
                 <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
             </div>
         </div>
@@ -43,22 +46,18 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div id="note-container"></div>
-            <button id="play">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
+            <button id="play" @click="handlePlayClick()">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
-            <input type="text" v-model="userIdeaInput"
-                placeholder="Nom de la musique">
-            <button @click="playGuessNotes()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+            <input type="text" v-model="userIdeaInput" placeholder="Nom de la musique">
+            <button @click="handlePlayClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
         </div>
-    </div>
-    <div class="end-game" v-show="showEndGame">
-        <button id="play">{{ $t('PARTIE_TERMINEE') }}</button>
     </div>
 </template>
 
 <style lang="css" scoped>
-    @import url('./KeyboardNotes.css');
+@import url('./KeyboardNotes.css');
 </style>
 
 <script lang="ts">
@@ -82,52 +81,52 @@ interface AssignedIdea {
     idea: string;
 }
 
-interface Rewind {
-    userID: {
-        Manche1: {
-            from: {
-                userID: string,
-                idea: string,
-            },
-            musician: {
-                userIDafter: string,
-                Suite2Notes: [],
-            },
-            guesser: {
-                userIDguess: string,
-                guess: string,
-            }
-        },
-        Manche2: {
-            from: {
-                userID: string,
-                idea: string,
-            },
-            musician: {
-                userIDafter: string,
-                Suite2Notes: [],
-            },
-            guesser: {
-                userIDguess: string,
-                guess: string,
-            }
-        },
-        Manche3: {
-            from: {
-                userID: string,
-                idea: string,
-            },
-            musician: {
-                userIDafter: string,
-                Suite2Notes: [],
-            },
-            guesser: {
-                userIDguess: string,
-                guess: string,
-            }
-        },
-    }
-}
+// interface Rewind {
+//     userID: {
+//         Manche1: {
+//             from: {
+//                 userID: string,
+//                 idea: string,
+//             },
+//             musician: {
+//                 userIDafter: string,
+//                 Suite2Notes: [],
+//             },
+//             guesser: {
+//                 userIDguess: string,
+//                 guess: string,
+//             }
+//         },
+//         Manche2: {
+//             from: {
+//                 userID: string,
+//                 idea: string,
+//             },
+//             musician: {
+//                 userIDafter: string,
+//                 Suite2Notes: [],
+//             },
+//             guesser: {
+//                 userIDguess: string,
+//                 guess: string,
+//             }
+//         },
+//         Manche3: {
+//             from: {
+//                 userID: string,
+//                 idea: string,
+//             },
+//             musician: {
+//                 userIDafter: string,
+//                 Suite2Notes: [],
+//             },
+//             guesser: {
+//                 userIDguess: string,
+//                 guess: string,
+//             }
+//         },
+//     }
+// }
 
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
@@ -168,7 +167,7 @@ export default defineComponent({
             assignedIdeaDone: '',
             player: {
                 host: false,
-                avatar: [0,0,0],
+                avatar: [0, 0, 0],
                 roomId: "",
                 username: "",
                 socketId: "",
@@ -177,10 +176,20 @@ export default defineComponent({
                 idea: false,
                 tabAttributed: false,
             },
+            rewind: [] as any[][],
+            rewindAll: [],
         }
     },
     // Ici tout le code procédural
     mounted() {
+        this.socket.emit('play');
+        for (let index = 0; index < this.maxRounds; index++) {
+            this.rewind.push([{
+                ideas: '',
+                sendedMusic:'',
+                receivedMusic: '',
+            }]);
+        }
         const keys = document.querySelectorAll(".key");
         const noteContainer = document.getElementById("note-container")!;
 
@@ -204,8 +213,9 @@ export default defineComponent({
             this.player.idea = true;
         });
 
-        this.socket.on('newTabToGuess', (NotesToGuess:any) => {
+        this.socket.on('newTabToGuess', (NotesToGuess: any, composerId: string) => {
             this.tabnotes = NotesToGuess;
+            this.rewind[this.currentRound][0].receivedMusic = [NotesToGuess, composerId];
             console.log(this.tabnotes);
             this.player.tabAttributed = true;
         });
@@ -214,18 +224,50 @@ export default defineComponent({
             this.startGame();
         });
 
-        this.socket.on('MainGame', (userIdeas: any) => {
-            this.socket.emit('random attribute');
+        this.socket.on('final rewind', (rewindAll: []) => {
+            this.rewindAll = rewindAll;
+            console.log("FINAL REWIND",rewindAll);
             
+        })
+
+        this.socket.on('MainGame', (userIdeas: any) => {
+            console.log("REWIND", this.rewind);
+
+            this.socket.emit('random attribute');
+
             this.assignedIdea = userIdeas;
-            console.log(`${this.assignedIdea}`);
+            userIdeas.forEach((idea: any) => {
+                if (idea.receiverId === this.player.socketId) {
+                    this.rewind[this.currentRound][0].ideas = idea;
+                }
+            });
+
+            [
+                [
+                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "grave" }
+                ],
+                [
+                    [
+                        {
+                            "userId": "8iiVA9ZFSeeV7z67AAAl", "infos":
+                                { "id": "30ez44pnh", "note": "E2", "duration": 1, "interval": 0 }
+                        }
+                    ],
+                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "gauche" }
+                ], [
+                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "aigu" }
+                ]
+            ]
+
+            // console.log(`${this.assignedIdea}`);
             this.firstStepGame = false;
             this.showMainGame = true;
             this.showAfterGame = false;
             this.showEndGame = false;
             this.remainingTime = this.roundDuration;
-            this.currentRound = 0;
-            this.playRound();
+            if (this.currentRound === 0) {
+                this.playRound();
+            }
             console.log('La partie a démarré côté client...');
             this.gameStarted = true; // Met à jour gameStarted pour désactiver le bouton "Jouer"
         });
@@ -233,19 +275,6 @@ export default defineComponent({
         noteContainer.addEventListener("dragover", (event) => {
             event.preventDefault();
         });
-
-        // this.socket.on('assigned idea', (assignedIdeas: AssignedIdea[]) => {
-        //     // Parcourir les idées attribuées pour trouver celle qui correspond à l'utilisateur actuel
-        //     assignedIdeas.forEach(idea => {
-        //         if (idea.id === this.socket.id) {
-        //             // Mettre à jour l'idée attribuée pour l'utilisateur actuel
-        //             this.assignedIdea = idea;
-        //             this.assignedIdeaDone = this.assignedIdea.idea;
-
-        //             console.log('Assigned idea for current user:', this.assignedIdea.idea);
-        //         }
-        //     });
-        // });
 
         noteContainer.addEventListener("drop", (event) => {
             event.preventDefault();
@@ -289,20 +318,20 @@ export default defineComponent({
             }
         });
 
-        document.getElementById("play")?.addEventListener("click", () => {
-            console.log(this.notesDuration);
-            let currentTime = 0;
-            this.notesDuration.forEach((item, index) => {
-                const sound = this.sounds[item.infos.note];
-                if (sound) {
-                    setTimeout(() => {
-                        sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
-                    }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].infos.interval.toString()) : 0));
-                }
-            });
-        });
+        // document.getElementById("play")?.addEventListener("click", () => {
+        //     console.log(this.notesDuration);
+        //     let currentTime = 0;
+        //     this.notesDuration.forEach((item, index) => {
+        //         const sound = this.sounds[item.infos.note];
+        //         if (sound) {
+        //             setTimeout(() => {
+        //                 sound.play();
+        //                 setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
+        //             }, currentTime * 1000);
+        //             currentTime += (item.infos.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].infos.interval.toString()) : 0));
+        //         }
+        //     });
+        // });
     },
     //Ici les fonctions (méthodes)
     methods: {
@@ -324,20 +353,31 @@ export default defineComponent({
             }
         },
 
-        playGuessNotes() {
-            console.log(this.tabnotes);
+        playSounds(soundList: any) {
             let currentTime = 0;
-            this.tabnotes.forEach((item, index) => {
-                console.log(item);
-                const sound = this.sounds[item.infos.note];
+            soundList.forEach((item: any, index: any) => {
+                console.log(item.infos.note);
+                const sound = new Howl({
+                    src: [`./sounds/${item.infos.note}.mp3`] // Path to local audio files
+                });
                 if (sound) {
                     setTimeout(() => {
                         sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
+                        setTimeout(() => sound.stop(), item.infos.duration * 1000);
                     }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (this.tabnotes[index + 1] ? parseFloat(this.tabnotes[index + 1].infos.interval.toString()) : 0));
+                    currentTime += (item.infos.duration + (soundList[index + 1] ? parseFloat(soundList[index + 1].infos.interval.toString()) : 0));
                 }
             });
+        },
+
+        handlePlayClick() {
+            console.log(this.notesDuration);
+            this.playSounds(this.notesDuration);
+        },
+
+        handlePlayGuessingClick() {
+            console.log(this.tabnotes);
+            this.playSounds(this.tabnotes);
         },
 
         noteID() {
@@ -366,13 +406,13 @@ export default defineComponent({
                 this.timerInterGame = false;
                 if (this.remainingTime <= 0) {
                     clearInterval(this.timerInterval);
-
+                    this.rewind[this.currentRound][0].sendedMusic = this.notesDuration;
                     this.socket.emit('sendTabNotes', this.notesDuration, this.player);
 
                     this.timerInterval = 0;
                     this.currentRound++;
                     this.resetRound();
-                    
+
                     if (this.currentRound < this.maxRounds) {
                         // Démarre le prochain tour si ce n'est pas le dernier
                         this.showMainGame = false;
@@ -389,7 +429,7 @@ export default defineComponent({
                                 console.log(this.Responses);
                                 clearInterval(countdownInterval); // Arrêter le deuxième timer une fois les 30 secondes écoulées
                                 console.log("c'est bon mon gars");
-                                
+
                                 this.showMainGame = true;
                                 this.showAfterGame = false; // Cacher la div après 30 secondes
                                 this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
@@ -403,6 +443,7 @@ export default defineComponent({
                         // Termine le jeu si tous les tours sont joués
                         this.timerInGame = false;
                         this.timerInterGame = false;
+                        this.socket.emit('rewind', this.rewind);
                         clearInterval(this.timerInterval);
                         this.showMainGame = false;
                         this.showAfterGame = false;
@@ -414,11 +455,11 @@ export default defineComponent({
                 }
             }, 1000);
         },
-        
+
         resetRound() {
             this.player.idea = false;
             this.player.tabAttributed = false;
-            this.tabnotes = [] as Notes[];
+            // this.tabnotes = [] as Notes[];
             this.notesDuration = [] as Notes[];
 
             const noteContainer = document.getElementById("note-container");
@@ -448,30 +489,6 @@ export default defineComponent({
         PlayNotesDone() {
             console.log("ff");
         },
-
-        // takeRandomValueAndAddToUserXidea(idUser: string, sourceArray: string[], userXideaArray: UserXidea[]): void {
-        //     if (sourceArray.length === 0) {
-        //         console.log("Le tableau source est vide.");
-        //         return;
-        //     }
-
-        //     // Sélectionne un index aléatoire dans le tableau source
-        //     const randomIndex = Math.floor(Math.random() * sourceArray.length);
-
-        //     // Récupère la valeur à l'index aléatoire
-        //     const idea = sourceArray[randomIndex];
-
-        //     // Retire l'élément sélectionné du tableau source
-        //     sourceArray.splice(randomIndex, 1);
-
-        //     // Ajoute la valeur à userXidea avec l'idUser spécifié
-        //     userXideaArray.push({ idUser, idea });
-        //     console.log(`source array : ${sourceArray}`);
-        //     userXideaArray.forEach((item, index) => {
-        //         console.log(`[${index + 1}] IdUser: ${item.idUser}, Idea: ${item.idea}`);
-        //     });
-        //     // console.log(`Idée '${idea}' ajoutée à userXidea pour l'utilisateur '${idUser}'.`);
-        // },
     },
 });
 
