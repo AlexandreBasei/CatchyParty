@@ -1,6 +1,19 @@
 <template>
     <div>
-        <h1>{{ rewind }}</h1>
+        <section class="rewind">
+            <div v-for="(items, index) in rewindAll" :key="index">
+                <div style="border: 5px solid black;" v-bind:id="'manche' + index" v-for="(item, innerIndex) in items" :key="innerIndex">
+                    <h1>Manche {{ index+1 }}</h1>
+                    <h2>
+                        {{ item[0].ideas.senderName }} a soumis l'idée : {{ item[0].ideas.idea }}
+                    </h2>
+                    <h2>
+                        Musique composée en réponse par {{ item[0].sendedMusic[0].composerName }}
+                    </h2>
+                    <button @click="playSounds(item[0].sendedMusic)">Écouter la musique</button>
+                </div>
+            </div>
+        </section>
         <div class="end-game" v-show="showEndGame">
             <h2 id="play">{{ $t('PARTIE_TERMINEE') }}</h2>
         </div>
@@ -67,7 +80,7 @@ import io from 'socket.io-client';
 import { Howl } from 'howler';
 
 interface Notes {
-    userId: string,
+    composerName: string,
     infos: {
         id: string,
         note: string,
@@ -80,53 +93,6 @@ interface AssignedIdea {
     id: string;
     idea: string;
 }
-
-// interface Rewind {
-//     userID: {
-//         Manche1: {
-//             from: {
-//                 userID: string,
-//                 idea: string,
-//             },
-//             musician: {
-//                 userIDafter: string,
-//                 Suite2Notes: [],
-//             },
-//             guesser: {
-//                 userIDguess: string,
-//                 guess: string,
-//             }
-//         },
-//         Manche2: {
-//             from: {
-//                 userID: string,
-//                 idea: string,
-//             },
-//             musician: {
-//                 userIDafter: string,
-//                 Suite2Notes: [],
-//             },
-//             guesser: {
-//                 userIDguess: string,
-//                 guess: string,
-//             }
-//         },
-//         Manche3: {
-//             from: {
-//                 userID: string,
-//                 idea: string,
-//             },
-//             musician: {
-//                 userIDafter: string,
-//                 Suite2Notes: [],
-//             },
-//             guesser: {
-//                 userIDguess: string,
-//                 guess: string,
-//             }
-//         },
-//     }
-// }
 
 export default defineComponent({
     //Ici les variables utilisées dans le DOM
@@ -151,6 +117,7 @@ export default defineComponent({
             showMainGame: false,
             showAfterGame: false,
             showEndGame: false,
+            showRewind: false,
             showWaitingGame: true,
             timerInterGame: false,
             timerInGame: false,
@@ -159,7 +126,7 @@ export default defineComponent({
             showTimer: false,
             remainingTime: 0,
             roundDuration: 10, // Durée de chaque tour en secondes
-            interRoundDuration: 30,
+            interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
             assignedIdea: {} as AssignedIdea,
@@ -178,6 +145,7 @@ export default defineComponent({
             },
             rewind: [] as any[][],
             rewindAll: [],
+            rewindCounter: 0,
         }
     },
     // Ici tout le code procédural
@@ -186,7 +154,7 @@ export default defineComponent({
         for (let index = 0; index < this.maxRounds; index++) {
             this.rewind.push([{
                 ideas: '',
-                sendedMusic:'',
+                sendedMusic: '',
                 receivedMusic: '',
             }]);
         }
@@ -213,9 +181,9 @@ export default defineComponent({
             this.player.idea = true;
         });
 
-        this.socket.on('newTabToGuess', (NotesToGuess: any, composerId: string) => {
+        this.socket.on('newTabToGuess', (NotesToGuess: any, composerName: string) => {
             this.tabnotes = NotesToGuess;
-            this.rewind[this.currentRound][0].receivedMusic = [NotesToGuess, composerId];
+            this.rewind[this.currentRound][0].receivedMusic = [NotesToGuess, this.player.username];
             console.log(this.tabnotes);
             this.player.tabAttributed = true;
         });
@@ -224,14 +192,18 @@ export default defineComponent({
             this.startGame();
         });
 
-        this.socket.on('final rewind', (rewindAll: []) => {
-            this.rewindAll = rewindAll;
-            console.log("FINAL REWIND",rewindAll);
+        this.socket.on('final rewind', (room:any) => {
+            this.rewindAll = room.rewind;
+            console.log("LALALA REWIND", room.rewind);
             
+            this.rewindCounter++;
+            if (this.rewindCounter === room.rewind.length +1) {
+                this.socket.emit("clear rewind", this.player.roomId);
+            }
+
         })
 
         this.socket.on('MainGame', (userIdeas: any) => {
-            console.log("REWIND", this.rewind);
 
             this.socket.emit('random attribute');
 
@@ -314,7 +286,7 @@ export default defineComponent({
                 });
 
                 // Store the note and its duration
-                this.notesDuration.push({ userId: this.socket.id, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
+                this.notesDuration.push({ composerName: this.player.username, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
             }
         });
 
@@ -420,7 +392,7 @@ export default defineComponent({
                         this.timerInGame = false;
                         this.timerInterGame = true;
 
-                        this.secondsLeft = 20;
+                        this.secondsLeft = 10;
 
                         // Décompte des 30 secondes sur le front-end
                         const countdownInterval = setInterval(() => {
@@ -443,11 +415,11 @@ export default defineComponent({
                         // Termine le jeu si tous les tours sont joués
                         this.timerInGame = false;
                         this.timerInterGame = false;
-                        this.socket.emit('rewind', this.rewind);
+                        this.socket.emit('rewind', this.rewind, this.player);
                         clearInterval(this.timerInterval);
                         this.showMainGame = false;
                         this.showAfterGame = false;
-                        this.showEndGame = true; // Afficher la section end-game
+                        this.showRewind = true; // Afficher la section rewind
                         console.log('Fin du jeu');
                     }
                 } else {
