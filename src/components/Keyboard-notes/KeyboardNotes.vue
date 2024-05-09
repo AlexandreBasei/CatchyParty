@@ -1,17 +1,17 @@
 <template>
     <div>
-        <section class="rewind">
-            <div v-for="(items, index) in rewindAll" :key="index">
-                <div style="border: 5px solid black;" v-bind:id="'manche' + index" v-for="(item, innerIndex) in items" :key="innerIndex">
-                    <h1>Manche {{ index+1 }}</h1>
-                    <h2>
-                        {{ item[0].ideas.senderName }} a soumis l'idée : {{ item[0].ideas.idea }}
-                    </h2>
-                    <h2>
-                        Musique composée en réponse par {{ item[0].sendedMusic[0].composerName }}
-                    </h2>
-                    <button @click="playSounds(item[0].sendedMusic)">Écouter la musique</button>
+        <section class="rewindAll">
+            <div class="rewind" v-for="(rewindGroup, index) in groupedRewindAll" :key="index"
+                v-bind:id="'joueur' + index">
+                <div v-for="(items, innerIndex) in rewindGroup" :key="innerIndex" style="border: 5px solid black;">
+                    <h1>Manche {{ items[0].rewindOrder + 1 }}</h1>
+                    <h2>{{ items[0].ideas.senderName }} a soumis l'idée : {{ items[0].ideas.idea }}</h2>
+                    <h2 v-if="items[0].sendedMusic.length > 0">Musique composée en réponse par {{
+                items[0].sendedMusic[0].composerName }}</h2>
+                    <button @click="playSounds(items[0].sendedMusic)">Écouter la musique</button>
                 </div>
+                <button @click="rewindBtns(0, index)">Afficher le précédent</button>
+                <button @click="rewindBtns(1, index)">Afficher le suivant</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -69,10 +69,6 @@
     </div>
 </template>
 
-<style lang="css" scoped>
-@import url('./KeyboardNotes.css');
-</style>
-
 <script lang="ts">
 
 import { defineComponent } from 'vue';
@@ -92,6 +88,27 @@ interface Notes {
 interface AssignedIdea {
     id: string;
     idea: string;
+}
+
+interface Item {
+    ideas: {
+        senderName: string;
+        receiverName: string;
+        receiverId: string;
+        idea: string;
+        rewindId: string;
+    };
+    sendedMusic: {
+        composerName: string;
+        infos: {
+            id: string;
+            note: string;
+            duration: number;
+            interval: number;
+        };
+    }[];
+    receivedMusic: any;
+    rewindId: string;
 }
 
 export default defineComponent({
@@ -146,16 +163,44 @@ export default defineComponent({
             rewind: [] as any[][],
             rewindAll: [],
             rewindCounter: 0,
+            rewindId: '',
+            rewindOrder: 0,
+            currentIndex: 0,
+        }
+    },
+
+    computed: {
+        groupedRewindAll() {
+            const grouped: { [key: string]: Array<any> } = {};
+            this.rewindAll.forEach((manche: any) => {
+                manche.forEach((item: any) => {
+                    const rewindId = item[0].rewindId;
+                    if (!grouped[rewindId]) {
+                        grouped[rewindId] = [];
+                    }
+                    grouped[rewindId].push(item);
+                });
+            });
+
+            // Triez les groupes par l'ordre rewindOrder
+            Object.values(grouped).forEach(group => {
+                group.sort((a, b) => a[0].rewindOrder - b[0].rewindOrder);
+            });
+
+            return Object.values(grouped);
         }
     },
     // Ici tout le code procédural
     mounted() {
+        this.rewindId = this.generateID();
         this.socket.emit('play');
         for (let index = 0; index < this.maxRounds; index++) {
             this.rewind.push([{
                 ideas: '',
                 sendedMusic: '',
                 receivedMusic: '',
+                rewindId: '',
+                rewindOrder: 0
             }]);
         }
         const keys = document.querySelectorAll(".key");
@@ -192,12 +237,12 @@ export default defineComponent({
             this.startGame();
         });
 
-        this.socket.on('final rewind', (room:any) => {
+        this.socket.on('final rewind', (room: any) => {
             this.rewindAll = room.rewind;
             console.log("LALALA REWIND", room.rewind);
-            
+
             this.rewindCounter++;
-            if (this.rewindCounter === room.rewind.length +1) {
+            if (this.rewindCounter === room.rewind.length + 1) {
                 this.socket.emit("clear rewind", this.player.roomId);
             }
 
@@ -205,31 +250,19 @@ export default defineComponent({
 
         this.socket.on('MainGame', (userIdeas: any) => {
 
-            this.socket.emit('random attribute');
-
             this.assignedIdea = userIdeas;
             userIdeas.forEach((idea: any) => {
                 if (idea.receiverId === this.player.socketId) {
                     this.rewind[this.currentRound][0].ideas = idea;
+                    this.rewindId = idea.rewindId;
+                    this.rewind[this.currentRound][0].rewindOrder = this.rewindOrder;
+                    this.rewindOrder++;
+                    if (this.rewind[this.currentRound][0].rewindId === '') {
+                        this.rewind[this.currentRound][0].rewindId = idea.rewindId;
+                    }
+                    console.log("REWIND ID LOG", this.rewind);
                 }
             });
-
-            [
-                [
-                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "grave" }
-                ],
-                [
-                    [
-                        {
-                            "userId": "8iiVA9ZFSeeV7z67AAAl", "infos":
-                                { "id": "30ez44pnh", "note": "E2", "duration": 1, "interval": 0 }
-                        }
-                    ],
-                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "gauche" }
-                ], [
-                    { "id": "qjRL9o0Ip9kzOoEAAAAn", "idea": "aigu" }
-                ]
-            ]
 
             // console.log(`${this.assignedIdea}`);
             this.firstStepGame = false;
@@ -253,7 +286,7 @@ export default defineComponent({
             if (event instanceof DragEvent) {
                 const note = event.dataTransfer?.getData("text/plain") || "";
                 const noteElement = document.createElement("div");
-                noteElement.id = this.noteID();
+                noteElement.id = this.generateID();
                 noteElement.className = "note";
                 noteElement.textContent = note;
                 noteElement.dataset.duration = "1"; // Default duration
@@ -304,9 +337,34 @@ export default defineComponent({
         //         }
         //     });
         // });
+
     },
     //Ici les fonctions (méthodes)
     methods: {
+        rewindBtns(order: number, id: number) {
+            const rewindDivs = document.querySelectorAll('.rewind');
+
+            rewindDivs.forEach(div => {
+                if ("joueur" + id === div.id) {
+                    if (order) {
+                        const nextDiv = document.getElementById('joueur' + (id + 1));
+
+                        if (nextDiv instanceof HTMLElement && div instanceof HTMLElement) {
+                            div.style.display = "none";
+                            nextDiv.style.display = "block";
+                        }
+                    }
+                    else {
+                        const previousDiv = document.getElementById('joueur' + (id - 1));
+                        if (previousDiv instanceof HTMLElement && div instanceof HTMLElement) {
+                            div.style.display = "none";
+                            previousDiv.style.display = "block";
+                        }
+                    }
+                }
+            });
+        },
+
         updateDuration(id: string, duration: number) {
             for (let i = 0; i < this.notesDuration.length; i++) {
                 if (this.notesDuration[i].infos.id === id) {
@@ -352,7 +410,7 @@ export default defineComponent({
             this.playSounds(this.tabnotes);
         },
 
-        noteID() {
+        generateID() {
             return Math.random().toString(36).substr(2, 9);
         },
 
@@ -452,7 +510,7 @@ export default defineComponent({
 
         submitIdea() {
             // Émettre un événement "submitIdea" avec les données de l'utilisateur
-            this.socket.emit('submitIdea', this.userIdeaInput, this.player);
+            this.socket.emit('submitIdea', this.userIdeaInput, this.player, this.rewindId);
 
             // Réinitialiser la valeur de userIdeaInput après l'avoir envoyée au serveur
             this.userIdeaInput = '';
@@ -461,7 +519,23 @@ export default defineComponent({
         PlayNotesDone() {
             console.log("ff");
         },
+
+        showNext() {
+            if (this.currentIndex < this.groupedRewindAll.length - 1) {
+                this.currentIndex++;
+            }
+        },
+        showPrevious() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+            }
+        }
     },
 });
 
 </script>
+
+<style lang="css" scoped>
+@import url('./kbnotes.css');
+@import url('./kbnotes-mobile.css');
+</style>

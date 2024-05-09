@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
         rooms = newRooms;
     })
 
-    socket.on('submitIdea', (idea, player) => {
+    socket.on('submitIdea', (idea, player, rewindId) => {
         let playersLENGTH = 0;
         let isDone = false;
         rooms.forEach(room => {
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
                     console.log("ROOM", room.players);
                     if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
-                        userIdeas.push({ senderName: player.username, receiverName: p.username, receiverId: p.socketId, idea: idea });
+                        userIdeas.push({ senderName: player.username, receiverName: p.username, receiverId: p.socketId, idea: idea, rewindId: rewindId });
                         // console.log(userIdeas);
                         console.log("USER IDEA", userIdeas);
                         p.idea = true;
@@ -131,10 +131,6 @@ io.on('connection', (socket) => {
         // Émettre un événement vers tous les clients pour démarrer la partie
         io.emit('startGame');
         console.log('La partie démarre...');
-    });
-
-    socket.on('random attribute', () => {
-        console.log("hihi ^^");
     });
 
     socket.on('rewind', (rewind, player) => {
