@@ -41,46 +41,34 @@ io.on('connection', (socket) => {
     })
 
     socket.on('submitIdea', (idea, player, rewindId) => {
-        let playersLENGTH = 0;
         let isDone = false;
         rooms.forEach(room => {
-            console.log(`${player.roomId} + ${room.id}`);
             if (player.roomId === room.id) {
+                let playersLENGTH = room.players.length;
                 room.players.forEach(p => {
-                    console.log("ROOM", room.players);
                     if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
-                        userIdeas.push({ senderName: player.username, receiverName: p.username, receiverId: p.socketId, idea: idea, rewindId: rewindId });
-                        // console.log(userIdeas);
-                        console.log("USER IDEA", userIdeas);
+                        room.roomIdeas.push({ senderName: player.username, receiverName: p.username, receiverId: p.socketId, idea: idea, rewindId: rewindId });
+                        console.log("TAILLE USERIDEA : ", room.roomIdeas.length);
                         p.idea = true;
-                        isDone = !isDone;
-                        console.log(`${userIdeas.length} / ${playersLENGTH}`);
+                        isDone = true;
+                        console.log(`${room.roomIdeas.length} / ${playersLENGTH}`);
                         console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
                     }
-
-                    playersLENGTH = room.players.length;
-
-                });
-            }
-        });
-
-        if (userIdeas.length === playersLENGTH) {
-            console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
-            rooms.forEach(room => {
-                if (player.roomId === room.id) {
+                }); 
+                if (room.roomIdeas.length === playersLENGTH) {
+                    console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
                     room.players.forEach(p => {
                         p.idea = false;
-                        isDone = false;
                     });
+                    io.emit('MainGame', room.roomIdeas);
+                    room.roomIdeas = [];
                 }
-            });
-            io.emit('MainGame', userIdeas);
-            userIdeas = [];
-        }
+            }
+        });
         socket.emit('ideaSubmitted');
-        console.log(userIdeas);
     });
+    
 
     socket.on('sendTabNotes', (tabnotes, player) => {
         let playersLENGTH = 0;
@@ -125,6 +113,10 @@ io.on('connection', (socket) => {
         if (game === "game1") {
             io.emit('game start', game);
         }
+    });
+
+    socket.on("send rounds", (maxRounds) => {
+        io.emit("get rounds", maxRounds);
     })
 
     socket.on('play', () => {
@@ -268,7 +260,7 @@ function exitRoom(socketId) {
 }
 
 function createRoom(player) {
-    const room = { id: roomId(), rewind: [], players: [] };
+    const room = { id: roomId(), rewind: [], players: [], roomIdeas: [] };
 
     player.roomId = room.id;
 

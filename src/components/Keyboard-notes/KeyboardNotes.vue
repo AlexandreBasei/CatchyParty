@@ -35,7 +35,7 @@
             <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
             <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
-        <div v-for="(item, index) in assignedIdea" :key="index">
+        <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
             <div v-if="item.receiverId === socket.id">
                 <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
             </div>
@@ -64,7 +64,7 @@
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
             <input type="text" v-model="userIdeaInput" placeholder="Nom de la musique">
-            <button @click="handlePlayClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+            <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
         </div>
     </div>
 </template>
@@ -117,6 +117,10 @@ export default defineComponent({
         socket: {
             type: Object,
             required: true
+        },
+        maxRounds: {
+            type: Number,
+            required: true,
         }
     },
 
@@ -124,6 +128,7 @@ export default defineComponent({
         return {
             sounds: {} as Record<string, Howl>,
             notesDuration: [] as Notes[],
+            notesDuration2: [] as Notes[],
             userIdeaInput: '', // Variable pour stocker la valeur de l'input
             userIdeas: [] as string[], // Tableau pour stocker les réponses
             guessInput: '', // Variable pour stocker la valeur de l'input
@@ -134,12 +139,12 @@ export default defineComponent({
             showMainGame: false,
             showAfterGame: false,
             showEndGame: false,
+            showIdea: false,
             showRewind: false,
             showWaitingGame: true,
             timerInterGame: false,
             timerInGame: false,
             currentRound: 0,
-            maxRounds: 3,
             showTimer: false,
             remainingTime: 0,
             roundDuration: 10, // Durée de chaque tour en secondes
@@ -269,6 +274,7 @@ export default defineComponent({
             this.showMainGame = true;
             this.showAfterGame = false;
             this.showEndGame = false;
+            this.showIdea = true;
             this.remainingTime = this.roundDuration;
             if (this.currentRound === 0) {
                 this.playRound();
@@ -406,8 +412,8 @@ export default defineComponent({
         },
 
         handlePlayGuessingClick() {
-            console.log(this.tabnotes);
-            this.playSounds(this.tabnotes);
+            console.log(this.notesDuration2);
+            this.playSounds(this.notesDuration2);
         },
 
         generateID() {
@@ -448,6 +454,7 @@ export default defineComponent({
                         this.showMainGame = false;
                         this.showAfterGame = true;
                         this.timerInGame = false;
+                        this.showIdea = false;
                         this.timerInterGame = true;
 
                         this.secondsLeft = 10;
@@ -477,6 +484,7 @@ export default defineComponent({
                         clearInterval(this.timerInterval);
                         this.showMainGame = false;
                         this.showAfterGame = false;
+                        this.showIdea = false;
                         this.showRewind = true; // Afficher la section rewind
                         console.log('Fin du jeu');
                     }
@@ -490,6 +498,7 @@ export default defineComponent({
             this.player.idea = false;
             this.player.tabAttributed = false;
             // this.tabnotes = [] as Notes[];
+            this.notesDuration2 = this.notesDuration;
             this.notesDuration = [] as Notes[];
 
             const noteContainer = document.getElementById("note-container");

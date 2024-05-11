@@ -31,8 +31,8 @@
             <button v-if="!copied" id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
             <button v-if="copied" class="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIE') }}</button>
         </section>
-        <section class="personalization-main">
-            <div class="settings">
+        <section class="personalization-main" v-for="room in rooms" :key="room.id">
+            <div class="settings" v-if="room.id === player.roomId && player.host">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
                 <div class="game-options">
@@ -64,18 +64,37 @@
                         </div> -->
                         <div>
                             <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
-                            <select id="nbRounds"></select>
+
+                            <select @change="sendRounds" v-model="maxRounds" id="nbRounds">
+                                <option :value=3>3</option>
+                                <option :value=4>4</option>
+                                <option :value=5>5</option>
+                                <option :value=6>6</option>
+                            </select>
                         </div>
                     </div>
 
                     <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 1 || room.players.length == 3 || room.players.length == 5 || room.players.length == 7 || room.players.length == 9)">
+                        <button class="startGame" id="startGameDisabled" disabled>{{ $t('DEMARRER_PARTIE') }}</button>
+                        <p>Vous devez être un nombre pair pour commencer la partie !</p>
+                    </div>
+
+                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 2 || room.players.length == 4 || room.players.length == 6 || room.players.length == 8 || room.players.length == 10)">
+                        <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
+                        <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
+                    </div>
+                    
+                    
                 </form>
+            </div>
+            <div class="settings guest" v-if="room.id === player.roomId && !player.host">
+                <h2>L'hôte configure la partie...</h2>
             </div>
         </section>
     </div>
 
-    <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
+    <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
 
 </template>
 
@@ -132,6 +151,7 @@ export default defineComponent({
             player: {} as Player,
             copied: false,
             game1: false,
+            maxRounds: 3,
         }
     },
 
@@ -140,6 +160,10 @@ export default defineComponent({
             this.player = player;
             this.currentRoom = player.roomId;
         });
+
+        this.socket.on('get rounds', (maxRounds:number) => {
+            this.maxRounds = maxRounds;
+        })
 
         this.socket.on('new host', (newHostId: string) => {
             console.log('This.player.socketId', this.player.socketId);
@@ -228,6 +252,10 @@ export default defineComponent({
                     this.socket.emit("kick player", socketId);
                 }
             });
+        },
+
+        sendRounds () {
+            this.socket.emit("send rounds", this.maxRounds);
         },
 
         copy(text: string) {

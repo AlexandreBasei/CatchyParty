@@ -9,6 +9,14 @@
     flex-direction: column;
 }
 
+.settings.guest{
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    /* margin-bottom: 50%; */
+}
+
 .settings form{
     display: flex;
     justify-content: center;
@@ -82,6 +90,7 @@
     border-radius: var(--borderradius);
 
     width: 80%;
+    min-height:30rem;
 }
 
 .personalization-options{
@@ -135,6 +144,11 @@ ul li {
 
 .startGame:hover {
     transform: scale(1.03);
+}
+
+#startGameDisabled {
+    opacity: .5;
+    cursor: not-allowed;
 }
 
 .hostMenuButton {
