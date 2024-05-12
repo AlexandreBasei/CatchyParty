@@ -1,25 +1,161 @@
+.Kbnotes {
+  display: flex;
+  flex-flow: wrap column;
+  justify-content: center;
+  align-items: center;
+}
+
 .rewindAll .rewind:not(:first-child) {
   display: none;
 }
 
-.rewindAll:first-child{
+.rewindAll:first-child {
   display: block;
 }
 
+.main-game{
+  display: flex;
+  flex-flow: wrap column;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+}
+
 #piano {
-    display: flex;
-  }
-  
-  .key {
-    width: 50px;
-    height: 100px;
-    border: 1px solid black;
-    cursor: pointer;
-  }
-  
-  #note-container {
-    min-height: 200px;
-    border: 1px solid black;
-    margin-top: 20px;
-  }
-  
+  display: flex;
+}
+
+.key {
+  width: 50px;
+  height: 100px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.note-parameters {
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  padding-top: 25px;
+  background-color: #19647e;
+  width: 50%;
+}
+
+.note-parameters button:first-child {
+  margin-right: 30px;
+}
+
+.note-parameters button:last-child{
+  margin: 20px 0;
+
+  background-color: rgb(255, 77, 77);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10rem;
+  cursor: pointer;
+}
+
+.note-parameters button:last-child:disabled{
+  opacity: .5;
+  cursor:no-drop;
+}
+
+#note-container {
+  min-height: 200px;
+  min-width: 100%;
+  border: 1px solid black;
+  border-radius: 2rem;
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: center;
+  align-items: center;
+}
+
+#note-container p {
+  text-align: center;
+  line-height: 25px;
+}
+
+#note-option-container {
+  min-width: 100%;
+  display: flex;
+  flex-flow: wrap column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+#note-option {
+  min-height: 200px;
+  min-width: 100%;
+  border: 1px solid black;
+  border-radius: 2rem;
+  margin-top: 20px;
+  display: flex;
+  flex-flow: wrap row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+#note-option div {
+  display: flex;
+  flex-flow: wrap column;
+  justify-content: right;
+  align-items: center;
+  width: 80%;
+  margin-left: 20%;
+  /* gap: 20px; */
+}
+
+#note-option div input {
+  position: relative;
+}
+
+#note-option div input:first-child::before{
+  content: "Durée de la note :";
+  position: absolute;
+  left: -80%;
+  top:32%;
+}
+
+#note-option div input:last-child::before{
+  content: "Intervalle entre deux notes :";
+  position: absolute;
+  left: -80%;
+  top:32%;
+}
+
+#note-option p{
+  display: none;
+}
+
+#option-note-container {
+  display: flex !important;
+  flex-flow: wrap row;
+  justify-content: center;
+  align-items: center;
+  min-height: 50px;
+  width: 90%;
+  gap: 15px;
+}
+
+#option-note-container .note{
+  height: 50px;
+  border-radius: 1rem;
+  width: 40px;
+}
+
+.note {
+  min-width: 40px;
+  height: 100px;
+  background-color: #fff;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20rem;
+  cursor: pointer;
+}

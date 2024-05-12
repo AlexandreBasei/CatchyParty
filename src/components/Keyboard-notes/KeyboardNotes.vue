@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="Kbnotes">
         <section class="rewindAll">
             <div class="rewind" v-for="(rewindGroup, index) in groupedRewindAll" :key="index"
                 v-bind:id="'joueur' + index">
@@ -58,7 +58,21 @@
                 <div class="key" data-note="E1" @click="playSound('E1')" draggable="true">E1</div>
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
-            <div id="note-container"></div>
+            <div class="note-parameters">
+                <button @click="noteContainerMenu()">Suite de notes</button>
+                <button @click="noteOptionMenu()">Réglages de durée</button>
+                <div id="note-container" v-show="showNoteContainer">
+                    <p>Glisse les notes dans cette zone <br> pour composer ta musique !</p>
+                </div>
+                <div id="note-option-container" v-show="showNoteOption">
+                    <div id="option-note-container"></div>
+                    <div id="note-option">
+                        <p>Aucune note sélectionnée</p>
+                    </div>
+                </div>
+                <button @click="deleteNote()" v-if="noteSelected">Supprimer la note</button>
+                <button disabled @click="deleteNote()" v-if="!noteSelected">Supprimer la note</button>
+            </div>
             <button id="play" @click="handlePlayClick()">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
@@ -74,6 +88,7 @@
 import { defineComponent } from 'vue';
 import io from 'socket.io-client';
 import { Howl } from 'howler';
+import { all } from 'axios';
 
 interface Notes {
     composerName: string,
@@ -127,6 +142,7 @@ export default defineComponent({
     data() {
         return {
             sounds: {} as Record<string, Howl>,
+            noteContainer: [],
             notesDuration: [] as Notes[],
             notesDuration2: [] as Notes[],
             userIdeaInput: '', // Variable pour stocker la valeur de l'input
@@ -142,12 +158,15 @@ export default defineComponent({
             showIdea: false,
             showRewind: false,
             showWaitingGame: true,
+            showNoteContainer: true,
+            showNoteOption: false,
             timerInterGame: false,
             timerInGame: false,
             currentRound: 0,
+            noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
+            roundDuration: 1000, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
@@ -210,6 +229,8 @@ export default defineComponent({
         }
         const keys = document.querySelectorAll(".key");
         const noteContainer = document.getElementById("note-container")!;
+        const noteOption = document.getElementById("note-option")!;
+        const optionNoteContainer = document.getElementById("option-note-container")!;
 
         keys.forEach((key) => {
             key.addEventListener("dragstart", (event) => {
@@ -291,22 +312,32 @@ export default defineComponent({
             event.preventDefault();
             if (event instanceof DragEvent) {
                 const note = event.dataTransfer?.getData("text/plain") || "";
-                const noteElement = document.createElement("div");
-                noteElement.id = this.generateID();
+                const noteParameters = document.createElement("div");
+                const noteElement = document.createElement("span");
+                const noteElement2 = document.createElement("span");
+                const noteId = this.generateID();
+                noteParameters.id = noteId;
+                noteElement.id = noteId;
+                noteElement2.id = noteId + "_2";
                 noteElement.className = "note";
+                noteElement2.className = "note";
                 noteElement.textContent = note;
-                noteElement.dataset.duration = "1"; // Default duration
+                noteElement2.textContent = note;
+                noteParameters.dataset.duration = "1"; // Default duration
                 const durationInput = document.createElement("input");
                 durationInput.type = "range";
                 durationInput.min = "0.2";
                 durationInput.max = "2";
                 durationInput.step = "0.1";
                 durationInput.value = "1";
+
                 durationInput.addEventListener("change", () => {
-                    this.updateDuration(noteElement.id, parseFloat(durationInput.value));
+                    this.updateDuration(noteParameters.id, parseFloat(durationInput.value));
+                    noteElement.style.width = 20 + durationInput.value + "px";
                 });
-                noteContainer.appendChild(noteElement);
-                noteContainer.appendChild(durationInput);
+
+                noteOption.appendChild(noteParameters);
+                noteParameters.appendChild(durationInput);
 
                 const intervalInput = document.createElement("input");
                 intervalInput.type = "range";
@@ -314,10 +345,47 @@ export default defineComponent({
                 intervalInput.max = "3";
                 intervalInput.step = "0.1";
                 intervalInput.value = "0";
+
                 intervalInput.addEventListener("change", () => {
-                    this.updateInterval(noteElement.id, parseFloat(intervalInput.value));
+                    this.updateInterval(noteParameters.id, parseFloat(intervalInput.value));
+                    noteElement.style.marginRight = 10 + intervalInput.value + "px";
                 });
-                noteContainer.appendChild(intervalInput);
+
+                noteElement2.addEventListener("click", () => {
+                    this.noteSelected = noteId;
+                    const allNotes = optionNoteContainer.querySelectorAll(".note");
+                    allNotes.forEach((note: any) => {
+                        note.style.backgroundColor = "white";
+                    });
+                    noteElement2.style.backgroundColor = "#03ac98";
+
+                    const notesAll = document.querySelectorAll('#note-option div')!;
+                    const noNoteMsg: any = document.querySelector('#note-option p')!;
+
+                    if (this.noteSelected) {
+                        noNoteMsg.style.display = "none";
+                        notesAll.forEach((note: any) => {
+                            if (note.id === this.noteSelected) {
+                                note.style.display = "flex";
+                            }
+                            else {
+                                note.style.display = "none";
+                            }
+                        });
+                    }
+                    else {
+                        noNoteMsg.style.display = 'flex';
+                        notesAll.forEach((note: any) => {
+                            note.style.display = "none";
+                        });
+                    }
+                });
+
+                noteParameters.appendChild(intervalInput);
+                noteContainer.appendChild(noteElement);
+                optionNoteContainer.appendChild(noteElement2);
+
+                noteContainer.querySelector("p")!.style.display = "none";
 
                 // Load the sound for this note
                 this.sounds[note] = new Howl({
@@ -325,25 +393,9 @@ export default defineComponent({
                 });
 
                 // Store the note and its duration
-                this.notesDuration.push({ composerName: this.player.username, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
+                this.notesDuration.push({ composerName: this.player.username, infos: { id: noteParameters.id, note: note, duration: parseFloat(noteParameters.dataset.duration), interval: parseFloat(intervalInput.value) } });
             }
         });
-
-        // document.getElementById("play")?.addEventListener("click", () => {
-        //     console.log(this.notesDuration);
-        //     let currentTime = 0;
-        //     this.notesDuration.forEach((item, index) => {
-        //         const sound = this.sounds[item.infos.note];
-        //         if (sound) {
-        //             setTimeout(() => {
-        //                 sound.play();
-        //                 setTimeout(() => sound.stop(), item.infos.duration * 1000); // Stop playing after the specified duration
-        //             }, currentTime * 1000);
-        //             currentTime += (item.infos.duration + (this.notesDuration[index + 1] ? parseFloat(this.notesDuration[index + 1].infos.interval.toString()) : 0));
-        //         }
-        //     });
-        // });
-
     },
     //Ici les fonctions (méthodes)
     methods: {
@@ -387,6 +439,75 @@ export default defineComponent({
                     break;
                 }
             }
+        },
+
+        noteOptionMenu() {
+            const notesAll = document.querySelectorAll('#note-option div')!;
+            const noNoteMsg: any = document.querySelector('#note-option p')!;
+
+            if (this.noteSelected) {
+                noNoteMsg.style.display = "none";
+                notesAll.forEach((note: any) => {
+                    if (note.id === this.noteSelected) {
+                        note.style.display = "flex";
+                    }
+                    else {
+                        note.style.display = "none";
+                    }
+                });
+            }
+            else {
+                noNoteMsg.style.display = 'flex';
+                notesAll.forEach((note: any) => {
+                    note.style.display = "none";
+                });
+            }
+            this.showNoteContainer = false;
+            this.showNoteOption = true;
+        },
+
+        noteContainerMenu() {
+
+            this.showNoteContainer = true;
+            this.showNoteOption = false;
+        },
+
+        deleteNote() {
+            const allNotes = document.querySelectorAll("#note-container span");
+            const allNotes2 = document.querySelectorAll("#option-note-container span");
+            const allNotesOptions = document.querySelectorAll('#note-option div')!;
+            const noteContainerMessage: any = document.querySelector('#note-container p');
+            const noteOptionMessage: any = document.querySelector('#note-option p');
+
+            allNotes.forEach(note => {
+                if (note.id === this.noteSelected) {
+                    note.remove();
+                }
+                allNotes2.forEach(note2 => {
+                    if (note2.id === this.noteSelected + "_2") {
+                        note2.remove();
+                    }
+                });
+
+                allNotesOptions.forEach(note3 => {
+                    if (note3.id === this.noteSelected) {
+                        note3.remove();
+                    }
+                });
+            });
+
+            noteContainerMessage.style.display = "block";
+            noteOptionMessage.style.display = "block";
+
+            const index = this.notesDuration.findIndex(note => note.infos.id === this.noteSelected);
+
+            // Vérifier si la note avec l'ID donné a été trouvée
+            if (index !== -1) {
+                // Retirer la note du tableau
+                this.notesDuration.splice(index, 1);
+            }
+
+            this.noteSelected = "";
         },
 
         playSounds(soundList: any) {
