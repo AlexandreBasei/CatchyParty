@@ -30,6 +30,7 @@ body{
     max-width: 100vw;
     min-height: 100vh;
     margin: 0;
+    font-size: 16px;
 }
 body::before {
     content: '';
@@ -38,7 +39,7 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('@/assets/svg/extend/motif.svg'), linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
+    background-image: url('@/assets/svg/motifs/motif1bis.svg'), linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
     background-repeat: repeat;
     background-size: 200px 200px, cover;
     z-index: -1;
@@ -102,4 +103,5 @@ button{
 
 ul{
     padding: 0px;
+    list-style-type: none;
 }

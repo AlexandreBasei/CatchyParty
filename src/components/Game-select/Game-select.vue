@@ -8,7 +8,7 @@
 
                         <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
-                        <p class="pseudoPlayer">
+                        <span class="pseudoPlayer">
                             <span v-if="rplayer.host">👑 </span>
                             {{ rplayer.username }}
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
@@ -19,7 +19,7 @@
                                         d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                                 </svg>
                             </button>
-                        </p>
+                        </span>
 
                         <div v-bind:id="rplayer.socketId" class="hostMenu">
                             <button @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
@@ -28,69 +28,71 @@
                     </div>
                 </div>
             </div>
-            <button v-if="!copied" id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
-            <button v-if="copied" class="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIE') }}</button>
+            <button id="shareLink" :class="{ 'shareLink': copied }" @click="copy(`localhost:8080?room=${player.roomId}`)" >
+                {{ copied ? $t('COPIE') : $t('COPIER_LIEN') }}
+            </button>
+
         </section>
-        <section class="personalization-main" v-for="room in rooms" :key="room.id">
-            <div class="settings" v-if="room.id === player.roomId && player.host">
+        <section class="personalization-section" v-if="rooms.some(room => room.id === player.roomId && player.host)">
+            <div class="games-block" v-if="player.host">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
                 <div class="game-options">
-                    <div class="game-container">
+                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
+
+                    <div class="game-container" v-for="game in games" :key="game.id">
                         <div class="game">
-                            <img src="@/assets/svg/partinies/solar.svg" alt="Game 1">
+                            <img :src="game.image" :alt="game.name">
                         </div>
-                        <p>{{ $t('KEYBOARD_NOTES') }}</p>
+                        <p>{{ game.name }}</p>
                     </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/vilo.svg" alt="Game 2">
-                        </div>
-                        <p>Classico</p>
+
+                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
+
+                    <div class="game-rounds">
+                        <h3>Déroulement de la Partie</h3>
                     </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/blingbling.svg" alt="Game 3">
-                        </div>
-                        <p>What's the situation ?</p>
+                </div>
+            </div>
+
+            <div v-else class="settings guest">
+                <h2>L'hôte configure la partie...</h2>
+            </div>
+
+            <form @submit.prevent="start('game1')">
+                <!-- <div class="personalization-options">
+                    <div>
+                        <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
+                        <select id="nbPlayers"></select>
+                    </div>
+                    <div>
+                        <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
+
+                        <select @change="sendRounds" v-model="maxRounds" id="nbRounds">
+                            <option :value=3>3</option>
+                            <option :value=4>4</option>
+                            <option :value=5>5</option>
+                            <option :value=6>6</option>
+                        </select>
                     </div>
                 </div>
 
-                <form @submit.prevent="start('game1')">
-                    <div class="personalization-options">
-                        <!-- <div>
-                            <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
-                            <select id="nbPlayers"></select>
-                        </div> -->
-                        <div>
-                            <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
+                <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 1 || room.players.length == 3 || room.players.length == 5 || room.players.length == 7 || room.players.length == 9)">
+                    <button class="startGame" id="startGameDisabled" disabled>{{ $t('DEMARRER_PARTIE') }}</button>
+                    <p>Vous devez être un nombre pair pour commencer la partie !</p>
+                </div>
 
-                            <select @change="sendRounds" v-model="maxRounds" id="nbRounds">
-                                <option :value=3>3</option>
-                                <option :value=4>4</option>
-                                <option :value=5>5</option>
-                                <option :value=6>6</option>
-                            </select>
-                        </div>
-                    </div>
+                <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 2 || room.players.length == 4 || room.players.length == 6 || room.players.length == 8 || room.players.length == 10)">
+                    <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
+                    <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
+                </div> -->
+                <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
 
-                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 1 || room.players.length == 3 || room.players.length == 5 || room.players.length == 7 || room.players.length == 9)">
-                        <button class="startGame" id="startGameDisabled" disabled>{{ $t('DEMARRER_PARTIE') }}</button>
-                        <p>Vous devez être un nombre pair pour commencer la partie !</p>
-                    </div>
-
-                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 2 || room.players.length == 4 || room.players.length == 6 || room.players.length == 8 || room.players.length == 10)">
-                        <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
-                        <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
-                    </div>
-                    
-                    
-                </form>
-            </div>
-            <div class="settings guest" v-if="room.id === player.roomId && !player.host">
-                <h2>L'hôte configure la partie...</h2>
-            </div>
+                <div class="messages">
+                    <span>Pas assez de joueurs (0)</span>
+                    <span>Pas de jeux (0)</span>
+                </div>                         
+            </form>
         </section>
     </div>
 
@@ -152,6 +154,11 @@ export default defineComponent({
             copied: false,
             game1: false,
             maxRounds: 3,
+            games: [
+                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: "@assets/svg/partinies/solar.svg" },
+                { id: 2, name: "Classico", image: "@assets/svg/partinies/vilo.svg" },
+                { id: 3, name: "What's the situation ?", image: "@assets/svg/partinies/blingbling.svg" }
+            ]
         }
     },
 
