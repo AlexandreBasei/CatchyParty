@@ -27,8 +27,8 @@
               <section class="description">
                 <h3>Round 1</h3>
                 <hr>
-                <div id="test">
-                  <p>{{ content }}</p> <!-- Liaison de la propriété content à l'élément <p> -->
+                <div id="story">
+                  <p>{{ content }}</p> 
                 </div>
               </section>
             </main>
@@ -114,11 +114,7 @@ export default defineComponent({
 
     // Obtenir la liste des musiques
     const musics: Music[] = data.musics;
-
-    // Mélanger la liste de musiques pour obtenir un ordre aléatoire
     musics.sort(() => Math.random() - 0.5);
-
-    // Assigner les musiques
     this.musics = musics.slice(0, 5);
   }
 });
