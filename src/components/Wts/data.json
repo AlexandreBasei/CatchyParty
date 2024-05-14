@@ -48,6 +48,11 @@
         {
             "id": 10,
             "description": "Actuellement dans votre dernière année d’étude, vous devez faire un travail de groupe pour valider votre année mais vous vous retrouvez avec la personne qui ne travaille jamais et qui compromet votre validation de diplôme.  Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 11,
+            "description": "Vous êtes en plein entretien pour un job, puis la personne qui vous fait l’entretien sort de son bureau, vous vous levez et commencez à vous balader dans son bureau. Tout d’un coup cette personne entre dans le bureau et vous surprend. Quelle musique représente votre réaction ?"
         }
     ],
 
@@ -61,23 +66,23 @@
        
        {
         "id": 2,
-        "title": "Ne Me Quitte Pas",
+        "title": "Ne me quitte pas",
         "artiste": "Jacques Brel",
         "album": "Les Marquises"
        },
 
        {
         "id": 3,
-        "title": "Je T'aime... Moi Non Plus",
+        "title": "Je t'aime ... moi non plus",
         "artiste": "Serge Gainsbourg",
         "album": "Histoire de Melody Nelson"
        },
 
        {
         "id": 4,
-        "title": "La Bohème",
-        "artiste": "Charles Aznavour",
-        "album": "La Bohème"
+        "title": "Formidable",
+        "artiste": "Stromae",
+        "album": "Racine carrée"
        },
 
        {
@@ -131,7 +136,7 @@
 
        {
         "id": 12,
-        "title": "Je dans le Mia",
+        "title": "Je danse le Mia",
         "artiste": "IAM",
         "album": "L'École du micro d'argent"
        },
@@ -161,7 +166,7 @@
         "id": 16,
         "title": "La puissance",
         "artiste": "Rohff",
-        "album": "La Vie avant la mort"
+        "album": "La vie avant la mort"
        },
 
        {
@@ -176,6 +181,13 @@
         "title": "Zoo",
         "artiste": "Kaaris",
         "album": "Or noir"
+       },
+
+       {
+        "id": 19,
+        "title": "Libérée, délivrée",
+        "artiste": "Anaïs Delva",
+        "album": "La Reine des neiges"
        }
     ]
 }

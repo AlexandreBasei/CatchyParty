@@ -63,7 +63,7 @@
     z-index: -1; 
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
     .content{
         height: 100vh;
         overflow: hidden;
@@ -146,7 +146,7 @@
 
 }
 
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 800px) {
     .song-cards{
         display: flex;
         gap: 1em;
