@@ -12,6 +12,7 @@
     --quaternary: #3374C1;
 
     --black: #161617;
+    --darkgrey: #4b5050;
     --grey: #9aa3a3;
     --white: #F9FAFA;
 
@@ -92,6 +93,10 @@ input:-ms-input-placeholder {
 }
 button{
     border: 0px;
+}
+button:disabled{
+    background-color: var(--grey);
+    color: var(--darkgrey);
 }
 
 .content h3{    

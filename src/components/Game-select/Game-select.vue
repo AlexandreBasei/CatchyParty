@@ -48,10 +48,10 @@
                     </div>
 
                     <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
+                </div>
 
-                    <div class="game-rounds">
-                        <h3>Déroulement de la Partie</h3>
-                    </div>
+                <div class="game-rounds">
+                    <h3>Déroulement de la Partie</h3>
                 </div>
             </div>
 
@@ -86,12 +86,14 @@
                     <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
                     <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
                 </div> -->
-                <button class="startGame" v-if="player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+                <button class="startGame" v-if="player.host" :disabled="roomWithPlayers && roomWithPlayers.players.length < 2">{{ $t('DEMARRER_PARTIE') }}</button>
 
-                <div class="messages">
-                    <span>Pas assez de joueurs (0)</span>
+                <div class="messages" v-if="rooms">
+                    <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
+                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{ roomWithPlayers.players.length }})
+                    </span>
                     <span>Pas de jeux (0)</span>
-                </div>                         
+                </div>           
             </form>
         </section>
     </div>
@@ -218,6 +220,11 @@ export default defineComponent({
         // this.updateAvatar();
 
     },
+    computed: {
+        roomWithPlayers() {
+            return this.rooms.find(room => room.id === this.player.roomId);
+        }
+    },
     methods: {
         updRooms() {
             this.socket.emit('get rooms');
@@ -268,6 +275,9 @@ export default defineComponent({
         copy(text: string) {
             navigator.clipboard.writeText(text);
             this.copied = true;
+            setTimeout(() => {
+                this.copied = false;
+            }, 2500);
         },
 
         playersNumber() {

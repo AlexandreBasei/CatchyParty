@@ -185,6 +185,9 @@ form .messages{
     color: red;
     text-shadow: 0x 0px 15px var(--white);
 }
+.messages.green-text{
+    color: green;
+}
 #shareLink,
 .startGame {
     background-color: var(--tertiary);
