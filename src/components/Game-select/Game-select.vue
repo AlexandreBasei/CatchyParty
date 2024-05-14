@@ -155,9 +155,9 @@ export default defineComponent({
             game1: false,
             maxRounds: 3,
             games: [
-                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: "@assets/svg/partinies/solar.svg" },
-                { id: 2, name: "Classico", image: "@assets/svg/partinies/vilo.svg" },
-                { id: 3, name: "What's the situation ?", image: "@assets/svg/partinies/blingbling.svg" }
+                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
+                { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
+                { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
             ]
         }
     },
