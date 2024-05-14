@@ -10,12 +10,15 @@ form.homepage-form{
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 100%;
 }
 .avatar-choice h3{
     user-select: none;
 }
 
 .avatar-container {
+    max-width: -webkit-fill-available;
+
     position: relative;
     border-radius: var(--borderradius);
     cursor: pointer;
@@ -31,8 +34,8 @@ ul.arrows{
     justify-content:space-around;
 }
 ul.arrows > *{
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    aspect-ratio: 1/1;
     color: var(--black);
     font-weight: bold;
     background-color: var(--tertiary);
@@ -45,11 +48,14 @@ ul.arrows > *{
     
     transition: all 0.2s ease;
 }
-ul.arrows button:disabled{
-    background-color: var(--grey);
+ul.arrows button img{
+    width: 50%;
 }
-ul.arrows >*:hover {
-    transform: scale(1.1);
+ul.arrows:nth-of-type(2n+1) >*:hover {
+    transform: translateX(-5px) scale(1.1);
+}
+ul.arrows:nth-of-type(2n) >*:hover {
+    transform: translateX(5px) scale(1.1);
 }
 
 
@@ -79,19 +85,16 @@ ul.arrows >*:hover {
 }
 
 .backBtn{
-    padding: 5px 15px;
+    padding: 20px 15px;
     border-radius: var(--borderradius);
+    
+    position: absolute;
+    left: 5vh;
+    top: 5vh;
     width: 100px;
-    background-color: var(--tertiary);
-    border: 2px solid var(--tertiary);
-    transition: all 0.5s ease;
-    color: var(--black);
 }
 
-.submitBtn {
-    background-color: var(--tertiary);
-    border: 2px solid var(--tertiary);
-}
+
 input,
 .submitBtn{
     padding: 20px 15px;

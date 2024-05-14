@@ -33,66 +33,49 @@
             </button>
 
         </section>
-        <section class="personalization-section" v-if="rooms.some(room => room.id === player.roomId && player.host)">
-            <div class="games-block" v-if="player.host">
+        <section class="personalization-section" v-if="rooms.some(room => room.id === player.roomId)">
+            <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
-                <div class="game-options">
-                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
-
-                    <div class="game-container" v-for="game in games" :key="game.id">
-                        <div class="game">
-                            <img :src="game.image" :alt="game.name">
+                <div class="games-options">
+                    <div class="all-games">
+                        <div class="game-container" v-for="game in games" :key="game.id">
+                            <div class="game" @click="handleGameClick(game.id)">
+                                <img :src="game.image" :alt="game.name" draggable="true" @dragstart="handleDragStart(game)">
+                            </div>
+                            <p>{{ game.name }}</p>
                         </div>
-                        <p>{{ game.name }}</p>
                     </div>
-
-                    <button class="game-arrow"><img src="@/assets/svg/icons/arrow.svg"></button>
                 </div>
 
-                <div class="game-rounds">
-                    <h3>Déroulement de la Partie</h3>
+                <h3>Déroulement de la Partie</h3>
+
+                <div class="games-selected" @drop="handleDrop" @dragover.prevent>
+                    <div class="all-games">
+                        <div class="game-container" v-for="game in gamesChosen" :key="game">
+                            <div class="game">
+                                <!-- <img :src="game.image" :alt="game.name"> -->
+                            </div>
+                            <p>{{ game }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div v-else class="settings guest">
+            <div v-if="!player.host" class="settings guest">
                 <h2>L'hôte configure la partie...</h2>
             </div>
 
             <form @submit.prevent="start('game1')">
-                <!-- <div class="personalization-options">
-                    <div>
-                        <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
-                        <select id="nbPlayers"></select>
-                    </div>
-                    <div>
-                        <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
-
-                        <select @change="sendRounds" v-model="maxRounds" id="nbRounds">
-                            <option :value=3>3</option>
-                            <option :value=4>4</option>
-                            <option :value=5>5</option>
-                            <option :value=6>6</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 1 || room.players.length == 3 || room.players.length == 5 || room.players.length == 7 || room.players.length == 9)">
-                    <button class="startGame" id="startGameDisabled" disabled>{{ $t('DEMARRER_PARTIE') }}</button>
-                    <p>Vous devez être un nombre pair pour commencer la partie !</p>
-                </div>
-
-                <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 2 || room.players.length == 4 || room.players.length == 6 || room.players.length == 8 || room.players.length == 10)">
-                    <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
-                    <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
-                </div> -->
-                <button class="startGame" v-if="player.host" :disabled="roomWithPlayers && roomWithPlayers.players.length < 2">{{ $t('DEMARRER_PARTIE') }}</button>
+                <button class="startGame" :disabled="(roomWithPlayers && roomWithPlayers.players.length < 2) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
                         {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{ roomWithPlayers.players.length }})
                     </span>
-                    <span>Pas de jeux (0)</span>
+                    <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
+                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{gamesChosen.length}})
+                    </span>
                 </div>           
             </form>
         </section>
@@ -160,7 +143,9 @@ export default defineComponent({
                 { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
                 { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
-            ]
+            ],
+            gamesChosen: [] as number[],
+            draggedGameId: null as null | number
         }
     },
 
@@ -225,7 +210,20 @@ export default defineComponent({
             return this.rooms.find(room => room.id === this.player.roomId);
         }
     },
-    methods: {
+    methods: {    
+        handleDragStart(game: { id: number }) {
+            this.draggedGameId = game.id;
+        },
+        handleDrop(event: DragEvent) {
+            event.preventDefault();
+            const gameId = this.draggedGameId;
+            if (gameId) {
+                this.gamesChosen.push(gameId);
+            }
+        },
+        handleGameClick(id: number) {
+            this.gamesChosen.push(id);
+        },
         updRooms() {
             this.socket.emit('get rooms');
 
@@ -277,7 +275,7 @@ export default defineComponent({
             this.copied = true;
             setTimeout(() => {
                 this.copied = false;
-            }, 2500);
+            }, 1500);
         },
 
         playersNumber() {
