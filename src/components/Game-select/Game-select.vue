@@ -234,17 +234,6 @@ export default defineComponent({
                 this.currentRound++;
                 this.start();
             }
-            this.socket.emit('sendPlayer', this.player);
-        });
-
-        this.socket.on('endgame', () => {
-            if (this.currentRound === this.gamesChosen.length) {
-                console.log("Partie terminée");
-            }
-            else {
-                this.currentRound++;
-                this.start();
-            }
         })
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
