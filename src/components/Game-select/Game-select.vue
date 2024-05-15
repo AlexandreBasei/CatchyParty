@@ -108,6 +108,8 @@ import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
 
 interface Room {
     id: string;
+    rewind: [];
+    gamesChosen: [];
     players: {
         host: boolean,
         avatar: [number, number, number],
@@ -169,6 +171,7 @@ export default defineComponent({
     },
 
     mounted() {
+
         this.socket.on('join room', (player: any) => {
             this.player = player;
             this.currentRoom = player.roomId;
@@ -176,7 +179,7 @@ export default defineComponent({
 
         this.socket.on('get rounds', (maxRounds: number) => {
             this.maxRounds = maxRounds;
-        })
+        });
 
         this.socket.on('new host', (newHostId: string) => {
             console.log('This.player.socketId', this.player.socketId);
@@ -212,6 +215,7 @@ export default defineComponent({
                     this.game1 = false;
                     this.game2 = false;
                     this.game3 = true;
+                    break;
                 default:
                     break;
             }
@@ -274,12 +278,12 @@ export default defineComponent({
         handleGameClick(id: number) {
             if (this.gamesChosen.length < this.maxRounds) {
                 this.gamesChosen.push(id);
-                this.socket.emit('update gamesChosen', this.gamesChosen);
+                this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
             }
         },
         handleRemoveGame(index: number) {
             this.gamesChosen.splice(index, 1);
-            this.socket.emit('update gamesChosen', this.gamesChosen);
+            this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
         },
         getGameName(id: number) {
             const game = this.games.find(game => game.id === id);
@@ -294,6 +298,12 @@ export default defineComponent({
 
             this.socket.on('list rooms', (rooms: Room[]) => {
                 this.rooms = rooms;
+
+                rooms.forEach(room => {
+                    if (this.player.roomId === room.id) {
+                        this.gamesChosen = room.gamesChosen;
+                    }
+                });
             });
         },
 
@@ -333,6 +343,10 @@ export default defineComponent({
 
         sendRounds() {
             this.socket.emit("send rounds", this.maxRounds);
+        },
+
+        getRounds() {
+            this.socket.emit("get rounds");
         },
 
         copy(text: string) {
