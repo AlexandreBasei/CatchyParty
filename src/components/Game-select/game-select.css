@@ -64,6 +64,8 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
 }
 
 
@@ -92,15 +94,43 @@
     gap: 20px;
     width: fit-content;
 }
+.games-selected .all-games{
+  gap: 40px;  
+}
 
 .game-container{
     /* width: 30%;
     height: 250px; */
 
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 175px;
     aspect-ratio: 1/1;
+}
+.games-selected .game-container::before {
+    background: url('@/assets/svg/icons/croixRed.svg') no-repeat;
+    background-size: contain;
+    position: absolute;
+    pointer-events: none;
+    width: 30px;
+    right: 10px;
+    top: 0px;
+    transform: translateX(50%);
+    aspect-ratio: 1/1;
+    content: '';
+    z-index: 1;
+}
+.games-selected .game-container:not(:last-of-type):after {
+    background: url('@/assets/svg/icons/arrowR.svg') no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 30px;
+    right: -25px;
+    top: 75px;
+    transform: translateX(50%);
+    aspect-ratio: 1/1;
+    content: '';
 }
 .game {
     display: flex;
@@ -120,6 +150,9 @@
 }
 .games-selected .game {
     background: linear-gradient(193deg, var(--tertiary) 29%, var(--white));
+}
+.games-selected .game:hover {
+    border: 5px solid red;
 }
 
 .game::before{
@@ -240,7 +273,7 @@ form .messages{
     display: none;
     position: absolute;
     left: 100%;
-    top: 100%;
+    /* top: 100%; */
     width: 50%;
     flex-flow: wrap row;
     align-items: start;

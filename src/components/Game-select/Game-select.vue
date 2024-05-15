@@ -12,7 +12,7 @@
                             <span v-if="rplayer.host">👑 </span>
                             {{ rplayer.username }}
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
-                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
+                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton no-background no-hover">
                                 <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
                                     class="bi bi-three-dots-vertical">
                                     <path
@@ -21,9 +21,9 @@
                             </button>
                         </span>
 
-                        <div v-bind:id="rplayer.socketId" class="hostMenu">
-                            <button @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
-                            <button style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
+                        <div v-bind:id="rplayer.socketId" class="hostMenu no-background no-hover">
+                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
+                            <button class="no-background no-hover" style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,8 @@
             </button>
 
         </section>
-        <section class="personalization-section" v-if="rooms.some(room => room.id === player.roomId)">
+        <section class="personalization-section">
+            <!-- v-if="rooms.some(room => room.id === player.roomId)" -->
             <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
@@ -48,15 +49,15 @@
                     </div>
                 </div>
 
-                <h3>Déroulement de la Partie</h3>
+                <h3>Déroulement de la Partie ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
 
                 <div class="games-selected" @drop="handleDrop" @dragover.prevent>
                     <div class="all-games">
-                        <div class="game-container" v-for="game in gamesChosen" :key="game">
-                            <div class="game">
-                                <!-- <img :src="game.image" :alt="game.name"> -->
+                        <div class="game-container" v-for="(gameId, index) in gamesChosen" :key="index">
+                            <div class="game" @click="handleRemoveGame(index)">
+                                <img :src="getGameImage(gameId)" :alt="getGameName(gameId)">
                             </div>
-                            <p>{{ game }}</p>
+                            <p>{{ $t('ROUND') }} {{index+1}}</p>
                         </div>
                     </div>
                 </div>
@@ -67,7 +68,7 @@
             </div>
 
             <form @submit.prevent="start('game1')">
-                <button class="startGame" :disabled="(roomWithPlayers && roomWithPlayers.players.length < 2) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+                <button class="startGame" :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1 )) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
@@ -138,14 +139,15 @@ export default defineComponent({
             player: {} as Player,
             copied: false,
             game1: false,
-            maxRounds: 3,
+            maxRounds: 5,
             games: [
                 { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
                 { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
             ],
             gamesChosen: [] as number[],
-            draggedGameId: null as null | number
+            draggedGameId: null as null | number,
+            draggedIndex: null as number | null,
         }
     },
 
@@ -200,7 +202,7 @@ export default defineComponent({
             });
         });
 
-        this.roundsNumber();
+        // this.roundsNumber();
         this.playersNumber();
         // this.updateAvatar();
 
@@ -218,11 +220,25 @@ export default defineComponent({
             event.preventDefault();
             const gameId = this.draggedGameId;
             if (gameId) {
-                this.gamesChosen.push(gameId);
+                this.handleGameClick(gameId);
+                this.draggedGameId = null;
             }
         },
         handleGameClick(id: number) {
-            this.gamesChosen.push(id);
+            if (this.gamesChosen.length < this.maxRounds){
+                this.gamesChosen.push(id);
+            }
+        },
+        handleRemoveGame(index: number) {
+            this.gamesChosen.splice(index, 1);
+        },
+        getGameName(id: number) {
+            const game = this.games.find(game => game.id === id);
+            return game ? game.name : '';
+        },
+        getGameImage(id: number) {
+            const game = this.games.find(game => game.id === id);
+            return game ? game.image : '';
         },
         updRooms() {
             this.socket.emit('get rooms');
@@ -290,18 +306,18 @@ export default defineComponent({
                 }
             }
         },
-        roundsNumber() {
-            var selectElement = document.getElementById("nbRounds");
+        // roundsNumber() {
+        //     var selectElement = document.getElementById("nbRounds");
 
-            for (var i = 1; i <= 3; i++) {
-                var option = document.createElement("option");
-                option.text = i.toString();
-                option.value = i.toString();
-                if (selectElement) {
-                    selectElement.appendChild(option);
-                }
-            }
-        },
+        //     for (var i = 1; i <= 3; i++) {
+        //         var option = document.createElement("option");
+        //         option.text = i.toString();
+        //         option.value = i.toString();
+        //         if (selectElement) {
+        //             selectElement.appendChild(option);
+        //         }
+        //     }
+        // },
 
         displayHostMenu(socketId: string) {
             const menuToDisplay = document.getElementById(socketId);
