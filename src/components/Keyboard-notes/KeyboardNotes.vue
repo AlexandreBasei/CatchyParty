@@ -164,7 +164,7 @@ export default defineComponent({
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 1000, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
