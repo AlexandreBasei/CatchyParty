@@ -93,10 +93,13 @@
             </form>
         </section>
 
-        <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
     </div>
 
-    <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
+    <Kbnotes v-if="game === 1" :socket="socket"></Kbnotes>
+
+    <ClassicoComponent v-if="game === 2" :socket="socket"></ClassicoComponent>
+
+    <WtsComponent v-if="game === 3" :socket="socket"></WtsComponent>
 
 </template>
 
@@ -105,6 +108,8 @@ import { defineComponent, ref } from 'vue';
 import io from 'socket.io-client';
 import Kbnotes from "@/components/Keyboard-notes/KeyboardNotes.vue";
 import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
+import WtsComponent from '../Wts/WtsComponent.vue';
+import ClassicoComponent from '../Classico/ClassicoComponent.vue';
 
 interface Room {
     id: string;
@@ -138,7 +143,9 @@ export default defineComponent({
     homepage: '',
     components: {
         Kbnotes,
-        ProfilePicture
+        ProfilePicture,
+        WtsComponent,
+        ClassicoComponent,
     },
 
     props: {
@@ -154,9 +161,7 @@ export default defineComponent({
             currentRoom: '',
             player: {} as Player,
             copied: false,
-            game1: false,
-            game2: false,
-            game3: false,
+            game: 0 as number,
             maxRounds: 5,
             currentRound: 0,
             games: [
@@ -202,19 +207,13 @@ export default defineComponent({
 
             switch (this.gamesChosen[this.currentRound]) {
                 case 1:
-                    this.game1 = true;
-                    this.game2 = false;
-                    this.game3 = false;
+                    this.game = 1;
                     break;
                 case 2:
-                    this.game1 = false;
-                    this.game2 = true;
-                    this.game3 = false;
+                    this.game = 2;
                     break;
                 case 3:
-                    this.game1 = false;
-                    this.game2 = false;
-                    this.game3 = true;
+                    this.game = 3;
                     break;
                 default:
                     break;
@@ -225,6 +224,9 @@ export default defineComponent({
         this.socket.on('endgame', () => {
             if (this.currentRound === this.gamesChosen.length) {
                 console.log("Partie terminée");
+                this.currentRound = 0;
+                this.gamesChosen = [];
+                this.game = 0;
             }
             else {
                 this.currentRound++;
