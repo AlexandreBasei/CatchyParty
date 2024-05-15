@@ -240,7 +240,7 @@ export default defineComponent({
             });
         });
 
-        this.socket.on('receivePlayer:3', (player: any) => {
+        this.socket.on('receivePlayer', (player: any) => {
             this.player = player;
         });
 
