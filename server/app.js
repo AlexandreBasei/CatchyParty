@@ -109,11 +109,9 @@ io.on('connection', (socket) => {
     });
 
     socket.on('update gamesChosen', (gamesChosen, player) => {
-        log("PLAYER", player);
         rooms.forEach(room => {
             if (player.roomId === room.id) {
                 room.gamesChosen = gamesChosen;
-                console.log("SALLE : ",room);
             }
         })
         io.emit('get gamesChosen', gamesChosen);
