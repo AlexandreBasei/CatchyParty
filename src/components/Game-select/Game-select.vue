@@ -234,7 +234,11 @@ export default defineComponent({
                 this.currentRound++;
                 this.start();
             }
-        })
+        });
+
+        this.socket.on('get gamesChosen', (gamesChosen: []) => {
+            this.gamesChosen = gamesChosen;
+        });
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
             console.log('gamesChosen updated in local for everyone');
