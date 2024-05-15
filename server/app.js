@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
                         console.log(`${room.roomIdeas.length} / ${playersLENGTH}`);
                         console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
                     }
-                }); 
+                });
                 if (room.roomIdeas.length === playersLENGTH) {
                     console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
                     room.players.forEach(p => {
@@ -68,7 +68,7 @@ io.on('connection', (socket) => {
         });
         socket.emit('ideaSubmitted');
     });
-    
+
 
     socket.on('sendTabNotes', (tabnotes, player) => {
         let playersLENGTH = 0;
@@ -104,15 +104,16 @@ io.on('connection', (socket) => {
         console.log(NotesToGuess);
     });
 
-    socket.on('sendPlayer:3', (player) => {
-        io.to(player.socketId).emit('receivePlayer:3', player);
+    socket.on('sendPlayer', (player) => {
+        io.to(player.socketId).emit('receivePlayer', player);
     });
 
-    socket.on('game started', (game) => {
-        console.log("This game start : ", game);
-        if (game === "game1") {
-            io.emit('game start', game);
-        }
+    socket.on('update gamesChosen', (gamesChosen) => {
+        io.emit('get gamesChosen', gamesChosen);
+    })
+
+    socket.on('game started', (gamesChosen) => {
+        io.emit('game start', gamesChosen);
     });
 
     socket.on("send rounds", (maxRounds) => {
@@ -222,7 +223,7 @@ io.on('connection', (socket) => {
 //     playersConnected.forEach((playerId, index) => {
 //         assignedIdeas.push({ id: playerId, idea: shuffledIdeas[index].idea });
 //     });
-    // console.log('Idées attribuées :', assignedIdeas);
+// console.log('Idées attribuées :', assignedIdeas);
 //     return assignedIdeas;
 // }
 
@@ -425,7 +426,7 @@ app.get('/lyrics', async (req, res) => {
         });
 
         // getSong(options).then((song) =>
-            console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
+        console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
         // );
     } catch (err) {
         console.error("Erreur lors de la récupération des données : ", err);

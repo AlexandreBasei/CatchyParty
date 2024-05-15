@@ -6,7 +6,8 @@
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
 
-                        <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
+                        <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]"
+                            :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
                         <span class="pseudoPlayer">
                             <div>
@@ -15,7 +16,8 @@
                             </div>
 
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
-                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton no-background no-hover">
+                                @click="displayHostMenu(rplayer.socketId)"
+                                class="hostMenuButton no-background no-hover">
                                 <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
                                     class="bi bi-three-dots-vertical">
                                     <path
@@ -25,13 +27,16 @@
                         </span>
 
                         <div v-bind:id="rplayer.socketId" class="hostMenu no-background no-hover">
-                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
-                            <button class="no-background no-hover" style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
+                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE')
+                                }}</button>
+                            <button class="no-background no-hover" style="color: red;"
+                                @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <button id="shareLink" :class="{ 'shareLink': copied }" @click="copy(`localhost:8080?room=${player.roomId}`)" >
+            <button id="shareLink" :class="{ 'shareLink': copied }"
+                @click="copy(`localhost:8080?room=${player.roomId}`)">
                 {{ copied ? $t('COPIE') : $t('COPIER_LIEN') }}
             </button>
 
@@ -45,7 +50,8 @@
                     <div class="all-games">
                         <div class="game-container" v-for="game in games" :key="game.id">
                             <div class="game" @click="handleGameClick(game.id)">
-                                <img :src="game.image" :alt="game.name" draggable="true" @dragstart="handleDragStart(game)">
+                                <img :src="game.image" :alt="game.name" draggable="true"
+                                    @dragstart="handleDragStart(game)">
                             </div>
                             <p>{{ game.name }}</p>
                         </div>
@@ -60,7 +66,7 @@
                             <div class="game" @click="handleRemoveGame(index)">
                                 <img :src="getGameImage(gameId)" :alt="getGameName(gameId)">
                             </div>
-                            <p>{{ $t('ROUND') }} {{index+1}}</p>
+                            <p>{{ $t('ROUND') }} {{ index + 1 }}</p>
                         </div>
                     </div>
                 </div>
@@ -70,17 +76,20 @@
                 <h2>L'hôte configure la partie...</h2>
             </div>
 
-            <form @submit.prevent="start('game1')">
-                <button class="startGame" :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1 )) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+            <form @submit.prevent="start()">
+                <button class="startGame"
+                    :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1)) || !player.host">{{
+        $t('DEMARRER_PARTIE') }}</button>
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
-                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{ roomWithPlayers.players.length }})
+                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{
+        roomWithPlayers.players.length }})
                     </span>
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
                         {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{gamesChosen.length}})
                     </span>
-                </div>           
+                </div>
             </form>
         </section>
 
@@ -98,7 +107,7 @@ interface Room {
     id: string;
     players: {
         host: boolean,
-        avatar: [number,number,number],
+        avatar: [number, number, number],
         roomId: string,
         socketId: string,
         username: string,
@@ -109,7 +118,7 @@ interface Room {
 
 interface Player {
     host: boolean,
-    avatar: [number,number,number],
+    avatar: [number, number, number],
     roomId: string,
     socketId: string,
     username: string,
@@ -121,7 +130,7 @@ interface Player {
 
 export default defineComponent({
     name: 'game_select',
-    homepage:'',
+    homepage: '',
     components: {
         Kbnotes,
         ProfilePicture
@@ -159,13 +168,13 @@ export default defineComponent({
             this.currentRoom = player.roomId;
         });
 
-        this.socket.on('get rounds', (maxRounds:number) => {
+        this.socket.on('get rounds', (maxRounds: number) => {
             this.maxRounds = maxRounds;
         })
 
         this.socket.on('new host', (newHostId: string) => {
             console.log('This.player.socketId', this.player.socketId);
-            
+
             if (this.player.socketId === newHostId) {
                 this.player.host = true;
             }
@@ -178,14 +187,19 @@ export default defineComponent({
             }
         });
 
-        this.socket.on('game start', (game: string) => {
-            console.log("GAME1 START");
+        this.socket.on('game start', (gamesChosen: []) => {
 
-            if (game === "game1") {
+            this.gamesChosen = gamesChosen;
+
+            if (this.gamesChosen[0] === 1) {
                 this.game1 = true;
-                this.socket.emit('sendPlayer:3', this.player);
+                this.socket.emit('sendPlayer', this.player);
             }
-        })
+        });
+
+        this.socket.on('get gamesChosen', (gamesChosen: []) => {
+            this.gamesChosen = gamesChosen;
+        });
 
         setInterval(() => {
             this.updRooms();
@@ -214,7 +228,7 @@ export default defineComponent({
             return this.rooms.find(room => room.id === this.player.roomId);
         }
     },
-    methods: {    
+    methods: {
         handleDragStart(game: { id: number }) {
             this.draggedGameId = game.id;
         },
@@ -227,12 +241,14 @@ export default defineComponent({
             }
         },
         handleGameClick(id: number) {
-            if (this.gamesChosen.length < this.maxRounds){
+            if (this.gamesChosen.length < this.maxRounds) {
                 this.gamesChosen.push(id);
+                this.socket.emit('update gamesChosen', this.gamesChosen);
             }
         },
         handleRemoveGame(index: number) {
             this.gamesChosen.splice(index, 1);
+            this.socket.emit('update gamesChosen', this.gamesChosen);
         },
         getGameName(id: number) {
             const game = this.games.find(game => game.id === id);
@@ -253,7 +269,7 @@ export default defineComponent({
         resetPlayer() {
             this.player.host = false;
             this.player.username = "";
-            this.player.avatar = [0,0,0];
+            this.player.avatar = [0, 0, 0];
             this.player.roomId = "";
             this.player.idea = false;
             this.player.tabAttributed = false;
@@ -284,7 +300,7 @@ export default defineComponent({
             });
         },
 
-        sendRounds () {
+        sendRounds() {
             this.socket.emit("send rounds", this.maxRounds);
         },
 
@@ -327,7 +343,7 @@ export default defineComponent({
             if (menuToDisplay) {
                 /*eslint no-undef: 0*/
                 const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
-                    
+
                 modals.forEach((modal) => {
                     if (modal) {
                         modal.style.display = 'none';
@@ -350,7 +366,6 @@ export default defineComponent({
         },
 
         isButtonClicked(buttons: any, target: Node): boolean {
-            console.log("saas");
 
             for (const button of buttons) {
                 if (button.contains(target)) {
@@ -388,16 +403,14 @@ export default defineComponent({
         //     }
         // },
 
-        start(game: string) {
-            if (game === "game1") {
-                this.socket.emit('game started', game);
-            }
+        start() {
+            this.socket.emit('game started', this.gamesChosen);
         }
     }
 })
 </script>
 
 <style lang="css" scoped>
-    @import url('./game-select.css');
-    @import url('./game-select-mobile.css');
+@import url('./game-select.css');
+@import url('./game-select-mobile.css');
 </style>
