@@ -1,5 +1,5 @@
 <template>
-    <div class="content" v-if="!game1">
+    <div class="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>
             <div class="playersContainer" v-for="room in rooms" :key="room.id">
@@ -9,8 +9,11 @@
                         <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
                         <span class="pseudoPlayer">
-                            <span v-if="rplayer.host">👑 </span>
-                            {{ rplayer.username }}
+                            <div>
+                                <span v-if="rplayer.host">👑</span>
+                                <span>{{ rplayer.username }}</span>
+                            </div>
+
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
                                 @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton no-background no-hover">
                                 <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
@@ -33,7 +36,7 @@
             </button>
 
         </section>
-        <section class="personalization-section">
+        <section class="personalization-section" v-if="!game1">
             <!-- v-if="rooms.some(room => room.id === player.roomId)" -->
             <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
@@ -80,10 +83,9 @@
                 </div>           
             </form>
         </section>
+
+        <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
     </div>
-
-    <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
-
 </template>
 
 <script lang="ts">
