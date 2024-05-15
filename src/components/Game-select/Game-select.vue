@@ -8,89 +8,77 @@
 
                         <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
-                        <p class="pseudoPlayer">
+                        <span class="pseudoPlayer">
                             <span v-if="rplayer.host">👑 </span>
                             {{ rplayer.username }}
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
-                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton">
+                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton no-background no-hover">
                                 <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
                                     class="bi bi-three-dots-vertical">
                                     <path
                                         d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                                 </svg>
                             </button>
-                        </p>
+                        </span>
 
-                        <div v-bind:id="rplayer.socketId" class="hostMenu">
-                            <button @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
-                            <button style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
+                        <div v-bind:id="rplayer.socketId" class="hostMenu no-background no-hover">
+                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
+                            <button class="no-background no-hover" style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <button v-if="!copied" id="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIER_LIEN') }}</button>
-            <button v-if="copied" class="shareLink" @click="copy(`localhost:8080?room=${player.roomId}`)">{{ $t('COPIE') }}</button>
+            <button id="shareLink" :class="{ 'shareLink': copied }" @click="copy(`localhost:8080?room=${player.roomId}`)" >
+                {{ copied ? $t('COPIE') : $t('COPIER_LIEN') }}
+            </button>
+
         </section>
-        <section class="personalization-main" v-for="room in rooms" :key="room.id">
-            <div class="settings" v-if="room.id === player.roomId && player.host">
+        <section class="personalization-section">
+            <!-- v-if="rooms.some(room => room.id === player.roomId)" -->
+            <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
 
-                <div class="game-options">
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/solar.svg" alt="Game 1">
+                <div class="games-options">
+                    <div class="all-games">
+                        <div class="game-container" v-for="game in games" :key="game.id">
+                            <div class="game" @click="handleGameClick(game.id)">
+                                <img :src="game.image" :alt="game.name" draggable="true" @dragstart="handleDragStart(game)">
+                            </div>
+                            <p>{{ game.name }}</p>
                         </div>
-                        <p>{{ $t('KEYBOARD_NOTES') }}</p>
-                    </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/vilo.svg" alt="Game 2">
-                        </div>
-                        <p>Classico</p>
-                    </div>
-                    <div class="game-container">
-                        <div class="game">
-                            <img src="@/assets/svg/partinies/blingbling.svg" alt="Game 3">
-                        </div>
-                        <p>What's the situation ?</p>
                     </div>
                 </div>
 
-                <form @submit.prevent="start('game1')">
-                    <div class="personalization-options">
-                        <!-- <div>
-                            <label for="nbPlayers">{{ $t('NOMBRE_DE_JOUEURS') }}</label>
-                            <select id="nbPlayers"></select>
-                        </div> -->
-                        <div>
-                            <label for="nbRounds">{{ $t('NOMBRE_DE_MANCHES') }}</label>
+                <h3>Déroulement de la Partie ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
 
-                            <select @change="sendRounds" v-model="maxRounds" id="nbRounds">
-                                <option :value=3>3</option>
-                                <option :value=4>4</option>
-                                <option :value=5>5</option>
-                                <option :value=6>6</option>
-                            </select>
+                <div class="games-selected" @drop="handleDrop" @dragover.prevent>
+                    <div class="all-games">
+                        <div class="game-container" v-for="(gameId, index) in gamesChosen" :key="index">
+                            <div class="game" @click="handleRemoveGame(index)">
+                                <img :src="getGameImage(gameId)" :alt="getGameName(gameId)">
+                            </div>
+                            <p>{{ $t('ROUND') }} {{index+1}}</p>
                         </div>
                     </div>
-
-                    <!-- <input type="submit" value="Select" class="submitBtn"> -->
-                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 1 || room.players.length == 3 || room.players.length == 5 || room.players.length == 7 || room.players.length == 9)">
-                        <button class="startGame" id="startGameDisabled" disabled>{{ $t('DEMARRER_PARTIE') }}</button>
-                        <p>Vous devez être un nombre pair pour commencer la partie !</p>
-                    </div>
-
-                    <div style="display: flex; flex-flow: wrap row; gap: 20px;" v-if="player.host && (room.players.length == 2 || room.players.length == 4 || room.players.length == 6 || room.players.length == 8 || room.players.length == 10)">
-                        <button class="startGame">{{ $t('DEMARRER_PARTIE') }}</button>
-                        <p style="opacity:0; pointer-events:none">Vous devez être un nombre pair pour commencer la partie !</p>
-                    </div>
-                    
-                    
-                </form>
+                </div>
             </div>
-            <div class="settings guest" v-if="room.id === player.roomId && !player.host">
+
+            <div v-if="!player.host" class="settings guest">
                 <h2>L'hôte configure la partie...</h2>
             </div>
+
+            <form @submit.prevent="start('game1')">
+                <button class="startGame" :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1 )) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+
+                <div class="messages" v-if="rooms">
+                    <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
+                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{ roomWithPlayers.players.length }})
+                    </span>
+                    <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
+                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{gamesChosen.length}})
+                    </span>
+                </div>           
+            </form>
         </section>
     </div>
 
@@ -151,7 +139,15 @@ export default defineComponent({
             player: {} as Player,
             copied: false,
             game1: false,
-            maxRounds: 3,
+            maxRounds: 5,
+            games: [
+                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
+                { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
+                { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
+            ],
+            gamesChosen: [] as number[],
+            draggedGameId: null as null | number,
+            draggedIndex: null as number | null,
         }
     },
 
@@ -206,12 +202,44 @@ export default defineComponent({
             });
         });
 
-        this.roundsNumber();
+        // this.roundsNumber();
         this.playersNumber();
         // this.updateAvatar();
 
     },
-    methods: {
+    computed: {
+        roomWithPlayers() {
+            return this.rooms.find(room => room.id === this.player.roomId);
+        }
+    },
+    methods: {    
+        handleDragStart(game: { id: number }) {
+            this.draggedGameId = game.id;
+        },
+        handleDrop(event: DragEvent) {
+            event.preventDefault();
+            const gameId = this.draggedGameId;
+            if (gameId) {
+                this.handleGameClick(gameId);
+                this.draggedGameId = null;
+            }
+        },
+        handleGameClick(id: number) {
+            if (this.gamesChosen.length < this.maxRounds){
+                this.gamesChosen.push(id);
+            }
+        },
+        handleRemoveGame(index: number) {
+            this.gamesChosen.splice(index, 1);
+        },
+        getGameName(id: number) {
+            const game = this.games.find(game => game.id === id);
+            return game ? game.name : '';
+        },
+        getGameImage(id: number) {
+            const game = this.games.find(game => game.id === id);
+            return game ? game.image : '';
+        },
         updRooms() {
             this.socket.emit('get rooms');
 
@@ -261,6 +289,9 @@ export default defineComponent({
         copy(text: string) {
             navigator.clipboard.writeText(text);
             this.copied = true;
+            setTimeout(() => {
+                this.copied = false;
+            }, 1500);
         },
 
         playersNumber() {
@@ -275,18 +306,18 @@ export default defineComponent({
                 }
             }
         },
-        roundsNumber() {
-            var selectElement = document.getElementById("nbRounds");
+        // roundsNumber() {
+        //     var selectElement = document.getElementById("nbRounds");
 
-            for (var i = 1; i <= 3; i++) {
-                var option = document.createElement("option");
-                option.text = i.toString();
-                option.value = i.toString();
-                if (selectElement) {
-                    selectElement.appendChild(option);
-                }
-            }
-        },
+        //     for (var i = 1; i <= 3; i++) {
+        //         var option = document.createElement("option");
+        //         option.text = i.toString();
+        //         option.value = i.toString();
+        //         if (selectElement) {
+        //             selectElement.appendChild(option);
+        //         }
+        //     }
+        // },
 
         displayHostMenu(socketId: string) {
             const menuToDisplay = document.getElementById(socketId);

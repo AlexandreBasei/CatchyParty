@@ -26,34 +26,6 @@ input[type=submit]:hover{
     border-radius: var(--borderradius);
 }
 
-.playersContainer{
-    display: flex;
-    justify-content: flex-start;
-}
-
-.playerContainer{
-    display: flex;
-    flex-flow: wrap column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 10px;
-    width: 100%;
-    margin: 20px 0px;
-}
-
-.playerContainer div{
-    display: flex;
-    flex-flow: nowrap row;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 20px;
-}
-
-
-.playerContainer p{
-    text-align: center;
-    /* margin-top: 5px; */
-}
 
 /* .submitBtn{
     margin-top: 35px;
