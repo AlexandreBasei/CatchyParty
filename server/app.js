@@ -110,11 +110,15 @@ io.on('connection', (socket) => {
 
     socket.on('update gamesChosen', (gamesChosen) => {
         io.emit('get gamesChosen', gamesChosen);
-    })
+    });
 
     socket.on('game started', (gamesChosen) => {
         io.emit('game start', gamesChosen);
     });
+
+    socket.on('endgame', () => {
+        io.emit('endgame');
+    })
 
     socket.on("send rounds", (maxRounds) => {
         io.emit("get rounds", maxRounds);

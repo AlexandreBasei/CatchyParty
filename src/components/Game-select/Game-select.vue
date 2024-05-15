@@ -84,14 +84,14 @@
         roomWithPlayers.players.length }})
                     </span>
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
-                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{gamesChosen.length}})
+                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{ gamesChosen.length }})
                     </span>
                 </div>
             </form>
         </section>
     </div>
 
-    <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
+    <Kbnotes v-if="game1" :socket="socket"></Kbnotes>
 
 </template>
 
@@ -148,7 +148,10 @@ export default defineComponent({
             player: {} as Player,
             copied: false,
             game1: false,
+            game2: false,
+            game3: false,
             maxRounds: 5,
+            currentRound: 0,
             games: [
                 { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
@@ -189,11 +192,36 @@ export default defineComponent({
 
             this.gamesChosen = gamesChosen;
 
-            if (this.gamesChosen[0] === 1) {
-                this.game1 = true;
-                this.socket.emit('sendPlayer', this.player);
+            switch (this.gamesChosen[this.currentRound]) {
+                case 1:
+                    this.game1 = true;
+                    this.game2 = false;
+                    this.game3 = false;
+                    break;
+                case 2:
+                    this.game1 = false;
+                    this.game2 = true;
+                    this.game3 = false;
+                    break;
+                case 3:
+                    this.game1 = false;
+                    this.game2 = false;
+                    this.game3 = true;
+                default:
+                    break;
             }
+            this.socket.emit('sendPlayer', this.player);
         });
+
+        this.socket.on('endgame', () => {
+            if (this.currentRound === this.gamesChosen.length) {
+                console.log("Partie terminée");
+            }
+            else {
+                this.currentRound++;
+                this.start();
+            }
+        })
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
             this.gamesChosen = gamesChosen;
