@@ -1,7 +1,14 @@
+p, h3 {
+    text-align: center;
+}
+
 .song-card{
     background-color: var(--secondary);
     border-radius: 20px;
     width: 20vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .song-card:hover {
