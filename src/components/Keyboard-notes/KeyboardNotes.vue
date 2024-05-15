@@ -12,6 +12,7 @@
                 </div>
                 <button @click="rewindBtns(0, index)">Afficher le précédent</button>
                 <button @click="rewindBtns(1, index)">Afficher le suivant</button>
+                <button @click="endGame()">Terminer la manche</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -133,10 +134,6 @@ export default defineComponent({
             type: Object,
             required: true
         },
-        maxRounds: {
-            type: Number,
-            required: true,
-        }
     },
 
     data() {
@@ -162,6 +159,7 @@ export default defineComponent({
             showNoteOption: false,
             timerInterGame: false,
             timerInGame: false,
+            maxRounds: 3,
             currentRound: 0,
             noteSelected: "",
             showTimer: false,
@@ -552,6 +550,10 @@ export default defineComponent({
         startGame() {
             this.gameStarted = true;
             this.Firststep();
+        },
+
+        endGame() {
+            this.socket.emit('endgame');
         },
 
         Firststep() {
