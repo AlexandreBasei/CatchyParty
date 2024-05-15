@@ -1,0 +1,193 @@
+{
+    "situations": [
+        {
+            "id": 1,
+            "description": "Vous avez accidentellement envoyé un texto embarrassant à la mauvaise personne. Quelle musique représentre votre réaction ?"
+        },
+
+        {
+            "id": 2,
+            "description": "Vous vous êtes retrouvé coincé dans un ascenseur avec une personne que vous trouvez attirante. Quelle musique représentre votre réaction ?"
+        },
+
+        {
+            "id": 3,
+            "description": "Vous avez réalisé que vous portiez votre vêtement à l'envers toute la journée. Quelle musique représentre votre réaction ?"
+        },
+
+        {
+            "id": 4,
+            "description": "Vous avez dit 'je t'aime' à quelqu'un pour la première fois mais cette personne n'a pas répondu. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 5,
+            "description": "Vous avez glissé et êtes tombé en public dans le hall d’entrée de votre école. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 6,
+            "description": "Vous avez ri à voix haute pendant un moment sérieux. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 7,
+            "description": "Vous avez décidé de faire une blague à votre meilleur ami en lui envoyant un message disant que vous aviez gagné à la loterie et que vous alliez partager votre fortune avec lui. Cependant, votre ami a pris votre message au sérieux et est maintenant en train de planifier comment dépenser l'argent que vous n'avez pas. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 8,
+            "description": "Vous êtes en train de faire un footing et tout d’un coup, vous croisez le mari de votre ami en compagnie féminine dans le même parc que vous. Quelle musique représente votre  réaction ?"
+        },
+
+        {
+            "id": 9,
+            "description": "Vous êtes entrain de travailler depuis plusieurs heures mais vous n’avez pas remarqué que vous n’aviez plus de batterie, votre ordinateur s'éteint sans que vous puissiez enregistrer votre travail. Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 10,
+            "description": "Actuellement dans votre dernière année d’étude, vous devez faire un travail de groupe pour valider votre année mais vous vous retrouvez avec la personne qui ne travaille jamais et qui compromet votre validation de diplôme.  Quelle musique représente votre réaction ?"
+        },
+
+        {
+            "id": 11,
+            "description": "Vous êtes en plein entretien pour un job, puis la personne qui vous fait l’entretien sort de son bureau, vous vous levez et commencez à vous balader dans son bureau. Tout d’un coup cette personne entre dans le bureau et vous surprend. Quelle musique représente votre réaction ?"
+        }
+    ],
+
+    "musics": [
+       {
+        "id": 1,
+        "title": "La vie en rose",
+        "artiste": "Edith Piaf",
+        "album": "La Vie En Rose"
+       },
+       
+       {
+        "id": 2,
+        "title": "Ne me quitte pas",
+        "artiste": "Jacques Brel",
+        "album": "Les Marquises"
+       },
+
+       {
+        "id": 3,
+        "title": "Je t'aime ... moi non plus",
+        "artiste": "Serge Gainsbourg",
+        "album": "Histoire de Melody Nelson"
+       },
+
+       {
+        "id": 4,
+        "title": "Formidable",
+        "artiste": "Stromae",
+        "album": "Racine carrée"
+       },
+
+       {
+        "id": 5,
+        "title": "Non, je ne regrette rien",
+        "artiste": "Édith Piaf",
+        "album": "Édith Piaf à l'Olympia"
+       },
+
+       {
+        "id": 6,
+        "title": "Les Copains d'abord",
+        "artiste": "Georges Brassens",
+        "album": "Les Copains d'abord"
+       },
+
+       {
+        "id": 7,
+        "title": "Que je t'aime",
+        "artiste": "Johnny Hallyday",
+        "album": "Johnny Hallyday à l'Olympia"
+       },
+
+       {
+        "id": 8,
+        "title": "Désenchantée",
+        "artiste": "Mylène Farmer",
+        "album": "Ainsi soit je..."
+       },
+
+       {
+        "id": 9,
+        "title": "Allumer le feu",
+        "artiste": "Johnny Hallyday",
+        "album": "Ce que je sais"
+       },
+
+       {
+        "id": 10,
+        "title": "La Nuit je mens",
+        "artiste": "Alain Bashung",
+        "album": "Bleu pétrole"
+       },
+
+       {
+        "id": 11,
+        "title": "La groupie du pianiste",
+        "artiste": "Michel Berger",
+        "album": "Beauséjour"
+       },
+
+       {
+        "id": 12,
+        "title": "Je danse le Mia",
+        "artiste": "IAM",
+        "album": "L'École du micro d'argent"
+       },
+
+       {
+        "id": 13,
+        "title": "J'ai demandé à la lune",
+        "artiste": "Indochine",
+        "album": "Paradize"
+       },
+
+       {
+        "id": 14,
+        "title": "J't'emmène au vent",
+        "artiste": "Louise Attaque",
+        "album": "Louise Attaque"
+       },
+
+       {
+        "id": 15,
+        "title": "Résiste",
+        "artiste": "France Gall",
+        "album": "Babacar"
+       },
+
+       {
+        "id": 16,
+        "title": "La puissance",
+        "artiste": "Rohff",
+        "album": "La vie avant la mort"
+       },
+
+       {
+        "id": 17,
+        "title": "Maman ne le sait pas",
+        "artiste": "Ninho",
+        "album": "Comme prévu"
+       },
+
+       {
+        "id": 18,
+        "title": "Zoo",
+        "artiste": "Kaaris",
+        "album": "Or noir"
+       },
+
+       {
+        "id": 19,
+        "title": "Libérée, délivrée",
+        "artiste": "Anaïs Delva",
+        "album": "La Reine des neiges"
+       }
+    ]
+}
