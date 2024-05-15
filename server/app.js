@@ -108,7 +108,14 @@ io.on('connection', (socket) => {
         io.to(player.socketId).emit('receivePlayer', player);
     });
 
-    socket.on('update gamesChosen', (gamesChosen) => {
+    socket.on('update gamesChosen', (gamesChosen, player) => {
+        log("PLAYER", player);
+        rooms.forEach(room => {
+            if (player.roomId === room.id) {
+                room.gamesChosen = gamesChosen;
+                console.log("SALLE : ",room);
+            }
+        })
         io.emit('get gamesChosen', gamesChosen);
     });
 
@@ -122,7 +129,7 @@ io.on('connection', (socket) => {
 
     socket.on("send rounds", (maxRounds) => {
         io.emit("get rounds", maxRounds);
-    })
+    });
 
     socket.on('play', () => {
         // Émettre un événement vers tous les clients pour démarrer la partie
@@ -265,7 +272,7 @@ function exitRoom(socketId) {
 }
 
 function createRoom(player) {
-    const room = { id: roomId(), rewind: [], players: [], roomIdeas: [] };
+    const room = { id: roomId(), rewind: [], gamesChosen: [], players: [], roomIdeas: [] };
 
     player.roomId = room.id;
 
