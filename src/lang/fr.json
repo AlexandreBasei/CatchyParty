@@ -96,5 +96,6 @@
     "POUR_COMPOSER_TA_MUSIQUE": "pour composer ta musique !",
     "AUCUNE_NOTE_SELECTIONNEE": "Aucune note sélectionnée",
     "SUPPRIMER_LA_NOTE": "Supprimer la note",
-    "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : "
+    "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : ",
+    "TERMINER_LA_MANCHE": "Terminer la manche"
 }
