@@ -12,6 +12,7 @@
                 </div>
                 <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
                 <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
+                <button @click="endGame()">Terminer la manche</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -135,10 +136,6 @@ export default defineComponent({
             type: Object,
             required: true
         },
-        maxRounds: {
-            type: Number,
-            required: true,
-        }
     },
 
     data() {
@@ -164,11 +161,12 @@ export default defineComponent({
             showNoteOption: false,
             timerInterGame: false,
             timerInGame: false,
+            maxRounds: 3,
             currentRound: 0,
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 1000, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
@@ -242,7 +240,7 @@ export default defineComponent({
             });
         });
 
-        this.socket.on('receivePlayer:3', (player: any) => {
+        this.socket.on('receivePlayer', (player: any) => {
             this.player = player;
         });
 
@@ -554,6 +552,10 @@ export default defineComponent({
         startGame() {
             this.gameStarted = true;
             this.Firststep();
+        },
+
+        endGame() {
+            this.socket.emit('endgame');
         },
 
         Firststep() {

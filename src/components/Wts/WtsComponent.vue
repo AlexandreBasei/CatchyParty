@@ -1,38 +1,38 @@
 <template>
-    <headerApp></headerApp>
-    <div class="content">
-          <section class="playersList">
-              <h3>Players</h3>
-              <div class="rect-container">
-                <div class="colored-rectangle"></div>
-            </div>
-              <div class="playersContainer">
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 1">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 2">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 3">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-              </div>
-              <input type="submit" value="Inviter joueur" class="inviteBtn" style="margin: auto;">
-          </section>
-          <div class="content-2">
-            <main class="game-main">
-              <section class="description">
-                <h3>Round 1</h3>
-                <hr>
-                <div id="story">
-                  <p>{{ content }}</p> 
-                </div>
-              </section>
-            </main>
-            <div class="songCont">
+  <headerApp></headerApp>
+  <div class="content">
+    <section class="playersList">
+      <h3>Players</h3>
+      <div class="rect-container">
+        <div class="colored-rectangle"></div>
+      </div>
+      <div class="playersContainer">
+        <div class="playerContainer">
+          <img class="player-icon" id="avatarImg" alt="player 1">
+          <p class="pseudoPlayer">Yannis</p>
+        </div>
+        <div class="playerContainer">
+          <img class="player-icon" id="avatarImg" alt="player 2">
+          <p class="pseudoPlayer">Yannis</p>
+        </div>
+        <div class="playerContainer">
+          <img class="player-icon" id="avatarImg" alt="player 3">
+          <p class="pseudoPlayer">Yannis</p>
+        </div>
+      </div>
+      <input type="submit" value="Inviter joueur" class="inviteBtn" style="margin: auto;">
+    </section>
+    <div class="content-2">
+      <main class="game-main">
+        <section class="description">
+          <h3>Round 1</h3>
+          <hr>
+          <div id="story">
+            <p>{{ content }}</p>
+          </div>
+        </section>
+      </main>
+      <div class="songCont">
         <div class="song-cards">
           <div class="song-card" v-if="musics[0]" >
             <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
@@ -55,27 +55,27 @@
           <div class="song-card" v-if="musics[3]">
             <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[3].title }}</p>
-            <p>{{ musics[3].artiste }}</p> 
+            <p>{{ musics[3].artiste }}</p>
             <p>{{ musics[3].album }}</p>
           </div>
           <div class="song-card" v-if="musics[4]">
             <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[4].title }}</p>
             <p>{{ musics[4].artiste }}</p>
-            <p>{{ musics[4].album }}</p> 
+            <p>{{ musics[4].album }}</p>
           </div>
 
-          </div>
         </div>
-        <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
       </div>
+      <input type="submit" value="Select" class="submitBtn" style="margin: auto;">
     </div>
   
     <!-- <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony"> -->
     <!-- <div class="footer">
+
           <footerApp></footerApp>
       </div> -->
-  </template>
+</template>
 
 
 <!-- //²Ici le JS (regarde les autres composants pour comprendre comment ça marche ou demande nous) -->
@@ -98,6 +98,13 @@ interface Music {
 
 export default defineComponent({
   name: 'WtsComponent',
+  props: {
+    socket: {
+      type: Object,
+      required: true
+    },
+  },
+
   data() {
     return {
       content: '' as string,
@@ -121,5 +128,5 @@ export default defineComponent({
 </script>
 
 <style lang="css" scoped>
-    @import './style.css';
+@import './style.css';
 </style>

@@ -1,18 +1,20 @@
 <template>
-    <div class="content" v-if="!game1">
+    <div class="content" v-if="!game">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>
             <div class="playersContainer" v-for="room in rooms" :key="room.id">
                 <div class="playerContainer" v-if="room.id === player.roomId">
                     <div v-for="rplayer in room.players" :key="rplayer.socketId" style="position: relative;">
 
-                        <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]" :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
+                        <ProfilePicture class="white-profile" :bodyIndex="rplayer.avatar[0]"
+                            :eyesIndex="rplayer.avatar[1]" :mouthIndex="rplayer.avatar[2]" />
 
                         <span class="pseudoPlayer">
                             <span v-if="rplayer.host">👑 </span>
                             {{ rplayer.username }}
                             <button v-if="player.host && rplayer.socketId !== player.socketId"
-                                @click="displayHostMenu(rplayer.socketId)" class="hostMenuButton no-background no-hover">
+                                @click="displayHostMenu(rplayer.socketId)"
+                                class="hostMenuButton no-background no-hover">
                                 <svg width="10px" height="15px" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF"
                                     class="bi bi-three-dots-vertical">
                                     <path
@@ -22,13 +24,16 @@
                         </span>
 
                         <div v-bind:id="rplayer.socketId" class="hostMenu no-background no-hover">
-                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE') }}</button>
-                            <button class="no-background no-hover" style="color: red;" @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
+                            <button class="no-background no-hover" @click="setHost(rplayer)">{{ $t('NOUVEAU_HOTE')
+                                }}</button>
+                            <button class="no-background no-hover" style="color: red;"
+                                @click="kickPlayer(rplayer.socketId)">{{ $t('EJECTER_JOUEUR') }}</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <button id="shareLink" :class="{ 'shareLink': copied }" @click="copy(`localhost:8080?room=${player.roomId}`)" >
+            <button id="shareLink" :class="{ 'shareLink': copied }"
+                @click="copy(`localhost:8080?room=${player.roomId}`)">
                 {{ copied ? $t('COPIE') : $t('COPIER_LIEN') }}
             </button>
 
@@ -42,7 +47,8 @@
                     <div class="all-games">
                         <div class="game-container" v-for="game in games" :key="game.id">
                             <div class="game" @click="handleGameClick(game.id)">
-                                <img :src="game.image" :alt="game.name" draggable="true" @dragstart="handleDragStart(game)">
+                                <img :src="game.image" :alt="game.name" draggable="true"
+                                    @dragstart="handleDragStart(game)">
                             </div>
                             <p>{{ game.name }}</p>
                         </div>
@@ -57,7 +63,7 @@
                             <div class="game" @click="handleRemoveGame(index)">
                                 <img :src="getGameImage(gameId)" :alt="getGameName(gameId)">
                             </div>
-                            <p>{{ $t('ROUND') }} {{index+1}}</p>
+                            <p>{{ $t('ROUND') }} {{ index + 1 }}</p>
                         </div>
                     </div>
                 </div>
@@ -67,8 +73,10 @@
                 <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
             </div>
 
-            <form @submit.prevent="start('game1')">
-                <button class="startGame" :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1 )) || !player.host">{{ $t('DEMARRER_PARTIE') }}</button>
+            <form @submit.prevent="start()">
+                <button class="startGame"
+                    :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1)) || !player.host">{{
+        $t('DEMARRER_PARTIE') }}</button>
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
@@ -77,12 +85,15 @@
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
                         {{ gamesChosen.length >= 1 ? $t('ASSEZ_DE_JEUX') : $t('PAS_ASSEZ_DE_JEUX') }} ({{gamesChosen.length}})
                     </span>
-                </div>           
+                </div>
             </form>
         </section>
     </div>
-    
-    <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
+    <Kbnotes v-if="game === 1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
+
+    <ClassicoComponent v-if="game === 2" :socket="socket"></ClassicoComponent>
+
+    <WtsComponent v-if="game === 3" :socket="socket"></WtsComponent>
 
 </template>
 
@@ -91,12 +102,16 @@ import { defineComponent, ref } from 'vue';
 import io from 'socket.io-client';
 import Kbnotes from "@/components/Keyboard-notes/KeyboardNotes.vue";
 import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
+import WtsComponent from '../Wts/WtsComponent.vue';
+import ClassicoComponent from '../Classico/ClassicoComponent.vue';
 
 interface Room {
     id: string;
+    rewind: [];
+    gamesChosen: [];
     players: {
         host: boolean,
-        avatar: [number,number,number],
+        avatar: [number, number, number],
         roomId: string,
         socketId: string,
         username: string,
@@ -107,7 +122,7 @@ interface Room {
 
 interface Player {
     host: boolean,
-    avatar: [number,number,number],
+    avatar: [number, number, number],
     roomId: string,
     socketId: string,
     username: string,
@@ -119,10 +134,12 @@ interface Player {
 
 export default defineComponent({
     name: 'game_select',
-    homepage:'',
+    homepage: '',
     components: {
         Kbnotes,
-        ProfilePicture
+        ProfilePicture,
+        WtsComponent,
+        ClassicoComponent,
     },
 
     props: {
@@ -138,8 +155,9 @@ export default defineComponent({
             currentRoom: '',
             player: {} as Player,
             copied: false,
-            game1: false,
+            game: 0 as number,
             maxRounds: 5,
+            currentRound: 0,
             games: [
                 { id: 1, name: "Keyboard-notes", image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
@@ -152,18 +170,19 @@ export default defineComponent({
     },
 
     mounted() {
+
         this.socket.on('join room', (player: any) => {
             this.player = player;
             this.currentRoom = player.roomId;
         });
 
-        this.socket.on('get rounds', (maxRounds:number) => {
+        this.socket.on('get rounds', (maxRounds: number) => {
             this.maxRounds = maxRounds;
-        })
+        });
 
         this.socket.on('new host', (newHostId: string) => {
             console.log('This.player.socketId', this.player.socketId);
-            
+
             if (this.player.socketId === newHostId) {
                 this.player.host = true;
             }
@@ -176,14 +195,42 @@ export default defineComponent({
             }
         });
 
-        this.socket.on('game start', (game: string) => {
-            console.log("GAME1 START");
+        this.socket.on('game start', (gamesChosen: []) => {
 
-            if (game === "game1") {
-                this.game1 = true;
-                this.socket.emit('sendPlayer:3', this.player);
+            this.gamesChosen = gamesChosen;
+
+            switch (this.gamesChosen[this.currentRound]) {
+                case 1:
+                    this.game = 1;
+                    break;
+                case 2:
+                    this.game = 2;
+                    break;
+                case 3:
+                    this.game = 3;
+                    break;
+                default:
+                    break;
+            }
+            this.socket.emit('sendPlayer', this.player);
+        });
+
+        this.socket.on('endgame', () => {
+            if (this.currentRound === this.gamesChosen.length) {
+                console.log("Partie terminée");
+                this.currentRound = 0;
+                this.gamesChosen = [];
+                this.game = 0;
+            }
+            else {
+                this.currentRound++;
+                this.start();
             }
         })
+
+        this.socket.on('get gamesChosen', (gamesChosen: []) => {
+            this.gamesChosen = gamesChosen;
+        });
 
         setInterval(() => {
             this.updRooms();
@@ -212,7 +259,7 @@ export default defineComponent({
             return this.rooms.find(room => room.id === this.player.roomId);
         }
     },
-    methods: {    
+    methods: {
         handleDragStart(game: { id: number }) {
             this.draggedGameId = game.id;
         },
@@ -225,12 +272,14 @@ export default defineComponent({
             }
         },
         handleGameClick(id: number) {
-            if (this.gamesChosen.length < this.maxRounds){
+            if (this.gamesChosen.length < this.maxRounds) {
                 this.gamesChosen.push(id);
+                this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
             }
         },
         handleRemoveGame(index: number) {
             this.gamesChosen.splice(index, 1);
+            this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
         },
         getGameName(id: number) {
             const game = this.games.find(game => game.id === id);
@@ -245,13 +294,19 @@ export default defineComponent({
 
             this.socket.on('list rooms', (rooms: Room[]) => {
                 this.rooms = rooms;
+
+                rooms.forEach(room => {
+                    if (this.player.roomId === room.id) {
+                        this.gamesChosen = room.gamesChosen;
+                    }
+                });
             });
         },
 
         resetPlayer() {
             this.player.host = false;
             this.player.username = "";
-            this.player.avatar = [0,0,0];
+            this.player.avatar = [0, 0, 0];
             this.player.roomId = "";
             this.player.idea = false;
             this.player.tabAttributed = false;
@@ -282,8 +337,12 @@ export default defineComponent({
             });
         },
 
-        sendRounds () {
+        sendRounds() {
             this.socket.emit("send rounds", this.maxRounds);
+        },
+
+        getRounds() {
+            this.socket.emit("get rounds");
         },
 
         copy(text: string) {
@@ -325,7 +384,7 @@ export default defineComponent({
             if (menuToDisplay) {
                 /*eslint no-undef: 0*/
                 const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
-                    
+
                 modals.forEach((modal) => {
                     if (modal) {
                         modal.style.display = 'none';
@@ -348,7 +407,6 @@ export default defineComponent({
         },
 
         isButtonClicked(buttons: any, target: Node): boolean {
-            console.log("saas");
 
             for (const button of buttons) {
                 if (button.contains(target)) {
@@ -386,16 +444,14 @@ export default defineComponent({
         //     }
         // },
 
-        start(game: string) {
-            if (game === "game1") {
-                this.socket.emit('game started', game);
-            }
+        start() {
+            this.socket.emit('game started', this.gamesChosen);
         }
     }
 })
 </script>
 
 <style lang="css" scoped>
-    @import url('./game-select.css');
-    @import url('./game-select-mobile.css');
+@import url('./game-select.css');
+@import url('./game-select-mobile.css');
 </style>
