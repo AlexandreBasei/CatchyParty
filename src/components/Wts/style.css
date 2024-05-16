@@ -152,7 +152,7 @@ p, h3 {
         justify-content: flex-start;
     }
 
-}
+/* } */
 
 @media only screen and (min-width: 800px) {
     .song-cards{
@@ -220,4 +220,4 @@ p, h3 {
         left: 50%;
         transform: translateX(-50%);
     }
-} */
+}

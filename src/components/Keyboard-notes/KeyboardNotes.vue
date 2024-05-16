@@ -129,7 +129,7 @@ interface Item {
 }
 
 export default defineComponent({
-    name: 'kbnotes',
+    name: 'KbNotes',
     //Ici les variables utilisées dans le DOM
     props: {
         socket: {
