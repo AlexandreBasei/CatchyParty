@@ -4,14 +4,14 @@
             <div class="rewind" v-for="(rewindGroup, index) in groupedRewindAll" :key="index"
                 v-bind:id="'joueur' + index">
                 <div v-for="(items, innerIndex) in rewindGroup" :key="innerIndex" style="border: 5px solid black;">
-                    <h1>Manche {{ items[0].rewindOrder + 1 }}</h1>
-                    <h2>{{ items[0].ideas.senderName }} a soumis l'idée : {{ items[0].ideas.idea }}</h2>
-                    <h2 v-if="items[0].sendedMusic.length > 0">Musique composée en réponse par {{
+                    <h1>{{ $t('MANCHE') }} {{ items[0].rewindOrder + 1 }}</h1>
+                    <h2>{{ items[0].ideas.senderName }} {{ $t('A_SOUMIS_IDEE') }} {{ items[0].ideas.idea }}</h2>
+                    <h2 v-if="items[0].sendedMusic.length > 0">{{ $t('MUSIQUE_COMPOSEE_PAR') }} {{
                 items[0].sendedMusic[0].composerName }}</h2>
-                    <button @click="playSounds(items[0].sendedMusic)">Écouter la musique</button>
+                    <button @click="playSounds(items[0].sendedMusic)">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
                 </div>
-                <button @click="rewindBtns(0, index)">Afficher le précédent</button>
-                <button @click="rewindBtns(1, index)">Afficher le suivant</button>
+                <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
+                <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -59,29 +59,29 @@
                 <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
             </div>
             <div class="note-parameters">
-                <button @click="noteContainerMenu()">Suite de notes</button>
-                <button @click="noteOptionMenu()">Réglages de durée</button>
+                <button @click="noteContainerMenu()">{{ $t('SUITE_DE_NOTE') }}</button>
+                <button @click="noteOptionMenu()">{{ $t('REGLAGES_DE_DUREE') }}</button>
                 <div id="note-container" v-show="showNoteContainer">
-                    <p>Glisse les notes dans cette zone <br> pour composer ta musique !</p>
+                    <p>{{ $t('GLISSE_LES_NOTES') }} <br> {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
                 </div>
                 <div id="note-option-container" v-show="showNoteOption">
                     <div id="option-note-container"></div>
                     <div id="note-option">
-                        <p>Aucune note sélectionnée</p>
+                        <p>{{ $t('AUCUNE_NOTE_SELECTIONNEE') }}</p>
                     </div>
                 </div>
-                <button @click="deleteNote()" v-if="noteSelected">Supprimer la note</button>
-                <button disabled @click="deleteNote()" v-if="!noteSelected">Supprimer la note</button>
+                <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
             </div>
             <button id="play" @click="handlePlayClick()">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
-            <input type="text" v-model="userIdeaInput" placeholder="Nom de la musique">
+            <input type="text" v-model="userIdeaInput" :placeholder="$t('NOM_DE_LA_MUSIQUE')">
             <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
         </div>
     </div>
-    <div style="width:100%;height:0;padding-bottom:100%;position:relative;"><iframe src="https://giphy.com/embed/1DtYcLp3GDlY2RsVXd" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/stickers/mobile-white-rotatescreen-1DtYcLp3GDlY2RsVXd">via GIPHY</a></p>
+    <img src="@/assets/gif/rotate.gif" alt="rotate phone" class="rotateGif">
 </template>
 
 <script lang="ts">
@@ -128,6 +128,7 @@ interface Item {
 }
 
 export default defineComponent({
+    name: 'kbnotes',
     //Ici les variables utilisées dans le DOM
     props: {
         socket: {

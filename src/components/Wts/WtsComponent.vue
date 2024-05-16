@@ -35,31 +35,31 @@
             <div class="songCont">
         <div class="song-cards">
           <div class="song-card" v-if="musics[0]" >
-            <img src="../../assets/svg/image.svg" alt="image">
+            <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[0].title }}</p> 
             <p>{{ musics[0].artiste }}</p> 
             <p>{{ musics[0].album }}</p>
           </div>
           <div class="song-card" v-if="musics[1]">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[1].title }}</p>
             <p>{{ musics[1].artiste }}</p>
             <p>{{ musics[1].album }}</p>
           </div>
           <div class="song-card" v-if="musics[2]">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[2].title }}</p>
             <p>{{ musics[2].artiste }}</p>
             <p>{{ musics[2].album }}</p>
           </div>
           <div class="song-card" v-if="musics[3]">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[3].title }}</p>
             <p>{{ musics[3].artiste }}</p> 
             <p>{{ musics[3].album }}</p>
           </div>
           <div class="song-card" v-if="musics[4]">
-            <img src="../../assets/svg/image.svg" alt="image">
+            <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
             <p>{{ musics[4].title }}</p>
             <p>{{ musics[4].artiste }}</p>
             <p>{{ musics[4].album }}</p> 
@@ -71,7 +71,7 @@
       </div>
     </div>
   
-    <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony">
+    <!-- <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony"> -->
     <!-- <div class="footer">
           <footerApp></footerApp>
       </div> -->

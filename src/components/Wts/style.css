@@ -106,13 +106,13 @@
         z-index: -1;
     }
 
-    .playersList {
+    /* .playersList {
         width: 80%;
         margin: 120px auto auto;
         display: flex;
         flex-direction: column;
         align-items: stretch;
-    }
+    } */
 
     .playersContainer {
         flex-direction: row;
