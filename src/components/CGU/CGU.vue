@@ -1,4 +1,5 @@
 <template>
+    <langApp></langApp>
     <main class="CGU-main">
         <section>
             <h2>{{ $t('INTRODUCTION') }}</h2>
@@ -43,12 +44,13 @@
     </main>
 </template>
 
-<script>
+<script lang="ts">
+import langApp from '@/components/Lang/Lang.vue';
 
     export default({
     name: 'cguApp',
     components: {
-
+        langApp
     }
     });
 </script>

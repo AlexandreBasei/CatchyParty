@@ -45,6 +45,10 @@ const router = createRouter({
             path: "/game1",
             component: game1_screen,
         },
+        {
+            path: "/wts",
+            component: WtsComponent,
+        },
         // {
         //     path: "/game2",
         //     component: game2_screen,

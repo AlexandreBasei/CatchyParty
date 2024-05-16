@@ -83,5 +83,18 @@
     "ASSEZ_DE_JOUEURS": "Assez de joueurs",
     "PAS_ASSEZ_DE_JOUEURS": "Pas assez de joueurs",
     "ASSEZ_DE_JEUX": "Assez de jeux",
-    "PAS_ASSEZ_DE_JEUX": "Pas assez de jeux"
+    "PAS_ASSEZ_DE_JEUX": "Pas assez de jeux",
+    "A_SOUMIS_IDEE": "a soumis l'idée :",
+    "MUSIQUE_COMPOSEE_PAR": "Musique composée par",
+    "MANCHE": "Manche",
+    "AFFICHER_LE_PRECEDENT": "Afficher le précédent",
+    "AFFICHER_LE_SUIVANT": "Afficher le suivant",
+    "NOM_DE_LA_MUSIQUE": "Nom de la musique",
+    "SUITE_DE_NOTE": "Suite de notes",
+    "REGLAGES_DE_DUREE": "Réglages de durée",
+    "GLISSE_LES_NOTES": "Glisse les notes dans cette zone",
+    "POUR_COMPOSER_TA_MUSIQUE": "pour composer ta musique !",
+    "AUCUNE_NOTE_SELECTIONNEE": "Aucune note sélectionnée",
+    "SUPPRIMER_LA_NOTE": "Supprimer la note",
+    "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : "
 }
