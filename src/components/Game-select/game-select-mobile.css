@@ -6,6 +6,15 @@
         width: 70%;
     }
 
+    .personalization-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+
     .player-icon {
         width: 20px;
         height: 20px;
@@ -22,10 +31,6 @@
 
     .playersList p {
         margin: 0 0 0 0;
-    }
-
-    .game-container{
-        width: 45%;
     }
 
     #shareLink{
@@ -45,10 +50,6 @@
 
     .personalization-options > div{
         flex-wrap: wrap;
-    }
-
-    .game{
-        height: 20vh;
     }
 
     select, input[type=text], button{

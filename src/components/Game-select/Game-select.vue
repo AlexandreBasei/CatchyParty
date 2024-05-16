@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <h3>Déroulement de la Partie ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
+                <h3>{{ $t('DEROULEMENT_PARTIE') }} ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
 
                 <div class="games-selected" @drop="handleDrop" @dragover.prevent>
                     <div class="all-games">
@@ -73,7 +73,7 @@
             </div>
 
             <div v-if="!player.host" class="settings guest">
-                <h2>L'hôte configure la partie...</h2>
+                <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
             </div>
 
             <form @submit.prevent="start()">

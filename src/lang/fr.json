@@ -77,5 +77,11 @@
     "SELECTION_DU_MANAGER": "Selection du manager",
     "RETOUR": "Retour",
     "COPIE": "Copié !",
-    "ROUND": "Tour"
+    "ROUND": "Tour",
+    "DEROULEMENT_PARTIE": "Déroulement de la partie",
+    "HOTE_CONFIGURE_PARTIE": "L'hôte configure la partie...",
+    "ASSEZ_DE_JOUEURS": "Assez de joueurs",
+    "PAS_ASSEZ_DE_JOUEURS": "Pas assez de joueurs",
+    "ASSEZ_DE_JEUX": "Assez de jeux",
+    "PAS_ASSEZ_DE_JEUX": "Pas assez de jeux"
 }
