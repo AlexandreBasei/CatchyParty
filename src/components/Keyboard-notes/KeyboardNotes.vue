@@ -12,7 +12,7 @@
                 </div>
                 <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
                 <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-                <button @click="endGame()">Terminer la manche</button>
+                <button @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
