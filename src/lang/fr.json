@@ -97,5 +97,6 @@
     "AUCUNE_NOTE_SELECTIONNEE": "Aucune note sélectionnée",
     "SUPPRIMER_LA_NOTE": "Supprimer la note",
     "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : ",
-    "TERMINER_LA_MANCHE": "Terminer la manche"
+    "TERMINER_LA_MANCHE": "Terminer la manche",
+    "ALERTE_PSEUDO": "Tu dois entrer un pseudo !"
 }

@@ -184,7 +184,7 @@ export default defineComponent({
                 this.homepage = false;
                 localStorage.setItem('homepage', JSON.stringify(this.homepage));
             } else {
-                alert("Tu dois entrer un pseudo !")
+                alert(this.$t('ALERTE_PSEUDO'))
             }
         },
         nextStepFr() {

@@ -1,5 +1,6 @@
 .lang{
     width: 5vh;
+    cursor: pointer;
 }
 
 .langCont{
