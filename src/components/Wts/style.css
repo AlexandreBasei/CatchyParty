@@ -1,5 +1,12 @@
+/* Modification du fichier game-select en 800px pour avoir affichage mobile sous 800px au lieu de 600px */
 p, h3 {
     text-align: center;
+    padding: 0px 20px;
+}
+
+.content-2 {
+    display: flex;
+    flex-direction: column;
 }
 
 .song-card{
@@ -16,24 +23,10 @@ p, h3 {
     color: var(--black);
 }
 
-.playersList {
-    background-color: var(--primary);
-    z-index: 1;
-}
 
 .playersContainer {
     flex-direction: column;
     align-items: center;
-}
-
-.playerContainer {
-    display: flex;
-    align-items: center;
-    margin-top: 10px; 
-    flex-direction: row;
-    justify-content: space-around;
-    height: 10vh;
-    width: 13vw;
 }
 
 .player-icon {
@@ -91,12 +84,8 @@ p, h3 {
         width: 150%;
     }
 
-    .song-card {
-        height: 20vh;
-    }
-
     .game-main{
-        height: 15vh;
+        height: 30%;
         background-color: var(--primary);
         border-radius: 20px;
         margin: 5% 5% 15% 5%;
@@ -126,7 +115,9 @@ p, h3 {
     }
 
     .playerContainer {
+        display: flex;
         flex-flow: column;
+        align-items: center;
     }
 
     .rect-container {
