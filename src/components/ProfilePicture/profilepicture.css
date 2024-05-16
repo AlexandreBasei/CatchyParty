@@ -1,11 +1,11 @@
 .profile-picture {
-    width: 55px;
+    width: 75px;
     aspect-ratio: 1/1;
     display: flex;
     gap: 5px;
 
     position: relative;
-    border-radius: var(--borderradius);
+    border-radius: 100%;
     overflow: hidden;
 }
 

@@ -1,55 +1,158 @@
 .content{
-    width: 80%;
+    width: 1500px;
+    max-width: 90%;
     gap: 25px;
     display: flex;
 }
-.settings{
-    width: 100%;
+
+
+.playersList {
+    background-color: var(--black);
+    border-radius: var(--borderradius);
+    padding: 20px 40px;
+    width: 20%;
+
+    position: relative;
+
     display: flex;
     flex-direction: column;
 }
-
-.settings.guest{
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    /* margin-bottom: 50%; */
+.playersList h3 {
+    text-align: center;
 }
 
-.settings form{
+.playersContainer{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+}
+
+.playerContainer{
+    display: flex;
+    flex-flow: wrap column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    margin: 20px 0px;
+}
+.playerContainer > div{
+    display: flex;
+    flex-flow: nowrap row;
+    justify-content: flex-start;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
+    width: 100%;
+}
+
+.personalization-section {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.games-block{
+    padding: 20px 40px;
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
+    width: -webkit-fill-available;
+
+    text-align: center;
+
+    
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+
+
+.games-options,
+.games-selected{
+    overflow-x: auto;
+    position: relative;
+}
+.games-options::-webkit-scrollbar,
+.games-selected::-webkit-scrollbar {
+    height: 10px;
+    background-color: var(--black);
+    border-radius: 8px;
+}
+
+.games-options::-webkit-scrollbar-thumb,
+.games-selected::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--tertiary)
+}
+.all-games{
+    min-height: 50px;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    width: fit-content;
+}
+.games-selected .all-games{
+  gap: 40px;  
 }
 
 .game-container{
-    width: 30%;
+    /* width: 30%;
+    height: 250px; */
+
+    position: relative;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    width: 175px;
+    aspect-ratio: 1/1;
 }
-.game-options{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    margin: 20px 0px;
+.games-selected .game-container::before {
+    background: url('@/assets/svg/icons/croixRed.svg') no-repeat;
+    background-size: contain;
+    position: absolute;
+    pointer-events: none;
+    width: 30px;
+    right: 10px;
+    top: 0px;
+    transform: translateX(50%);
+    aspect-ratio: 1/1;
+    content: '';
+    z-index: 1;
+}
+.games-selected .game-container:not(:last-of-type):after {
+    background: url('@/assets/svg/icons/arrowR.svg') no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 30px;
+    right: -25px;
+    top: 75px;
+    transform: translateX(50%);
+    aspect-ratio: 1/1;
+    content: '';
 }
 .game {
     display: flex;
     justify-content: center;
     align-items: center;
 
-    height: 100%;
+    aspect-ratio: 1/1;
     padding: 15px;
     border-radius: var(--borderradius);
     
-    background-color: var(--secondary);
+    background: linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
+
     cursor: pointer;
     position: relative;
 
     overflow: hidden;
+}
+.games-selected .game {
+    background: linear-gradient(193deg, var(--tertiary) 29%, var(--white));
+}
+.games-selected .game:hover {
+    border: 5px solid red;
 }
 
 .game::before{
@@ -63,7 +166,7 @@
 
     z-index: 0;
     
-    background-image: url("@/assets/svg/extend/motif2.svg");
+    background-image: url("@/assets/svg/motifs/motif2.svg");
     background-repeat: repeat;
     background-size: 150px 150px, cover;
 }
@@ -73,83 +176,88 @@
     max-height: 80%;
 
     z-index: 1;
+    transition: all 0.2s ease-in;
+}
+
+@keyframes rotateImg {
+    0%{
+        transform: rotate(0deg);
+    }
+    1%{
+        transform: rotate(-15deg);
+    }
+    2%{
+       transform: rotate(15deg);
+    }
+    3%,100%{
+       transform: rotate(0deg);
+    }
+}
+
+.game:hover img{
+    transform: scale(1.1);
+}
+
+.game:not(:hover) img{
+    animation: rotateImg 8s ease-in forwards;
+}
+
+.game-arrow{
+    position: absolute;
+    height: 30px;
+    background-color: transparent;
+
+    cursor: pointer;
+    top: 50%;
+    z-index: 10;
+}
+.game-arrow:nth-of-type(1){
+    left: 0px;
+}
+.game-arrow:nth-of-type(2){
+    right: 0px;
+}
+.game-arrow img{
+    max-width: 100%;
+    max-height: 100%;
 }
 
 
-.personalization{
-    justify-content: center;
+
+
+form{
     display: flex;
-    margin: 35px 0px;
-    text-align: center;
+    align-items: center;
+    gap: 25px;
 }
-
-.personalization-main {
-    padding: 20px 40px;
-    position: relative;
-    background-color: var(--primary);
-    border-radius: var(--borderradius);
-
-    width: 80%;
-    min-height:30rem;
-}
-
-.personalization-options{
+form .messages{
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-.personalization-options > div{
-    display: flex;
     gap: 10px;
-    align-items: center;
-    justify-content: space-between;
+    color: red;
+    text-shadow: 0px 0px 1px var(--black);
 }
-.personalization-options select{
-    background-color: var(--tertiary);
-    color: var(--black);
-    padding: 10px 5px;
-    border: 0px;
-    border-radius: var(--borderradius);
+.messages .green-text{
+    color: green;
 }
-
-.game-container p {
-    font-size: 80%;
-}
-
-ul {
-    list-style-type: none;
-}
-
-ul li {
-    width: fit-content;
-}
-
-
 #shareLink,
-.startGame,
-.shareLink {
-    background-color: var(--tertiary);
-    color: var(--black);
+.startGame {
     font-weight: 600;
     padding: 20px 15px;
     border-radius: var(--borderradius);
-    border-color: transparent;
     cursor: pointer;
     transition: all 0.2s ease;
 }
-
-.shareLink, #shareLink{
-    width: 100%;
-}
-
 .startGame:hover {
     transform: scale(1.03);
 }
 
-#startGameDisabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
+
+
+
+
+
+
 
 .hostMenuButton {
     background-color: transparent;
@@ -161,11 +269,11 @@ ul li {
     padding-right: 10px;
 }
 
-.playerContainer .hostMenu {
+.hostMenu {
     display: none;
     position: absolute;
     left: 100%;
-    top: 100%;
+    /* top: 100%; */
     width: 50%;
     flex-flow: wrap row;
     align-items: start;
@@ -191,16 +299,3 @@ ul li {
 }
 
 
-
-.playersList {
-    background-color: var(--black);
-    border-radius: var(--borderradius);
-    padding: 20px 40px;
-    width: 20%;
-
-    position: relative
-}
-
-.playersList h3 {
-    text-align: center;
-}

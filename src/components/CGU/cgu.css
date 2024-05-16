@@ -1,15 +1,6 @@
 @media only screen and (min-width: 1000px) {
     .CGU-main{
-        height: 80vh;
-        margin: 0 20vh 20vh;
-    }
-
-    header{
-        height: 10vh;
-    }
-
-    footer{
-        height: 5vh;
+        margin: 0 20vh 0 20vh;
     }
 }
 

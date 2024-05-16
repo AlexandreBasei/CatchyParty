@@ -1,19 +1,22 @@
 <template>
+    <langApp></langApp>
     <div class="container">
         <h1>{{ $t('CONTACTEZ_NOUS') }}</h1>
         <p>{{ $t('CONTACTEZ_NOUS_TEXTE') }}</p>
         <div>
-            <span id="email">owen.donnars@gmail.com</span>
-            <img class="email-icon" src="../../assets/svg/icons/copy.svg" alt="Email Icon" width="20" height="20" @click="copyEmail()">
+            <span id="email">catchyparty0@gmail.com</span>
+            <img class="email-icon" src="@/assets/svg/icons/copy.svg" alt="Email Icon" width="20" height="20" @click="copyEmail()">
         </div>
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import langApp from '@/components/Lang/Lang.vue';
+
     export default({
     name: 'contactApp',
     components: {
-
+        langApp
     },
     methods:{
         copyEmail() {
@@ -27,7 +30,7 @@
                 document.execCommand('copy');
                 document.body.removeChild(tempInput);
                 
-                alert("L'email a été copié dans le presse-papiers : " + email);
+                alert(this.$t('EMAIL_COPIEE') + email);
             }
     },
     });

@@ -19,17 +19,17 @@
             
             <div class="avatar-container">
                 <ul class="arrows">
-                    <button type="button" @click="previousAvatarPart('eyes')" :disabled="avatarData[1] === 0">&lt;</button>
-                    <button type="button" @click="previousAvatarPart('mouth')" :disabled="avatarData[2] === 0">&lt;</button>
-                    <button type="button" @click="previousAvatarPart('body')" :disabled="avatarData[0] === 0">&lt;</button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('eyes')" :disabled="avatarData[1] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('mouth')" :disabled="avatarData[2] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('body')" :disabled="avatarData[0] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
                 </ul>
 
-                <ProfilePicture :width="200" :bodyIndex="avatarData[0]" :eyesIndex="avatarData[1]" :mouthIndex="avatarData[2]" />
+                <ProfilePicture :width="300" :bodyIndex="avatarData[0]" :eyesIndex="avatarData[1]" :mouthIndex="avatarData[2]" />
 
                 <ul class="arrows">
-                    <button type="button" @click="nextAvatarPart('eyes')" :disabled="avatarData[1] === maxEyesIndex-1">&gt;</button>
-                    <button type="button" @click="nextAvatarPart('mouth')" :disabled="avatarData[2] === maxMouthIndex-1">&gt;</button>
-                    <button type="button" @click="nextAvatarPart('body')" :disabled="avatarData[0] === maxBodyIndex-1">&gt;</button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('eyes')" :disabled="avatarData[1] === maxEyesIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('mouth')" :disabled="avatarData[2] === maxMouthIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('body')" :disabled="avatarData[0] === maxBodyIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
                 </ul>
             </div>
         </div>
