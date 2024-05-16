@@ -108,13 +108,22 @@ io.on('connection', (socket) => {
         io.to(player.socketId).emit('receivePlayer', player);
     });
 
-    socket.on('update gamesChosen', (gamesChosen, player) => {
-        rooms.forEach(room => {
-            if (player.roomId === room.id) {
-                room.gamesChosen = gamesChosen;
-            }
-        })
-        io.emit('get gamesChosen', gamesChosen);
+    // socket.on('update gamesChosen', (gamesChosen, player) => {
+    //     rooms.forEach(room => {
+    //         if (player.roomId === room.id) {
+    //             room.gamesChosen = gamesChosen;
+    //         }
+    //     })
+    //     io.emit('get gamesChosen', gamesChosen);
+    // });
+    socket.on('update gamesChosen', (roomId, updatedGamesChosen) => {
+        console.log('update gamesChosen to '+updatedGamesChosen);
+        const room = rooms.find(room => room.id === roomId);
+        if (room) {
+            room.gamesChosen = updatedGamesChosen;
+            io.to(roomId).emit('room updated', room);
+            io.to(roomId).emit('get gamesChosen', updatedGamesChosen);
+        }
     });
 
     socket.on('game started', (gamesChosen) => {

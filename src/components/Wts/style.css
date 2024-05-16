@@ -23,10 +23,6 @@ p, h3 {
     color: var(--black);
 }
 
-.playersList {
-    background-color: var(--primary);
-    z-index: 1;
-}
 
 .playersContainer {
     flex-direction: column;
@@ -41,7 +37,7 @@ p, h3 {
     justify-content: space-around;
     height: 10vh;
     width: 13vw;
-}
+} */
 
 /* .player-icon {
     width: 50px; 
@@ -76,7 +72,7 @@ p, h3 {
     right: 0; 
     z-index: -1; 
 }
-
+/* 
 @media only screen and (max-width: 800px) {
     /* .content{
         height: 100vh;
@@ -224,4 +220,4 @@ p, h3 {
         left: 50%;
         transform: translateX(-50%);
     }
-}
+} */
