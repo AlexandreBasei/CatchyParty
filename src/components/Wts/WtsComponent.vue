@@ -1,6 +1,5 @@
 <template>
     <headerApp></headerApp>
-    <div class="content" style="overflow-y: auto;">
           <div class="content-2">
             <main class="game-main">
               <section class="description">
@@ -51,6 +50,7 @@
   
     <!-- <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony"> -->
     <!-- <div class="footer">
+
           <footerApp></footerApp>
       </div> -->
 </template>

@@ -43,6 +43,10 @@
   display: none;
 }
 
+.rotateGif{
+  display: none;
+}
+
 .note-parameters {
   display: flex;
   flex-flow: wrap row;

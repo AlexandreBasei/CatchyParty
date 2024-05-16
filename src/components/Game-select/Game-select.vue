@@ -93,11 +93,8 @@
                 </div>
             </form>
         </section>
-
         <Kbnotes v-else-if="game === 1" :socket="socket"></Kbnotes>
-
         <ClassicoComponent v-else-if="game === 2" :socket="socket"></ClassicoComponent>
-
         <WtsComponent v-else-if="game === 3" :socket="socket"></WtsComponent>
     </div>
 </template>
@@ -237,10 +234,6 @@ export default defineComponent({
         })
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
-            this.gamesChosen = gamesChosen;
-        });
-
-        this.socket.on('get gamesChosen', (gamesChosen: []) => {
             console.log('gamesChosen updated in local for everyone');
             this.gamesChosen = gamesChosen;
         });
@@ -329,7 +322,6 @@ export default defineComponent({
 
             this.socket.on('list rooms', (rooms: Room[]) => {
                 this.rooms = rooms;
-                
                 // rooms.forEach(room => {
                 //     if (this.player.roomId === room.id) {
                 //         // this.gamesChosen = room.gamesChosen;
