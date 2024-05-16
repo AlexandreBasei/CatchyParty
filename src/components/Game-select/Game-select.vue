@@ -55,7 +55,7 @@
                     </div>
                 </div>
 
-                <h3>Déroulement de la Partie ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
+                <h3>{{ $t('DEROULEMENT_PARTIE') }} ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
 
                 <div class="games-selected" @drop="handleDrop" @dragover.prevent>
                     <div class="all-games">
@@ -70,7 +70,7 @@
             </div>
 
             <div v-if="!player.host" class="settings guest">
-                <h2>L'hôte configure la partie...</h2>
+                <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
             </div>
 
             <form @submit.prevent="start()">
@@ -80,18 +80,16 @@
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
-                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{
-        roomWithPlayers.players.length }})
+                        {{ roomWithPlayers.players.length >= 2 ? $t('ASSEZ_DE_JOUEURS') : $t('PAS_ASSEZ_DE_JOUEURS') }} ({{ roomWithPlayers.players.length }})
                     </span>
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
-                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{ gamesChosen.length }})
+                        {{ gamesChosen.length >= 1 ? $t('ASSEZ_DE_JEUX') : $t('PAS_ASSEZ_DE_JEUX') }} ({{gamesChosen.length}})
                     </span>
                 </div>
             </form>
         </section>
     </div>
-
-    <Kbnotes v-if="game === 1" :socket="socket"></Kbnotes>
+    <Kbnotes v-if="game === 1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
 
     <ClassicoComponent v-if="game === 2" :socket="socket"></ClassicoComponent>
 
@@ -161,7 +159,7 @@ export default defineComponent({
             maxRounds: 5,
             currentRound: 0,
             games: [
-                { id: 1, name: this.$t('KEYBOARD_NOTES'), image: require("@/assets/svg/partinies/solar.svg") },
+                { id: 1, name: "Keyboard-notes", image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
                 { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
             ],

@@ -5,6 +5,7 @@ import contactApp from "@/components/Contact/Contact.vue";
 import aboutApp from "@/components/About/About.vue";
 import game_select from "@/components/Game-select/Game-select.vue";
 import game1_screen from "@/components/Game1-screen/Game1-screen.vue";
+import WtsComponent from "@/components/Wts/WtsComponent.vue";
 // import game2_screen from "@/components/Game2-screen/Game2-screen.vue";
 // import game3_screen from "@/components/Game3-screen/Game3-screen.vue";
 // import game4_screen from "@/components/Game4-screen/Game4-screen.vue";
@@ -43,6 +44,10 @@ const router = createRouter({
         {
             path: "/game1",
             component: game1_screen,
+        },
+        {
+            path: "/wts",
+            component: WtsComponent,
         },
         // {
         //     path: "/game2",
