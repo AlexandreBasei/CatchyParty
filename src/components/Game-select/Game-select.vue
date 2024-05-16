@@ -49,7 +49,7 @@
                     </div>
                 </div>
 
-                <h3>Déroulement de la Partie ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
+                <h3>{{ $t('DEROULEMENT_PARTIE') }} ({{ gamesChosen.length }}/{{ maxRounds }})</h3>
 
                 <div class="games-selected" @drop="handleDrop" @dragover.prevent>
                     <div class="all-games">
@@ -64,7 +64,7 @@
             </div>
 
             <div v-if="!player.host" class="settings guest">
-                <h2>L'hôte configure la partie...</h2>
+                <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
             </div>
 
             <form @submit.prevent="start('game1')">
@@ -72,16 +72,16 @@
 
                 <div class="messages" v-if="rooms">
                     <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
-                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{ roomWithPlayers.players.length }})
+                        {{ roomWithPlayers.players.length >= 2 ? $t('ASSEZ_DE_JOUEURS') : $t('PAS_ASSEZ_DE_JOUEURS') }} ({{ roomWithPlayers.players.length }})
                     </span>
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
-                        {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{gamesChosen.length}})
+                        {{ gamesChosen.length >= 1 ? $t('ASSEZ_DE_JEUX') : $t('PAS_ASSEZ_DE_JEUX') }} ({{gamesChosen.length}})
                     </span>
                 </div>           
             </form>
         </section>
     </div>
-
+    
     <Kbnotes v-if="game1" :socket="socket" :maxRounds="maxRounds"></Kbnotes>
 
 </template>

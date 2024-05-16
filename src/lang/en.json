@@ -77,6 +77,12 @@
     "SELECTION_DU_MANAGER": "Manager selection",
     "RETOUR": "Back",
     "COPIE": "Copied!",
-    "ROUND": "Round"
+    "ROUND": "Round",
+    "DEROULEMENT_PARTIE": "Progress of the game",
+    "HOTE_CONFIGURE_PARTIE": "The host is conguring the game...",
+    "ASSEZ_DE_JOUEURS": "Enough players",
+    "PAS_ASSEZ_DE_JOUEURS": "Not enough players",
+    "ASSEZ_DE_JEUX": "Enough games",
+    "PAS_ASSEZ_DE_JEUX": "Not enough games"
   }
   
