@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <div v-if="!player.host" class="settings-guest">
+                <div v-if="!player.host" class="guest-settings">
                     <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
                 </div>
             </div>

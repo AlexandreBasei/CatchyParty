@@ -18,22 +18,23 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue';
 import langApp from '@/components/Lang/Lang.vue';
 
-    export default({
+export default defineComponent({
     name: 'aboutApp',
+    components: {
+        langApp
+    },
     data() {
-    return {
-        lang: ''
-    };
+        return {
+            lang: 'fr' as string | null
+        };
     },
     mounted() {
         this.lang = localStorage.getItem('lang');
     },
-    components: {
-        langApp
-    }
-    });
+});
 </script>
 
 <style lang="css" scoped>
