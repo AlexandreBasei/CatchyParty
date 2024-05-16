@@ -41,7 +41,7 @@
             </button>
 
         </section>
-        <section class="personalization-section" v-if="!game1">
+        <section class="personalization-section" v-if="game === 0">
             <!-- v-if="rooms.some(room => room.id === player.roomId)" -->
             <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
@@ -78,13 +78,14 @@
 
             <form @submit.prevent="start()">
                 <button class="startGame"
-                    :disabled="((roomWithPlayers && roomWithPlayers.players.length < 2 || gamesChosen.length < 1)) || !player.host">{{
-        $t('DEMARRER_PARTIE') }}</button>
+                    :disabled="((currentRoomPlayers && currentRoomPlayers.players.length < 2 || gamesChosen.length < 1)) || !player.host">{{
+                    $t('DEMARRER_PARTIE') }}
+                </button>
 
-                <div class="messages" v-if="rooms">
-                    <span v-if="roomWithPlayers" :class="{ 'green-text': roomWithPlayers.players.length >= 2 }">
-                        {{ roomWithPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{
-        roomWithPlayers.players.length }})
+                <div class="messages">
+                    <span v-if="currentRoomPlayers" :class="{ 'green-text': currentRoomPlayers.players.length >= 2 }">
+                        {{ currentRoomPlayers.players.length >= 2 ? 'Assez de joueurs' : 'Pas assez de joueurs' }} ({{
+                        currentRoomPlayers.players.length }})
                     </span>
                     <span v-if="gamesChosen" :class="{ 'green-text': gamesChosen.length >= 1 }">
                         {{ gamesChosen.length >= 1 ? 'Assez de jeux' : 'Pas assez de jeux' }} ({{ gamesChosen.length }})
@@ -93,14 +94,12 @@
             </form>
         </section>
 
+        <Kbnotes v-else-if="game === 1" :socket="socket"></Kbnotes>
+
+        <ClassicoComponent v-else-if="game === 2" :socket="socket"></ClassicoComponent>
+
+        <WtsComponent v-else-if="game === 3" :socket="socket"></WtsComponent>
     </div>
-
-    <Kbnotes v-if="game === 1" :socket="socket"></Kbnotes>
-
-    <ClassicoComponent v-if="game === 2" :socket="socket"></ClassicoComponent>
-
-    <WtsComponent v-if="game === 3" :socket="socket"></WtsComponent>
-
 </template>
 
 <script lang="ts">
@@ -114,7 +113,7 @@ import ClassicoComponent from '../Classico/ClassicoComponent.vue';
 interface Room {
     id: string;
     rewind: [];
-    gamesChosen: [];
+    gamesChosen: number[];
     players: {
         host: boolean,
         avatar: [number, number, number],
@@ -180,6 +179,9 @@ export default defineComponent({
         this.socket.on('join room', (player: any) => {
             this.player = player;
             this.currentRoom = player.roomId;
+            // if (this.currentRoomPlayers){
+            //     this.socket.emit('update gamesChosen', this.currentRoomPlayers.id, this.gamesChosen);
+            // }
         });
 
         this.socket.on('get rounds', (maxRounds: number) => {
@@ -203,7 +205,7 @@ export default defineComponent({
 
         this.socket.on('game start', (gamesChosen: []) => {
 
-            this.gamesChosen = gamesChosen;
+            // this.gamesChosen = gamesChosen;
 
             switch (this.gamesChosen[this.currentRound]) {
                 case 1:
@@ -235,12 +237,13 @@ export default defineComponent({
         })
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
+            console.log('gamesChosen updated in local for everyone');
             this.gamesChosen = gamesChosen;
         });
 
-        setInterval(() => {
-            this.updRooms();
-        }, 20);
+        // setInterval(() => {
+        this.updRooms();
+        // }, 20);
 
         document.addEventListener('click', (event: MouseEvent) => {
             /*eslint no-undef: 0*/
@@ -260,14 +263,27 @@ export default defineComponent({
         // this.updateAvatar();
 
     },
+    // watch: {
+    //     gamesChosen: {
+    //         handler(newValue: any, oldValue: any) {
+    //             if (this.player.host && this.currentRoomPlayers){
+    //                 this.socket.emit('update gamesChosen', this.currentRoomPlayers.id, newValue);
+    //                 console.log('Changing gamesChosen for room n°'+this.currentRoomPlayers.id+" with "+this.gamesChosen)
+    //             }
+    //         },
+    //         deep: true,
+    //     },
+    // },
     computed: {
-        roomWithPlayers() {
+        currentRoomPlayers() {
             return this.rooms.find(room => room.id === this.player.roomId);
-        }
+        },
     },
     methods: {
         handleDragStart(game: { id: number }) {
-            this.draggedGameId = game.id;
+            if (this.player.host) {
+                this.draggedGameId = game.id;
+            }
         },
         handleDrop(event: DragEvent) {
             event.preventDefault();
@@ -278,14 +294,16 @@ export default defineComponent({
             }
         },
         handleGameClick(id: number) {
-            if (this.gamesChosen.length < this.maxRounds) {
+            if (this.player.host && this.currentRoomPlayers && this.gamesChosen && this.gamesChosen.length < this.maxRounds) {
                 this.gamesChosen.push(id);
-                this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
+                this.socket.emit('update gamesChosen', this.currentRoomPlayers.id, this.gamesChosen);
             }
         },
         handleRemoveGame(index: number) {
-            this.gamesChosen.splice(index, 1);
-            this.socket.emit('update gamesChosen', this.gamesChosen, this.player);
+            if (this.player.host && this.currentRoomPlayers){
+                this.gamesChosen.splice(index, 1);
+                this.socket.emit('update gamesChosen', this.currentRoomPlayers.id, this.gamesChosen);
+            }
         },
         getGameName(id: number) {
             const game = this.games.find(game => game.id === id);
@@ -298,14 +316,23 @@ export default defineComponent({
         updRooms() {
             this.socket.emit('get rooms');
 
+            this.socket.on('room updated', (updatedRoom: Room) => {
+                const index = this.rooms.findIndex(room => room.id === updatedRoom.id);
+                if (index !== -1) {
+                    this.rooms.splice(index, 1, updatedRoom);
+                }
+            });
+
             this.socket.on('list rooms', (rooms: Room[]) => {
                 this.rooms = rooms;
-
-                rooms.forEach(room => {
-                    if (this.player.roomId === room.id) {
-                        this.gamesChosen = room.gamesChosen;
-                    }
-                });
+                
+                // rooms.forEach(room => {
+                //     if (this.player.roomId === room.id) {
+                //         // this.gamesChosen = room.gamesChosen;
+                //         room.gamesChosen = this.gamesChosen;
+                //         console.log(room.gamesChosen)
+                //     }
+                // });
             });
         },
 
@@ -421,26 +448,6 @@ export default defineComponent({
             }
             return false;
         },
-        // updateAvatar() {
-        //     var img = document.getElementById('avatarImg');
-        //     var avatarPath = this.getAvatar();
-        //     // img.src = avatarPath;
-        //     // var img1 = document.getElementById('pseudoPlayer1');
-        //     // var pseudoText = this.getPseudo();
-        //     // img1.textContent = pseudoText;
-        // },
-        // getAvatar() {
-        //     var avatar = localStorage.getItem('selectedAvatar');
-        //     if (avatar == 'Avatar 1') {
-        //         return '../../assets/Comparaison.png';
-        //     }
-        //     if (avatar == 'Avatar 2') {
-        //         return '../../assets/Realping.png';
-        //     }
-        //     if (avatar == 'Avatar 3') {
-        //         return '../../assets/security.png';
-        //     }
-        // },
         // getPseudo() {
         //     var pseudo = localStorage.getItem('pseudoP1');
         //     if (!pseudo) {
