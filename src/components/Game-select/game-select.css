@@ -72,12 +72,12 @@
 
     text-align: center;
 
-    
     display: flex;
     flex-direction: column;
     gap: 20px;
     -webkit-tap-highlight-color: transparent;
     user-select: none;
+    position: relative;
 }
 
 
@@ -120,7 +120,7 @@
     width: 175px;
     aspect-ratio: 1/1;
 }
-.games-selected .game-container::before {
+.personalization-section.hosting .games-selected .game-container::before {
     background: url('@/assets/svg/icons/croixRed.svg') no-repeat;
     background-size: contain;
     position: absolute;
@@ -163,9 +163,16 @@
 .games-selected .game {
     background: linear-gradient(193deg, var(--tertiary) 29%, var(--white));
 }
-.games-selected .game:hover {
+.personalization-section.hosting .games-selected .game:hover {
     border: 5px solid red;
 }
+.personalization-section:not(.hosting) .games-options .game {
+    background: linear-gradient(193deg,  var(--secondary) 29%, var(--grey));
+}
+.personalization-section:not(.hosting) .games-selected .game {
+    background: linear-gradient(193deg, var(--grey) 29%, var(--white));
+}
+
 
 .game::before{
     content: '';
@@ -235,7 +242,30 @@
     max-height: 100%;
 }
 
-
+.guest-settings{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    border-radius: var(--borderradius);
+    overflow: hidden;
+}
+.guest-settings::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--black);
+    opacity: 0.7;
+    z-index: -1;
+}
 
 
 form{
@@ -256,8 +286,6 @@ form .messages{
 #shareLink,
 .startGame {
     font-weight: 600;
-    padding: 20px 15px;
-    border-radius: var(--borderradius);
     cursor: pointer;
     transition: all 0.2s ease;
 }
