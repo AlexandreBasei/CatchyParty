@@ -20,9 +20,6 @@
     display: flex;
     flex-direction: column;
 }
-.playersList h3 {
-    text-align: center;
-}
 
 .playersContainer{
     display: flex;
@@ -39,22 +36,53 @@
     margin: 20px 0px;
 }
 .playerContainer > div{
+    position: relative;
+
     display: flex;
     flex-flow: nowrap row;
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
     width: 100%;
+
+    padding: 2px;
+    border-radius: calc(var(--borderradius) + 7px);
+    box-sizing: border-box;
+}
+.currentPlayer{
+    background: linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
 }
 .pseudoPlayer{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
 }
-.pseudoPlayer>div{
-    display: flex;
-    gap: 5px;
+.profile-picture-wrapper{
+    position: relative;
 }
+.profile-picture-wrapper.hosting::before{
+    content: '';
+    display: block;
+    position: absolute;
+    background-image: url("@/assets/svg/icons/crownny.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1;
+}
+/* .pseudoPlayer>div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+} */
+/* .pseudoPlayer .crownny{
+    max-width: 40px;
+} */
 
 .personalization-section {
     width: 80%;
@@ -80,6 +108,11 @@
     position: relative;
 }
 
+.games-block h3{
+    border-radius: var(--borderradius);
+    background-color: var(--black);
+    color: var(--white);
+}
 
 
 .games-options,
@@ -167,10 +200,10 @@
     border: 5px solid red;
 }
 .personalization-section:not(.hosting) .games-options .game {
-    background: linear-gradient(193deg,  var(--secondary) 29%, var(--grey));
+    background: linear-gradient(193deg,  var(--grey) 29%, var(--secondary));
 }
 .personalization-section:not(.hosting) .games-selected .game {
-    background: linear-gradient(193deg, var(--grey) 29%, var(--white));
+    background: linear-gradient(193deg, var(--grey) 29%, var(--tertiary));
 }
 
 
@@ -292,7 +325,9 @@ form .messages{
 .startGame:hover {
     transform: scale(1.03);
 }
-
+.startGame:disabled {
+    cursor: not-allowed;
+}
 
 
 
@@ -313,16 +348,35 @@ form .messages{
 .hostMenu {
     display: none;
     position: absolute;
-    left: calc(100% + 10px);
-    /* top: 100%; */
-    width: 50%;
+    left: calc(100% + 15px);
+    top: 50%;
+    width: 150px;
     flex-flow: wrap row;
     align-items: start;
     justify-content: center;
-    background-color: var(--tertiary);
+    background-color: var(--grey);
+    border: 2px solid var(--white);
     border-radius: var(--borderradius);
     padding: 10px;
     z-index: 10;
+    overflow: hidden;
+    transform: translateY(-50%);
+}
+.hostMenu::before {
+    content: '';
+
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    opacity: 0.2;
+
+    z-index: -1;
+    top: 0;
+    
+    background-image: url("@/assets/svg/motifs/motif3.svg");
+    background-repeat: repeat;
+    background-size: 300px 220px, cover;
 }
 
 .hostMenu button {
@@ -333,13 +387,5 @@ form .messages{
 .hostMenu button:hover {
     opacity: .5;
 }
-
-.hostMenu button:first-child {
-    border-bottom: 0.5px solid black;
-}
-.hostMenu button:last-child {
-    border-top: 0.5px solid black;
-}
-
 
 

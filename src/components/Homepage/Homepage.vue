@@ -19,17 +19,17 @@
             
             <div class="avatar-container">
                 <ul class="arrows">
-                    <button class="no-hover" type="button" @click="previousAvatarPart('eyes')" :disabled="avatarData[1] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
-                    <button class="no-hover" type="button" @click="previousAvatarPart('mouth')" :disabled="avatarData[2] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
-                    <button class="no-hover" type="button" @click="previousAvatarPart('body')" :disabled="avatarData[0] === 0"><img src="@/assets/svg/icons/arrowL.svg"></button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('eyes')"><img src="@/assets/svg/icons/arrowL.svg"></button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('mouth')"><img src="@/assets/svg/icons/arrowL.svg"></button>
+                    <button class="no-hover" type="button" @click="previousAvatarPart('body')"><img src="@/assets/svg/icons/arrowL.svg"></button>
                 </ul>
 
                 <ProfilePicture :width="300" :bodyIndex="avatarData[0]" :eyesIndex="avatarData[1]" :mouthIndex="avatarData[2]" />
 
                 <ul class="arrows">
-                    <button class="no-hover" type="button" @click="nextAvatarPart('eyes')" :disabled="avatarData[1] === maxEyesIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
-                    <button class="no-hover" type="button" @click="nextAvatarPart('mouth')" :disabled="avatarData[2] === maxMouthIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
-                    <button class="no-hover" type="button" @click="nextAvatarPart('body')" :disabled="avatarData[0] === maxBodyIndex-1"><img src="@/assets/svg/icons/arrowR.svg"></button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('eyes')" ><img src="@/assets/svg/icons/arrowR.svg"></button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('mouth')"><img src="@/assets/svg/icons/arrowR.svg"></button>
+                    <button class="no-hover" type="button" @click="nextAvatarPart('body')"><img src="@/assets/svg/icons/arrowR.svg"></button>
                 </ul>
             </div>
         </div>
@@ -215,21 +215,21 @@ export default defineComponent({
         },
         
         previousAvatarPart(part: string) {
-            if (part === 'body' && this.avatarData[0] > 0) {
-                this.avatarData[0]--;
-            } else if (part === 'eyes' && this.avatarData[1] > 0) {
-                this.avatarData[1]--;
-            } else if (part === 'mouth' && this.avatarData[2] > 0) {
-                this.avatarData[2]--;
+            if (part === 'body') {
+                this.avatarData[0] = (this.avatarData[0] - 1 + this.maxBodyIndex) % this.maxBodyIndex;
+            } else if (part === 'eyes') {
+                this.avatarData[1] = (this.avatarData[1] - 1 + this.maxEyesIndex) % this.maxEyesIndex;
+            } else if (part === 'mouth') {
+                this.avatarData[2] = (this.avatarData[2] - 1 + this.maxMouthIndex) % this.maxMouthIndex;
             }
         },
         nextAvatarPart(part: string) {
-            if (part === 'body' && this.avatarData[0] < this.maxBodyIndex - 1) {
-                this.avatarData[0]++;
-            } else if (part === 'eyes' && this.avatarData[1] < this.maxEyesIndex - 1) {
-                this.avatarData[1]++;
-            } else if (part === 'mouth' && this.avatarData[2] < this.maxMouthIndex - 1) {
-                this.avatarData[2]++;
+            if (part === 'body') {
+                this.avatarData[0] = (this.avatarData[0] + 1) % this.maxBodyIndex;
+            } else if (part === 'eyes') {
+                this.avatarData[1] = (this.avatarData[1] + 1) % this.maxEyesIndex;
+            } else if (part === 'mouth') {
+                this.avatarData[2] = (this.avatarData[2] + 1) % this.maxMouthIndex;
             }
         },
 
