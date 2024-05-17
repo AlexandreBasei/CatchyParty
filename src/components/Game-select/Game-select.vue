@@ -35,7 +35,8 @@
                 </div>
             </div>
             <button id="shareLink" :class="{ 'shareLink': copied }"
-                @click="copy(`localhost:8080?room=${player.roomId}`)">
+                @click="copyLink">
+                <!-- (`localhost:8080?room=${player.roomId}`) -->
                 {{ copied ? $t('COPIE') : $t('COPIER_LIEN') }}
             </button>
 
@@ -93,6 +94,7 @@
                 </div>
             </form>
         </section>
+        <!-- TODO passer en paramètre de component, l'interRoundDuration -->
         <Kbnotes v-else-if="game === 1" :socket="socket"></Kbnotes>
         <ClassicoComponent v-else-if="game === 2" :socket="socket"></ClassicoComponent>
         <WtsComponent v-else-if="game === 3" :socket="socket"></WtsComponent>
@@ -111,6 +113,7 @@ interface Room {
     id: string;
     rewind: [];
     gamesChosen: number[];
+    round: number;
     players: {
         host: boolean,
         avatar: [number, number, number],
@@ -170,7 +173,8 @@ export default defineComponent({
             draggedIndex: null as number | null,
             dots: '' as string,
             maxDots: 3,
-            interval: undefined as number | undefined
+            interval: undefined as number | undefined,
+            interRoundDuration: 5
         }
     },  
     created() {
@@ -253,9 +257,7 @@ export default defineComponent({
         });
 
         document.addEventListener('click', (event: MouseEvent) => {
-            /*eslint no-undef: 0*/
             const modals = document.querySelectorAll('.hostMenu') as NodeListOf<HTMLElement>;
-            /*eslint no-undef: 0*/
             const buttons = document.querySelectorAll('.hostMenuButton') as NodeListOf<HTMLElement>;
 
             modals.forEach((modal) => {
@@ -266,11 +268,24 @@ export default defineComponent({
         });
 
         // this.roundsNumber();
-        this.playersNumber();
+        // this.playersNumber();
         // this.updateAvatar();
 
     },
     methods: {
+        updRooms() {
+            this.socket.emit('get rooms');
+
+            this.socket.on('list rooms', (rooms: Room[]) => {
+                this.rooms = rooms;
+                rooms.forEach(room => {
+                    if (this.player.roomId === room.id) {
+                        this.gamesChosen = room.gamesChosen;
+                    }
+                });
+            });
+        },
+
         startDotsAnimation() {
             let count = 0;
             this.interval = setInterval(() => {
@@ -283,6 +298,7 @@ export default defineComponent({
                 clearInterval(this.interval);
             }
         },
+
         handleDragStart(game: { id: number }) {
             if (this.player.host) {
                 this.draggedGameId = game.id;
@@ -308,6 +324,7 @@ export default defineComponent({
                 this.socket.emit('update gamesChosen', this.currentRoomPlayers.id, this.gamesChosen);
             }
         },
+
         getGameName(id: number) {
             const game = this.games.find(game => game.id === id);
             return game ? game.name : '';
@@ -315,18 +332,6 @@ export default defineComponent({
         getGameImage(id: number) {
             const game = this.games.find(game => game.id === id);
             return game ? game.image : '';
-        },
-        updRooms() {
-            this.socket.emit('get rooms');
-
-            this.socket.on('list rooms', (rooms: Room[]) => {
-                this.rooms = rooms;
-                rooms.forEach(room => {
-                    if (this.player.roomId === room.id) {
-                        this.gamesChosen = room.gamesChosen;
-                    }
-                });
-            });
         },
 
         resetPlayer() {
@@ -349,13 +354,18 @@ export default defineComponent({
             });
         },
 
+        setHost(player: any) {
+            this.player.host = false;
+            this.socket.emit("set host", player);
+
+            const menuToDisplay = document.getElementById(player.socketId);
+
+            if (menuToDisplay) {
+                menuToDisplay.style.display = "none";
+            }
+        },
         kickPlayer(socketId: string) {
-
             this.rooms.forEach(room => {
-                console.log("roomId : ", room.id);
-                console.log("this roomId :", this.currentRoom);
-
-
                 if (room.id === this.currentRoom) {
                     console.log("kick");
                     this.socket.emit("kick player", socketId);
@@ -366,31 +376,34 @@ export default defineComponent({
         sendRounds() {
             this.socket.emit("send rounds", this.maxRounds);
         },
-
         getRounds() {
             this.socket.emit("get rounds");
         },
 
-        copy(text: string) {
-            navigator.clipboard.writeText(text);
-            this.copied = true;
-            setTimeout(() => {
-                this.copied = false;
-            }, 1500);
+        copyLink() {
+            const link = `${window.location.origin}?room=${this.player.roomId}`;
+            navigator.clipboard.writeText(link).then(() => {
+                this.copied = true;
+                setTimeout(() => {
+                    this.copied = false;
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
         },
 
-        playersNumber() {
-            var selectElement = document.getElementById("nbPlayers");
+        // playersNumber() {
+        //     var selectElement = document.getElementById("nbPlayers");
 
-            for (var i = 1; i <= 10; i++) {
-                var option = document.createElement("option");
-                option.text = i.toString();
-                option.value = i.toString();
-                if (selectElement) {
-                    selectElement.appendChild(option);
-                }
-            }
-        },
+        //     for (var i = 1; i <= 10; i++) {
+        //         var option = document.createElement("option");
+        //         option.text = i.toString();
+        //         option.value = i.toString();
+        //         if (selectElement) {
+        //             selectElement.appendChild(option);
+        //         }
+        //     }
+        // },
         // roundsNumber() {
         //     var selectElement = document.getElementById("nbRounds");
 
@@ -420,18 +433,6 @@ export default defineComponent({
                 menuToDisplay.style.display = "flex";
             }
         },
-
-        setHost(player: any) {
-            this.player.host = false;
-            this.socket.emit("set host", player);
-
-            const menuToDisplay = document.getElementById(player.socketId);
-
-            if (menuToDisplay) {
-                menuToDisplay.style.display = "none";
-            }
-        },
-
         isButtonClicked(buttons: any, target: Node): boolean {
 
             for (const button of buttons) {
@@ -441,14 +442,6 @@ export default defineComponent({
             }
             return false;
         },
-        // getPseudo() {
-        //     var pseudo = localStorage.getItem('pseudoP1');
-        //     if (!pseudo) {
-        //         return 'Randomname';
-        //     } else {
-        //         return pseudo;
-        //     }
-        // },
 
         start() {
             this.socket.emit('game started', this.gamesChosen);

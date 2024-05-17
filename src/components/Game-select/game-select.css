@@ -324,9 +324,6 @@ form .messages{
 .startGame:hover {
     transform: scale(1.03);
 }
-.startGame:disabled {
-    cursor: not-allowed;
-}
 
 
 

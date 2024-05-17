@@ -114,6 +114,7 @@ button:disabled{
     background-color: var(--grey) !important;
     border: 2px solid var(--grey) !important;
     color: var(--darkgrey) !important;
+    cursor: not-allowed;
 }
 button img{
     max-width: 100%;
