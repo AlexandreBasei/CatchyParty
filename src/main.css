@@ -96,6 +96,8 @@ button{
     transition: all 0.2s ease;
     cursor: pointer;
     border: 0px solid transparent;
+    padding: 20px 15px;
+    border-radius: var(--borderradius);
 }
 button:not(.no-background){
     border: 2px solid var(--tertiary);

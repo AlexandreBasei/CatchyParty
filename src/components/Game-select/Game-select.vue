@@ -41,7 +41,7 @@
             </button>
 
         </section>
-        <section class="personalization-section" v-if="game === 0">
+        <section class="personalization-section" :class="{ hosting: player.host }" v-if="game === 0">
             <!-- v-if="rooms.some(room => room.id === player.roomId)" -->
             <div class="games-block">
                 <h3>{{ $t('SELECTION_DES_JEUX') }}</h3>
@@ -70,11 +70,12 @@
                         </div>
                     </div>
                 </div>
+
+                <div v-if="!player.host" class="guest-settings">
+                    <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
+                </div>
             </div>
 
-            <div v-if="!player.host" class="settings guest">
-                <h2>{{ $t('HOTE_CONFIGURE_PARTIE') }}</h2>
-            </div>
 
             <form @submit.prevent="start()">
                 <button class="startGame"
@@ -313,12 +314,12 @@ export default defineComponent({
         updRooms() {
             this.socket.emit('get rooms');
 
-            this.socket.on('room updated', (updatedRoom: Room) => {
-                const index = this.rooms.findIndex(room => room.id === updatedRoom.id);
-                if (index !== -1) {
-                    this.rooms.splice(index, 1, updatedRoom);
-                }
-            });
+            // this.socket.on('room updated', (updatedRoom: Room) => {
+            //     const index = this.rooms.findIndex(room => room.id === updatedRoom.id);
+            //     if (index !== -1) {
+            //         this.rooms.splice(index, 1, updatedRoom);
+            //     }
+            // });
 
             this.socket.on('list rooms', (rooms: Room[]) => {
                 this.rooms = rooms;

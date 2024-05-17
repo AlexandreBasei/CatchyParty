@@ -11,18 +11,20 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref } from 'vue';
 import langApp from '@/components/Lang/Lang.vue';
 
-    export default({
+export default defineComponent({
     name: 'contactApp',
     components: {
         langApp
     },
     methods:{
         copyEmail() {
-                const emailElement = document.getElementById('email');
-                const email = emailElement.textContent;
+            const emailElement = document.getElementById('email');
+            const email = emailElement?.textContent;
 
+            if (email) {
                 const tempInput = document.createElement('input');
                 tempInput.value = email;
                 document.body.appendChild(tempInput);
@@ -32,6 +34,7 @@ import langApp from '@/components/Lang/Lang.vue';
                 
                 alert(this.$t('EMAIL_COPIEE') + email);
             }
+        }
     },
     });
 </script>

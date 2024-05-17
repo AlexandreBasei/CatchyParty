@@ -35,12 +35,10 @@ ul.arrows{
     justify-content:space-around;
 }
 ul.arrows > *{
+    padding: 0px;
     width: 50px;
-    aspect-ratio: 1/1;
-    color: var(--black);
+    height: 50px;
     font-weight: bold;
-    background-color: var(--tertiary);
-    border-radius: var(--borderradius);
     border: 0px;
 
     display: flex;
@@ -50,7 +48,7 @@ ul.arrows > *{
     transition: all 0.2s ease;
 }
 ul.arrows button img{
-    width: 50%;
+    width: 40%;
 }
 ul.arrows:nth-of-type(2n+1) >*:hover {
     transform: translateX(-5px) scale(1.1);
@@ -86,7 +84,6 @@ ul.arrows:nth-of-type(2n) >*:hover {
 }
 
 .backBtn{
-    padding: 20px 15px;
     border-radius: var(--borderradius);
     
     position: absolute;
