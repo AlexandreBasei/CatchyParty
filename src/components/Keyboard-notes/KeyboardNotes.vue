@@ -18,62 +18,69 @@
         <div class="end-game" v-show="showEndGame">
             <h2 id="play">{{ $t('PARTIE_TERMINEE') }}</h2>
         </div>
-        <!-- Affichage du temps restant -->
-        <div id="timer" v-show="timerInGame">
-            {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
-        </div>
-        <!-- Affichage du temps restant dans le décompte des 30 secondes -->
-        <div id="countdown" v-show="timerInterGame">
-            {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
-        </div>
+       
         <!-- <div class="Waiting-game" v-show="showWaitingGame">
             <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
                 :disabled="gameStarted">{{ $t('KEYBOARD_NOTES') }}</button>
         </div> -->
         <div class="first-step" v-show="firstStepGame">
             <label for="userIdea">{{ $t('ENTREZ_NOM_MUSIQUE') }}</label>
-            <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')">
+            <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')" class="justHere">
             <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
             <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
-        <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
-            <div v-if="item.receiverId === socket.id">
-                <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
-            </div>
-        </div>
 
         <div class="main-game" v-show="showMainGame">
-            <div id="piano">
-                <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
-                <div class="key" data-note="A1" @click="playSound('A1')" draggable="true">A1</div>
-                <div class="key" data-note="A2" @click="playSound('A2')" draggable="true">A2</div>
-                <div class="key" data-note="B0" @click="playSound('B0')" draggable="true">B0</div>
-                <div class="key" data-note="B1" @click="playSound('B1')" draggable="true">B1</div>
-                <div class="key" data-note="B2" @click="playSound('B2')" draggable="true">B1</div>
-                <div class="key" data-note="C1" @click="playSound('C1')" draggable="true">C1</div>
-                <div class="key" data-note="C2" @click="playSound('C2')" draggable="true">C2</div>
-                <div class="key" data-note="C3" @click="playSound('C3')" draggable="true">C3</div>
-                <div class="key" data-note="D1" @click="playSound('D1')" draggable="true">D1</div>
-                <div class="key" data-note="D2" @click="playSound('D2')" draggable="true">D2</div>
-                <div class="key" data-note="D3" @click="playSound('D3')" draggable="true">D3</div>
-                <div class="key" data-note="E1" @click="playSound('E1')" draggable="true">E1</div>
-                <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
+                <!-- Affichage du temps restant -->
+            <div id="timer" v-show="timerInGame">
+                {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
             </div>
-            <div class="note-parameters">
-                <button @click="noteContainerMenu()">{{ $t('SUITE_DE_NOTE') }}</button>
-                <button @click="noteOptionMenu()">{{ $t('REGLAGES_DE_DUREE') }}</button>
-                <div id="note-container" v-show="showNoteContainer">
-                    <p>{{ $t('GLISSE_LES_NOTES') }} <br> {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
-                </div>
-                <div id="note-option-container" v-show="showNoteOption">
-                    <div id="option-note-container"></div>
-                    <div id="note-option">
-                        <p>{{ $t('AUCUNE_NOTE_SELECTIONNEE') }}</p>
+            <!-- Affichage du temps restant dans le décompte des 30 secondes -->
+            <div id="countdown" v-show="timerInterGame">
+                {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
+            </div>
+            <div class="topBlock">
+                <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
+                    <div v-if="item.receiverId === socket.id">
+                        <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
                     </div>
                 </div>
-                <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
-                <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                <div id="piano">
+                    <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
+                    <div class="key" data-note="A1" @click="playSound('A1')" draggable="true">A1</div>
+                    <div class="key" data-note="A2" @click="playSound('A2')" draggable="true">A2</div>
+                    <div class="key" data-note="B0" @click="playSound('B0')" draggable="true">B0</div>
+                    <div class="key" data-note="B1" @click="playSound('B1')" draggable="true">B1</div>
+                    <div class="key" data-note="B2" @click="playSound('B2')" draggable="true">B1</div>
+                    <div class="key" data-note="C1" @click="playSound('C1')" draggable="true">C1</div>
+                    <div class="key" data-note="C2" @click="playSound('C2')" draggable="true">C2</div>
+                    <div class="key" data-note="C3" @click="playSound('C3')" draggable="true">C3</div>
+                    <div class="key" data-note="D1" @click="playSound('D1')" draggable="true">D1</div>
+                    <div class="key" data-note="D2" @click="playSound('D2')" draggable="true">D2</div>
+                    <div class="key" data-note="D3" @click="playSound('D3')" draggable="true">D3</div>
+                    <div class="key" data-note="E1" @click="playSound('E1')" draggable="true">E1</div>
+                    <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
+                </div>
             </div>
+            <hr class="line">
+            <div class="bottomBlock">
+                <div class="note-parameters">
+                    <button @click="noteContainerMenu()">{{ $t('SUITE_DE_NOTE') }}</button>
+                    <button @click="noteOptionMenu()">{{ $t('REGLAGES_DE_DUREE') }}</button>
+                    <div id="note-container" v-show="showNoteContainer">
+                        <p>{{ $t('GLISSE_LES_NOTES') }} <br> {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
+                    </div>
+                    <div id="note-option-container" v-show="showNoteOption">
+                        <div id="option-note-container"></div>
+                        <div id="note-option">
+                            <p>{{ $t('AUCUNE_NOTE_SELECTIONNEE') }}</p>
+                        </div>
+                    </div>
+                    <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                    <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                </div>
+            </div>
+
             <button id="play" @click="handlePlayClick()">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
@@ -129,7 +136,7 @@ interface Item {
 }
 
 export default defineComponent({
-    name: 'kbnotes',
+    name: 'KbNotes',
     //Ici les variables utilisées dans le DOM
     props: {
         socket: {
@@ -166,8 +173,8 @@ export default defineComponent({
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
-            interRoundDuration: 10,
+            roundDuration: 1000000, // Durée de chaque tour en secondes
+            interRoundDuration: 1000000,
             timerInterval: 0,
             secondsLeft: 0,
             assignedIdea: {} as AssignedIdea,
