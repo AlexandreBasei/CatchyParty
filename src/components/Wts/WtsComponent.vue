@@ -1,27 +1,6 @@
 <template>
     <headerApp></headerApp>
     <div class="content">
-          <section class="playersList">
-              <h3>Players</h3>
-              <div class="rect-container">
-                <div class="colored-rectangle"></div>
-            </div>
-              <div class="playersContainer">
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 1">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 2">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-                  <div class="playerContainer">
-                      <img class="player-icon" id="avatarImg" alt="player 3">
-                      <p class="pseudoPlayer">Yannis</p>
-                  </div>
-              </div>
-              <input type="submit" value="Inviter joueur" class="inviteBtn" style="margin: auto;">
-          </section>
           <div class="content-2">
             <main class="game-main">
               <section class="description">
