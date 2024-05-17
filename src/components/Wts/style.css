@@ -7,6 +7,7 @@ p, h3 {
 .content-2 {
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .song-card{

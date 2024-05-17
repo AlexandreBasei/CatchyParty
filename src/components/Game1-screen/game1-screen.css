@@ -23,7 +23,7 @@
 
     .game-main{
         height: 30vh;
-        background-color: var(--tertiary);
+        background-color: var(--primary);
         border-radius: var(--borderradius);
         margin: 5% 5% 15% 5%;
     }
