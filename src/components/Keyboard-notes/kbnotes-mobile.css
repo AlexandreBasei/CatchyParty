@@ -17,11 +17,16 @@
     margin-top: 20px;
   }
 
+  .content{
+    margin-top: 15vh;
+  }
+
 }
 
 @media only screen and (max-width: 600px) and (orientation: portrait) {
   .rotateGif {
     display: block;
+    width: 100%;
   }
 
   .Kbnotes{
