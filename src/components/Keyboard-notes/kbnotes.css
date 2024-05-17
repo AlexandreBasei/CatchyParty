@@ -6,13 +6,12 @@
 }
 
 .Kbnotes{
-  padding: 20px 40px;
+  padding: 0px 40px;
   border-radius: var(--borderradius);
   width: -webkit-fill-available;
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
 }
@@ -43,6 +42,7 @@
   flex-flow: wrap column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 #piano {
@@ -214,4 +214,35 @@
   align-items: center;
   border-radius: 20rem;
   cursor: pointer;
+}
+
+#timer{
+  position: absolute;
+  right: 0;
+  top: -20px;
+  transform: translateY(-100%);
+  background-color: var(--primary);
+  color: var(--white);
+  border: 2px solid var(--white);
+  border-radius: var(--borderradius);
+  padding: 20px 15px;
+}
+
+#play{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.play{
+  width: 40px;
+}
+
+.play:not(:hover){
+  filter: brightness(0);
+}
+
+#play:hover .play{
+  filter: brightness(1);
 }

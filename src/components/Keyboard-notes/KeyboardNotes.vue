@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <button id="play" @click="handlePlayClick()">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
+            <button id="play" @click="handlePlayClick()"><img src="@/assets/svg/play.svg" class="play" alt="play">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
