@@ -80,6 +80,7 @@
     "ROUND": "Tour",
     "DEROULEMENT_PARTIE": "Déroulement de la partie",
     "HOTE_CONFIGURE_PARTIE": "L'hôte configure la partie",
+    "HOST_START": "Seul l'hôte peut lancer la partie",
     "ASSEZ_DE_JOUEURS": "Assez de joueurs",
     "PAS_ASSEZ_DE_JOUEURS": "Pas assez de joueurs",
     "ASSEZ_DE_JEUX": "Assez de jeux",

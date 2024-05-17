@@ -32,7 +32,7 @@
     "JOUEURS": "Players",
     "NOUVEAU_HOTE": "Define new room's host",
     "EJECTER_JOUEUR": "Kick this player",
-    "COPIER_LIEN": "Copy the link",
+    "COPIER_LIEN": "Copy link",
     "SELECTION_DES_JEUX": "Games selection",
     "KEYBOARD_NOTES": "Keyboard-notes",
     "NOMBRE_DE_JOUEURS": "Number of players",
@@ -78,8 +78,9 @@
     "RETOUR": "Back",
     "COPIE": "Copied!",
     "ROUND": "Round",
-    "DEROULEMENT_PARTIE": "Progress of the game",
+    "DEROULEMENT_PARTIE": "Game progress",
     "HOTE_CONFIGURE_PARTIE": "The host is conguring the game",
+    "HOST_START": "Only the host can start the game",
     "ASSEZ_DE_JOUEURS": "Enough players",
     "PAS_ASSEZ_DE_JOUEURS": "Not enough players",
     "ASSEZ_DE_JEUX": "Enough games",
@@ -97,6 +98,6 @@
     "AUCUNE_NOTE_SELECTIONNEE": "No notes selected",
     "SUPPRIMER_LA_NOTE": "Delete note",
     "EMAIL_COPIEE": "The email has been copied to the clipboard : ",
-    "TERMINER_LA_MANCHE": "End the round"
+    "TERMINER_LA_MANCHE": "End round"
   }
   
