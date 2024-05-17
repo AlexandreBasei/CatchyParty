@@ -69,10 +69,7 @@
     background-color: var(--primary);
     border-radius: var(--borderradius);
     width: -webkit-fill-available;
-
     text-align: center;
-
-    
     display: flex;
     flex-direction: column;
     gap: 20px;
