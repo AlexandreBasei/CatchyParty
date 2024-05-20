@@ -18,7 +18,7 @@
         <div class="end-game" v-show="showEndGame">
             <h2 id="play">{{ $t('PARTIE_TERMINEE') }}</h2>
         </div>
-       
+
         <!-- <div class="Waiting-game" v-show="showWaitingGame">
             <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
                 :disabled="gameStarted">{{ $t('KEYBOARD_NOTES') }}</button>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="main-game" v-show="showMainGame">
-                <!-- Affichage du temps restant -->
+            <!-- Affichage du temps restant -->
             <div id="timer" v-show="timerInGame">
                 {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
             </div>
@@ -81,7 +81,8 @@
                 </div>
             </div>
 
-            <button id="play" @click="handlePlayClick()"><img src="@/assets/svg/play.svg" class="play" alt="play">{{ $t('ECOUTE_TA_MUSIQUE') }}</button>
+            <button id="play" @click="handlePlayClick()"><img src="@/assets/svg/play.svg" class="play" alt="play">{{
+                $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
@@ -143,6 +144,10 @@ export default defineComponent({
             type: Object,
             required: true
         },
+        roomId: {
+            type: String,
+            required: true
+        },
     },
 
     data() {
@@ -173,8 +178,8 @@ export default defineComponent({
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 1000000, // Durée de chaque tour en secondes
-            interRoundDuration: 1000000,
+            roundDuration: 10, // Durée de chaque tour en secondes
+            interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
             assignedIdea: {} as AssignedIdea,
@@ -562,7 +567,7 @@ export default defineComponent({
         },
 
         endGame() {
-            this.socket.emit('endgame');
+            this.socket.emit('endgame', this.roomId);
         },
 
         Firststep() {

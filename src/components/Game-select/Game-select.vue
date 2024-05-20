@@ -95,9 +95,9 @@
             </form>
         </section>
         <!-- TODO passer en paramètre de component, l'interRoundDuration -->
-        <Kbnotes v-else-if="game === 1" :socket="socket"></Kbnotes>
-        <ClassicoComponent v-else-if="game === 2" :socket="socket"></ClassicoComponent>
-        <WtsComponent v-else-if="game === 3" :socket="socket"></WtsComponent>
+        <Kbnotes v-else-if="game === 1" :socket="socket" :roomId="player.roomId"></Kbnotes>
+        <ClassicoComponent v-else-if="game === 2" :socket="socket" :roomId="player.roomId"></ClassicoComponent>
+        <WtsComponent v-else-if="game === 3" :socket="socket" :roomId="player.roomId"></WtsComponent>
     </div>
 </template>
 
@@ -221,6 +221,10 @@ export default defineComponent({
         this.socket.on('game start', (gamesChosen: []) => {
 
             // this.gamesChosen = gamesChosen;
+            console.log("GAMES", this.gamesChosen);
+            console.log("CURRENT ROUND", this.currentRound);
+            
+            
 
             switch (this.gamesChosen[this.currentRound]) {
                 case 1:

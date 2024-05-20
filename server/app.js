@@ -108,14 +108,6 @@ io.on('connection', (socket) => {
         io.to(player.socketId).emit('receivePlayer', player);
     });
 
-    // socket.on('update gamesChosen', (gamesChosen, player) => {
-    //     rooms.forEach(room => {
-    //         if (player.roomId === room.id) {
-    //             room.gamesChosen = gamesChosen;
-    //         }
-    //     })
-    //     io.emit('get gamesChosen', gamesChosen);
-    // });
     socket.on('update gamesChosen', (roomId, updatedGamesChosen) => {
         console.log('update gamesChosen to '+updatedGamesChosen);
         const room = rooms.find(room => room.id === roomId);
@@ -130,8 +122,16 @@ io.on('connection', (socket) => {
         io.emit('game start', gamesChosen);
     });
 
-    socket.on('endgame', () => {
-        io.emit('endgame');
+    socket.on("WTS/nextRound", (roomId) =>  {
+        rooms.forEach(room => {
+            if (room.id === roomId) {
+                io.to(roomId).emit('nextRound', room);
+            }
+        });
+    });
+
+    socket.on("endgame", (roomId) => {
+        io.to(roomId).emit("endgame");
     })
 
     socket.on("send rounds", (maxRounds) => {
