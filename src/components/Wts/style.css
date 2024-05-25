@@ -5,6 +5,23 @@ h3 {
     padding: 0px 20px;
 }
 
+.rewindAll .rewind:not(:first-child) {
+    display: none;
+}
+
+.rewindAll:first-child {
+    display: block;
+}
+
+.rewind {
+    border: 2px solid black;
+    margin-bottom: 20px;
+}
+
+.rewind2{
+    border: 2px solid white;
+}
+
 .content-2 {
     display: flex;
     flex-direction: column;
@@ -83,7 +100,7 @@ h3 {
     height: 30%;
     background-color: var(--primary);
     border-radius: 20px;
-    margin: 5% 5% 15% 5%;
+    margin: 5% 5% 0 5%;
 }
 
 .vilo,

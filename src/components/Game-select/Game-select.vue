@@ -1,4 +1,5 @@
 <template>
+    <h1>Current round : {{ currentRound }}</h1>
     <div class="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>
@@ -97,7 +98,7 @@
         <!-- TODO passer en paramètre de component, l'interRoundDuration -->
         <Kbnotes v-else-if="game === 1" :socket="socket" :roomId="player.roomId"></Kbnotes>
         <ClassicoComponent v-else-if="game === 2" :socket="socket" :roomId="player.roomId"></ClassicoComponent>
-        <WtsComponent v-else-if="game === 3" :socket="socket" :roomId="player.roomId"></WtsComponent>
+        <WtsComponent v-else-if="game === 3" :socket="socket" :player="player"></WtsComponent>
     </div>
 </template>
 
@@ -224,9 +225,8 @@ export default defineComponent({
             console.log("GAMES", this.gamesChosen);
             console.log("CURRENT ROUND", this.currentRound);
             
-            
-
-            switch (this.gamesChosen[this.currentRound]) {
+            if (this.currentRound + 1 <= gamesChosen.length) {
+                switch (this.gamesChosen[this.currentRound]) {
                 case 1:
                     this.game = 1;
                     break;
@@ -238,8 +238,14 @@ export default defineComponent({
                     break;
                 default:
                     break;
-            }
+                }
             this.socket.emit('sendPlayer', this.player);
+            }
+            else{
+                this.game = 0;
+                this.currentRound = 0;
+                gamesChosen = [];
+            }
         });
 
         this.socket.on('endgame', () => {
@@ -256,7 +262,7 @@ export default defineComponent({
         })
 
         this.socket.on('get gamesChosen', (gamesChosen: []) => {
-            console.log('gamesChosen updated in local for everyone to: '+gamesChosen);
+            // console.log('gamesChosen updated in local for everyone to: '+gamesChosen);
             this.gamesChosen = gamesChosen;
         });
 
@@ -378,7 +384,7 @@ export default defineComponent({
         },
 
         sendRounds() {
-            this.socket.emit("send rounds", this.maxRounds);
+            this.socket.emit("send rounds", this.maxRounds, this.player.roomId);
         },
         getRounds() {
             this.socket.emit("get rounds");
@@ -448,7 +454,9 @@ export default defineComponent({
         },
 
         start() {
-            this.socket.emit('game started', this.gamesChosen);
+            if (this.player.host) {
+                this.socket.emit('game started', this.gamesChosen, this.player.roomId);
+            }
         }
     }
 })

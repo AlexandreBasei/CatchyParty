@@ -61,7 +61,7 @@ io.on('connection', (socket) => {
                     room.players.forEach(p => {
                         p.idea = false;
                     });
-                    io.emit('MainGame', room.roomIdeas);
+                    io.to(player.roomId).emit('MainGame', room.roomIdeas);
                     room.roomIdeas = [];
                 }
             }
@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('update gamesChosen', (roomId, updatedGamesChosen) => {
-        console.log('update gamesChosen to '+updatedGamesChosen);
+        console.log('update gamesChosen to ' + updatedGamesChosen);
         const room = rooms.find(room => room.id === roomId);
         if (room) {
             room.gamesChosen = updatedGamesChosen;
@@ -118,14 +118,24 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('game started', (gamesChosen) => {
-        io.emit('game start', gamesChosen);
+    socket.on('game started', (gamesChosen, roomId) => {
+        console.log("[game started executed] GamesChosen :", gamesChosen);
+        io.to(roomId).emit('game start', gamesChosen);
     });
 
-    socket.on("WTS/nextRound", (roomId) =>  {
+    socket.on("WTS/nextRound", (roomId) => {
         rooms.forEach(room => {
             if (room.id === roomId) {
                 io.to(roomId).emit('nextRound', room);
+            }
+        });
+    });
+
+    socket.on('WTS/rewind', (rewind, player) => {
+        rooms.forEach(room => {
+            if (room.id === player.roomId) {
+                room.rewind.push(rewind);
+                io.to(player.roomId).emit('WTS/final rewind', room);
             }
         });
     });
@@ -134,13 +144,13 @@ io.on('connection', (socket) => {
         io.to(roomId).emit("endgame");
     })
 
-    socket.on("send rounds", (maxRounds) => {
-        io.emit("get rounds", maxRounds);
+    socket.on("send rounds", (maxRounds, roomId) => {
+        io.to(roomId).emit("get rounds", maxRounds);
     });
 
-    socket.on('play', () => {
+    socket.on('play', (roomId) => {
         // Émettre un événement vers tous les clients pour démarrer la partie
-        io.emit('startGame');
+        io.to(roomId).emit('startGame');
         console.log('La partie démarre...');
     });
 
@@ -148,7 +158,7 @@ io.on('connection', (socket) => {
         rooms.forEach(room => {
             if (room.id === player.roomId) {
                 room.rewind.push(rewind);
-                io.emit('final rewind', room);
+                io.to(player.roomId).emit('final rewind', room);
             }
         });
     });

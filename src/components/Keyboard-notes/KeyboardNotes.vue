@@ -12,7 +12,7 @@
                 </div>
                 <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
                 <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-                <button @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+                <button v-if="player.host" @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -136,6 +136,18 @@ interface Item {
     rewindId: string;
 }
 
+interface Player {
+    host: boolean,
+    avatar: [number, number, number],
+    roomId: string,
+    socketId: string,
+    username: string,
+    idea: boolean,
+    turn: boolean,
+    win: boolean,
+    tabAttributed: boolean,
+}
+
 export default defineComponent({
     name: 'KbNotes',
     //Ici les variables utilisées dans le DOM
@@ -147,7 +159,7 @@ export default defineComponent({
         roomId: {
             type: String,
             required: true
-        },
+        }
     },
 
     data() {
@@ -182,20 +194,10 @@ export default defineComponent({
             interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
+            player: {} as Player,
             assignedIdea: {} as AssignedIdea,
             tabnotes: [] as Notes[],
             assignedIdeaDone: '',
-            player: {
-                host: false,
-                avatar: [0, 0, 0],
-                roomId: "",
-                username: "",
-                socketId: "",
-                turn: false,
-                win: false,
-                idea: false,
-                tabAttributed: false,
-            },
             rewind: [] as any[][],
             rewindAll: [],
             rewindCounter: 0,
@@ -228,17 +230,8 @@ export default defineComponent({
     },
     // Ici tout le code procédural
     mounted() {
-        this.rewindId = this.generateID();
-        this.socket.emit('play');
-        for (let index = 0; index < this.maxRounds; index++) {
-            this.rewind.push([{
-                ideas: '',
-                sendedMusic: '',
-                receivedMusic: '',
-                rewindId: '',
-                rewindOrder: 0
-            }]);
-        }
+        this.resetGame();
+
         const keys = document.querySelectorAll(".key");
         const noteContainer = document.getElementById("note-container")!;
         const noteOption = document.getElementById("note-option")!;
@@ -321,92 +314,7 @@ export default defineComponent({
         });
 
         noteContainer.addEventListener("drop", (event) => {
-            event.preventDefault();
-            if (event instanceof DragEvent) {
-                const note = event.dataTransfer?.getData("text/plain") || "";
-                const noteParameters = document.createElement("div");
-                const noteElement = document.createElement("span");
-                const noteElement2 = document.createElement("span");
-                const noteId = this.generateID();
-                noteParameters.id = noteId;
-                noteElement.id = noteId;
-                noteElement2.id = noteId + "_2";
-                noteElement.className = "note";
-                noteElement2.className = "note";
-                noteElement.textContent = note;
-                noteElement2.textContent = note;
-                noteParameters.dataset.duration = "1"; // Default duration
-                const durationInput = document.createElement("input");
-                durationInput.type = "range";
-                durationInput.min = "0.2";
-                durationInput.max = "2";
-                durationInput.step = "0.1";
-                durationInput.value = "1";
-
-                durationInput.addEventListener("change", () => {
-                    this.updateDuration(noteParameters.id, parseFloat(durationInput.value));
-                    noteElement.style.width = 20 + durationInput.value + "px";
-                });
-
-                noteOption.appendChild(noteParameters);
-                noteParameters.appendChild(durationInput);
-
-                const intervalInput = document.createElement("input");
-                intervalInput.type = "range";
-                intervalInput.min = "0.0";
-                intervalInput.max = "3";
-                intervalInput.step = "0.1";
-                intervalInput.value = "0";
-
-                intervalInput.addEventListener("change", () => {
-                    this.updateInterval(noteParameters.id, parseFloat(intervalInput.value));
-                    noteElement.style.marginRight = 10 + intervalInput.value + "px";
-                });
-
-                noteElement2.addEventListener("click", () => {
-                    this.noteSelected = noteId;
-                    const allNotes = optionNoteContainer.querySelectorAll(".note");
-                    allNotes.forEach((note: any) => {
-                        note.style.backgroundColor = "white";
-                    });
-                    noteElement2.style.backgroundColor = "#03ac98";
-
-                    const notesAll = document.querySelectorAll('#note-option div')!;
-                    const noNoteMsg: any = document.querySelector('#note-option p')!;
-
-                    if (this.noteSelected) {
-                        noNoteMsg.style.display = "none";
-                        notesAll.forEach((note: any) => {
-                            if (note.id === this.noteSelected) {
-                                note.style.display = "flex";
-                            }
-                            else {
-                                note.style.display = "none";
-                            }
-                        });
-                    }
-                    else {
-                        noNoteMsg.style.display = 'flex';
-                        notesAll.forEach((note: any) => {
-                            note.style.display = "none";
-                        });
-                    }
-                });
-
-                noteParameters.appendChild(intervalInput);
-                noteContainer.appendChild(noteElement);
-                optionNoteContainer.appendChild(noteElement2);
-
-                noteContainer.querySelector("p")!.style.display = "none";
-
-                // Load the sound for this note
-                this.sounds[note] = new Howl({
-                    src: [`./sounds/${note}.mp3`] // Path to local audio files
-                });
-
-                // Store the note and its duration
-                this.notesDuration.push({ composerName: this.player.username, infos: { id: noteParameters.id, note: note, duration: parseFloat(noteParameters.dataset.duration), interval: parseFloat(intervalInput.value) } });
-            }
+            this.handleDrop(event);
         });
     },
     //Ici les fonctions (méthodes)
@@ -549,6 +457,115 @@ export default defineComponent({
             this.playSounds(this.notesDuration2);
         },
 
+        handleDrop(event: DragEvent) {
+            event.preventDefault();
+
+            const noteContainer = document.getElementById("note-container")!;
+
+            if (event instanceof DragEvent) {
+                const note = event.dataTransfer?.getData('text/plain') || '';
+                const noteParameters = document.createElement('div');
+                const noteElement = document.createElement('span');
+                const noteElement2 = document.createElement('span');
+
+                const noteId = this.generateID();
+
+                noteParameters.id = noteId;
+
+                noteElement.id = noteId;
+                noteElement2.id = noteId + '_2';
+                noteElement.className = 'note';
+                noteElement2.className = 'note';
+                noteElement.textContent = note;
+                noteElement2.textContent = note;
+
+                noteParameters.dataset.duration = '1'; // Default duration
+
+                const durationInput = document.createElement('input');
+                durationInput.type = 'range';
+                durationInput.min = '0.2';
+                durationInput.max = '2';
+                durationInput.step = '0.1';
+                durationInput.value = '1';
+
+                durationInput.addEventListener('change', () => {
+                    this.updateDuration(noteParameters.id, parseFloat(durationInput.value));
+                    // noteElement.style.width = 20 + durationInput.value + 'px';
+                });
+
+                const noteOption = document.getElementById('note-option');
+                const optionNoteContainer = document.getElementById('option-note-container');
+
+                if (noteOption && optionNoteContainer) {
+                    noteOption.appendChild(noteParameters);
+                    noteParameters.appendChild(durationInput);
+
+                    const intervalInput = document.createElement('input');
+                    intervalInput.type = 'range';
+                    intervalInput.min = '0.0';
+                    intervalInput.max = '3';
+                    intervalInput.step = '0.1';
+                    intervalInput.value = '0';
+
+                    intervalInput.addEventListener('change', () => {
+                        this.updateInterval(noteParameters.id, parseFloat(intervalInput.value));
+                        // noteElement.style.marginRight = 10 + intervalInput.value + 'px';
+                    });
+
+                    noteElement2.addEventListener('click', () => {
+                        this.noteSelected = noteId;
+                        const allNotes = optionNoteContainer.querySelectorAll('.note');
+                        allNotes.forEach((note: any) => {
+                            note.style.backgroundColor = 'white';
+                        });
+                        noteElement2.style.backgroundColor = '#03ac98';
+
+                        const notesAll = document.querySelectorAll('#note-option div');
+                        const noNoteMsg: any = document.querySelector('#note-option p');
+
+                        if (this.noteSelected) {
+                            if (noNoteMsg) noNoteMsg.style.display = 'none';
+                            notesAll.forEach((note: any) => {
+                                if (note.id === this.noteSelected) {
+                                    note.style.display = 'flex';
+                                } else {
+                                    note.style.display = 'none';
+                                }
+                            });
+                        } else {
+                            if (noNoteMsg) noNoteMsg.style.display = 'flex';
+                            notesAll.forEach((note: any) => {
+                                note.style.display = 'none';
+                            });
+                        }
+                    });
+
+                    noteParameters.appendChild(intervalInput);
+                    noteContainer.appendChild(noteElement);
+                    optionNoteContainer.appendChild(noteElement2);
+
+                    const noteContainerMsg = noteContainer.querySelector('p');
+                    if (noteContainerMsg) noteContainerMsg.style.display = 'none';
+
+                    // Load the sound for this note
+                    this.sounds[note] = new Howl({
+                        src: [`./sounds/${note}.mp3`] // Path to local audio files
+                    });
+
+                    // Store the note and its duration
+                    this.notesDuration.push({
+                        composerName: this.player.username,
+                        infos: {
+                            id: noteParameters.id,
+                            note: note,
+                            duration: parseFloat(noteParameters.dataset.duration),
+                            interval: parseFloat(intervalInput.value)
+                        }
+                    });
+                }
+            }
+        },
+
         generateID() {
             return Math.random().toString(36).substr(2, 9);
         },
@@ -567,7 +584,9 @@ export default defineComponent({
         },
 
         endGame() {
-            this.socket.emit('endgame', this.roomId);
+            if (this.player.host) {
+                this.socket.emit('endgame', this.roomId);
+            }
         },
 
         Firststep() {
@@ -634,11 +653,11 @@ export default defineComponent({
         resetRound() {
             this.player.idea = false;
             this.player.tabAttributed = false;
-            // this.tabnotes = [] as Notes[];
             this.notesDuration2 = this.notesDuration;
-            this.notesDuration = [] as Notes[];
+            this.notesDuration = [];
 
-            const noteContainer = document.getElementById("note-container");
+            const noteContainer = document.getElementById('note-container');
+            const noteOptionContainer = document.getElementById('option-note-container');
 
             if (noteContainer) {
                 while (noteContainer.firstChild) {
@@ -646,6 +665,66 @@ export default defineComponent({
                 }
             }
 
+            if (noteOptionContainer) {
+                while (noteOptionContainer.firstChild) {
+                    noteOptionContainer.removeChild(noteOptionContainer.firstChild);
+                }
+            }
+        },
+
+        resetGame() {
+            this.sounds = {} as Record<string, Howl>;
+            this.noteContainer = [];
+            this.notesDuration = [] as Notes[];
+            this.notesDuration2 = [] as Notes[];
+            this.userIdeaInput = ''; // Variable pour stocker la valeur de l'input
+            this.userIdeas = [] as string[]; // Tableau pour stocker les réponses
+            this.guessInput = ''; // Variable pour stocker la valeur de l'input
+            this.Responses = [] as string[]; // Tableau pour stocker les réponses
+            this.firstStepGame = true;
+            this.ideaSubmitted = false;
+            this.gameStarted = false;
+            this.showMainGame = false;
+            this.showAfterGame = false;
+            this.player = {} as Player;
+            this.showEndGame = false;
+            this.showIdea = false;
+            this.showRewind = false;
+            this.showWaitingGame = true;
+            this.showNoteContainer = true;
+            this.showNoteOption = false;
+            this.timerInterGame = false;
+            this.timerInGame = false;
+            this.maxRounds = 3;
+            this.currentRound = 0;
+            this.noteSelected = "";
+            this.showTimer = false;
+            this.remainingTime = 0;
+            this.roundDuration = 10; // Durée de chaque tour en secondes
+            this.interRoundDuration = 10;
+            this.timerInterval = 0;
+            this.secondsLeft = 0;
+            this.assignedIdea = {} as AssignedIdea;
+            this.tabnotes = [] as Notes[];
+            this.assignedIdeaDone = '';
+            this.rewind = [] as any[][];
+            this.rewindAll = [];
+            this.rewindCounter = 0;
+            this.rewindId = '';
+            this.rewindOrder = 0;
+            this.currentIndex = 0;
+
+            this.rewindId = this.generateID();
+            this.socket.emit('play', this.roomId);
+            for (let index = 0; index < this.maxRounds; index++) {
+                this.rewind.push([{
+                    ideas: '',
+                    sendedMusic: '',
+                    receivedMusic: '',
+                    rewindId: '',
+                    rewindOrder: 0
+                }]);
+            }
         },
 
         formatTime(seconds: number): string {

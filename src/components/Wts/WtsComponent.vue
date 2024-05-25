@@ -2,7 +2,21 @@
   <div class="content-2">
     <section v-show="showEnd">
       <h2>Round terminé !</h2>
-    </section>    
+    </section>
+    <section class="rewindAll" v-show="showRewind">
+      <div class="rewind" v-for="(rewinds, index) in rewindAll" :key="index" v-bind:id="'joueur' + index">
+        <h2>Choix de {{ rewinds[index].username }}</h2>
+        <div class="rewind2" v-for="(rewind, index2) in rewinds" :key="index2">
+          <h3>Situation :</h3>
+          <p>{{ rewind.situation }}</p>
+          <h3>Musique choisie :</h3>
+          <p>{{ rewind.music }}</p>
+        </div>
+        <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
+        <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
+        <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+      </div>
+    </section>
     <main class="game-main" v-show="showGame">
       <section class="description">
         <h3>Round {{ currentTurn + 1 }}</h3>
@@ -87,8 +101,8 @@ export default defineComponent({
       type: Object,
       required: true
     },
-    roomId: {
-      type: String,
+    player: {
+      type: Object,
       required: true
     },
   },
@@ -104,17 +118,19 @@ export default defineComponent({
       room: [] as any,
       isSubmitDisabled: false,
       showGame: true,
+      showRewind: false,
       showEnd: false,
-      choicesTab: [] as any,
+      rewindTab: [] as any,
+      rewindAll: [] as any,
+      rewindCounter: 0 as number,
       selectedCard: 0 as number,
     };
   },
   mounted() {
+    this.resetGame();
     this.randomizeSituation();
     this.randomizeMusics();
     this.maxTurns--;
-    console.log("CURRENT ROOM", this.roomId);
-
 
     this.socket.on("nextRound", (room: any) => {
       this.room = room;
@@ -147,15 +163,84 @@ export default defineComponent({
 
       if (this.room.players.length === this.nextRoundCounter && this.currentTurn === this.maxTurns) {
         this.showGame = false;
-        this.showEnd = true;
-        setTimeout(() => {
-          this.socket.emit("endgame", this.roomId);
-        }, 3000)
+        // this.showRewind = true;
+        this.socket.emit("WTS/rewind", this.rewindTab, this.player);
       }
-    })
+    });
+
+    this.socket.on('WTS/final rewind', (room: any) => {
+      this.rewindAll = room.rewind;
+
+      this.rewindCounter++;
+      
+      if (this.rewindCounter === room.rewind.length) {
+        console.log("STITIIIIIII");
+        this.showRewind = true;
+        this.socket.emit("clear rewind", this.player.roomId);
+      }
+
+    });
 
   },
   methods: {
+    rewindBtns(order: number, id: number) {
+      const rewindDivs = document.querySelectorAll('.rewind');
+
+      rewindDivs.forEach(div => {
+        if ("joueur" + id === div.id) {
+          if (order) {
+            const nextDiv = document.getElementById('joueur' + (id + 1));
+
+            if (nextDiv instanceof HTMLElement && div instanceof HTMLElement) {
+              div.style.display = "none";
+              nextDiv.style.display = "block";
+            }
+          }
+          else {
+            const previousDiv = document.getElementById('joueur' + (id - 1));
+            if (previousDiv instanceof HTMLElement && div instanceof HTMLElement) {
+              div.style.display = "none";
+              previousDiv.style.display = "block";
+            }
+          }
+        }
+      });
+    },
+    resetGame() {
+      this.content = '' as string;
+      this.musics = [] as Music[];
+      this.currentTurn = 0 as number;
+      this.maxTurns = 5;
+      this.situations = data.situations as Situation[];
+      this.nextRoundCounter = 0 as number;
+      this.room = [] as any;
+      this.isSubmitDisabled = false;
+      this.showGame = true;
+      this.showEnd = false;
+      this.rewindTab = [] as any;
+      this.selectedCard = 0 as number;
+
+      this.maxTurns--;
+      this.randomizeSituation();
+      this.randomizeMusics();
+
+      const cards: any = document.querySelectorAll(".song-card");
+
+      cards.forEach((card: any) => {
+        card.style.backgroundColor = "#19647e";
+        card.style.color = "#f9fafa";
+
+      });
+
+      const submit: any = document.getElementById("submit");
+      submit.disabled = false;
+      this.isSubmitDisabled = false;
+      const afterSelectionDiv: any = document.querySelector(".after-selection");
+
+      afterSelectionDiv.style.opacity = "0";
+      afterSelectionDiv.style.pointerEvents = "none";
+    },
+
     selectCard(number: number) {
       const cards: any = document.querySelectorAll(".song-card");
 
@@ -192,14 +277,26 @@ export default defineComponent({
 
       const cards: any = document.querySelectorAll(".song-card");
 
-      this.choicesTab.push(cards[this.selectedCard].innerText);
+      this.rewindTab.push({ username: this.player.username, situation: this.content, music: cards[this.selectedCard].innerText });
 
       const afterSelectionDiv: any = document.querySelector(".after-selection");
 
       afterSelectionDiv.style.opacity = "0.3";
       afterSelectionDiv.style.pointerEvents = "all";
 
-      this.socket.emit("WTS/nextRound", this.roomId);
+      this.socket.emit("WTS/nextRound", this.player.roomId);
+    },
+
+    endgame() {
+      this.showEnd = true;
+      this.showGame = false;
+      this.showRewind = false;
+      setTimeout(() => {
+        if (this.player.host) {
+          this.socket.emit("endgame", this.player.roomId);
+        }
+        this.resetGame();
+      }, 3000)
     }
   }
 });
