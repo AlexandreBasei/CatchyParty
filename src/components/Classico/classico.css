@@ -1,0 +1,16 @@
+.content2 {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+.game-main {
+    height: 30%;
+    background-color: var(--primary);
+    border-radius: 20px;
+    margin: 5% 5% 0 5%;
+}
+
+.songCont {
+    position: relative;
+}

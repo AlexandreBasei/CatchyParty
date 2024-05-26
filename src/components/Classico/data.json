@@ -1,0 +1,84 @@
+{
+    "classico": [
+        {
+            "id": 1,
+            "title": "Requiem en D mineur, Lacrimosa dies illa, K.626",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "En 1791, Mozart a reçu une commande anonyme pour composer un requiem. L'homme qui a passé la commande était en réalité un émissaire du comte Franz von Walsegg, qui avait l'intention de présenter l'œuvre comme la sienne pour commémorer la mort de son épouse. Mozart, déjà affaibli par la maladie, a travaillé intensément sur le requiem, mais il n'a pas pu le terminer avant sa mort le 5 décembre 1791. La légende raconte que Mozart était convaincu qu'il écrivait ce requiem pour ses propres funérailles, ce qui ajoutait une touche tragique à l'œuvre.",
+            "date": "1791",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/1u2fCJwW8Ys?si=Nv7qkPWOEOi2Ruz7;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 2,
+            "title": "Symphony No. 5",
+            "artiste": "Ludwig Van Beethoven",
+            "anecdote": "L'ouverture de la Symphonie n° 5 est célèbre pour ses quatre notes initiales : `ta-ta-ta-taa`. Un jour, un de ses élèves a demandé à Beethoven ce que signifiait ce motif si frappant. Beethoven a répondu en disant que c'était `le destin qui frappe à la porte`. Cette ouverture puissante et dramatique, répétée tout au long du premier mouvement, symbolise la lutte et la victoire, thèmes récurrents dans l'œuvre de Beethoven, qui lui-même luttait contre la surdité au moment de la composition de cette symphonie.",
+            "date": "1805-1807",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/wsz2KRqpMhI?si=3p4T0SkwTQ3RoMBt;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 3,
+            "title": "La Primavera (Printemps), Les Quatre Saisons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Lorsqu'il a composé Les Quatre Saisons en 1723, Vivaldi a non seulement écrit la musique, mais il a également fourni des sonnets pour accompagner chaque saison, probablement rédigés par lui-même. Ces sonnets décrivent les scènes et les sentiments que la musique est censée évoquer, rendant ces concertos parmi les premières œuvres de musique programmatique, où la musique raconte une histoire ou dépeint des images spécifiques.",
+            "date": "1725",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/RnwuF-MCRuo?si=gqnn5KvJdBvTqBB8;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 4,
+            "title": "L'estate (Été), Les Quatre Saisons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Il est dit que Vivaldi était tellement inspiré par les violentes tempêtes estivales qu'il a observées en Italie qu'il a voulu capturer leur intensité et leur turbulence dans sa musique. Lors de l'une des premières représentations, l'orchestre jouait le passage de la tempête avec une telle vigueur et un tel réalisme que certains membres du public furent effrayés, croyant réellement qu'une tempête approchait.",
+            "date": "1725",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/KYfNaL9lODs?si=0FSqI1kxZVvbFrbb&amp;start=65&autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 5,
+            "title": "L'autunno (Automne), Les Quatre Saisons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Bien que les concertos de Vivaldi aient été populaires à son époque, ils sont tombés dans l'oubli après sa mort. Au début des années 1920, un collectionneur de manuscrits musicaux à Turin, en Italie, découvrit une importante collection de partitions de Vivaldi, y compris les manuscrits originaux des `Quatre Saisons`. Ces partitions étaient en assez mauvais état, certaines parties manquaient même, mais elles ont été soigneusement restaurées. La redécouverte de ces partitions a été une révélation pour le monde de la musique classique. Les `Quatre Saisons` ont rapidement regagné en popularité et sont devenus l'une des œuvres les plus jouées et enregistrées de tous les temps.",
+            "date": "1725",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/zqx37cBz_no?si=tOHZN_9-GRdndqvQ;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 6,
+            "title": "L'inverno (Hiver), Les Quatre Saisons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Au fil des décennies, `Les Quatre Saisons` ont été utilisées dans de nombreux films, publicités, émissions de télévision et même jeux vidéo. Leur musique expressive et évocatrice a été souvent choisie pour accompagner des scènes dramatiques, romantiques ou contemplatives, renforçant ainsi leur impact émotionnel. Par exemple, le premier mouvement du Concerto de l'été a été utilisé dans des films tels que `Excalibur` de John Boorman et `Le talentueux Mr. Ripley` d'Anthony Minghella, tandis que le deuxième mouvement du Concerto de l'hiver a été utilisé dans le film `Orange mécanique` de Stanley Kubrick.",
+            "date": "1725",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/eH4oGJcCzdM?si=qWHq1xgTrwVXsdUi&amp;start=39&autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 7,
+            "title": "Symphonie n° 40 en sol mineur, K.550",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "À l'âge de 14 ans, Mozart se rendit à Rome pour assister à la Semaine Sainte. Lors de cette visite, il entendit une seule fois le fameux Miserere d'Allegri, une pièce chorale sacrée de neuf minutes qui était jalousement gardée par le Vatican et interdite de reproduction. À son retour à son hébergement, Mozart, grâce à son incroyable mémoire musicale, réussit à retranscrire la pièce entière de mémoire. Cette prouesse fut découverte par le Vatican, mais au lieu de punir Mozart, le Pape Clément XIV fut tellement impressionné par son talent qu'il le fit Chevalier de l'Ordre de l'Éperon d'or.",
+            "date": "1788",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/-hJf4ZffkoI?si=gF96TpicF9SQSLcw;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 8,
+            "title": "Eine Kleine Nachtmusik",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "Bien que `Eine kleine Nachtmusik` soit l'une des œuvres les plus célèbres de Mozart aujourd'hui, il existe peu d'informations sur les circonstances exactes de sa création. On ne sait pas pourquoi Mozart a composé cette œuvre ou à qui elle était destinée. Il n'y a pas de dédicace dans le manuscrit original, et il n'y a pas de référence à cette pièce dans la correspondance de Mozart. De plus, il n'existe aucun enregistrement de Mozart jouant cette pièce lui-même, ni de mention de sa première exécution de son vivant. Cela contraste avec d'autres compositions de Mozart pour lesquelles il a souvent fait des annonces ou des commentaires dans sa correspondance.",
+            "date": "1787",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/oy2zDJPIgwc?si=8yV_-Z_z3sXwU88d&amp;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 9,
+            "title": "Les noces de Figaro , Ouverture, K. 492",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "Lorsque Mozart a adapté la pièce de Beaumarchais en opéra, il a choisi Lorenzo Da Ponte pour rédiger le livret. Da Ponte était un poète et librettiste italien, et leur collaboration a produit certaines des œuvres les plus célèbres de l'opéra, dont `Les Noces de Figaro`. Cependant, lorsque l'opéra a été terminé en 1786, il a été rapidement confronté à l'opposition de la censure. Le sujet subversif et politiquement chargé de la pièce de Beaumarchais, combiné à la satire sociale et politique du livret de Da Ponte, a provoqué des inquiétudes parmi les autorités autrichiennes. L'empereur Joseph II a initialement interdit la représentation de l'opéra, craignant que son contenu révolutionnaire ne provoque des troubles. Mozart et Da Ponte ont dû lutter pour obtenir l'autorisation de le jouer. Finalement, après plusieurs ajustements et négociations, ils ont réussi à persuader l'empereur de laisser la pièce être présentée au public.",
+            "date": "1786",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/lT7iLG-UCdE?si=UVmoDFu5WIbnELnC&amp;start=2&autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        },
+        {
+            "id": 10,
+            "title": "Piano Concerto No. 21 - Andante",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "Lorsque Mozart a joué ce concerto pour la première fois en public à Vienne en 1785, il aurait improvisé une cadenza remarquablement complexe et virtuose lors du premier mouvement. C'était une pratique courante à l'époque pour les solistes de composer ou d'improviser leur propre cadenza, une section soliste souvent située vers la fin d'un mouvement concerto. Cependant, ce qui a rendu cette performance particulièrement mémorable, c'est que Mozart n'avait pas écrit de cadenza pour ce concerto, et qu'il aurait improvisé cette cadenza sur place, sur la base des thèmes musicaux du mouvement. Cette démonstration de virtuosité et de génie musical a laissé le public stupéfait et a ajouté à la réputation de Mozart en tant que pianiste prodigieux et improvisateur exceptionnel.",
+            "date": "1785",
+            "url": "<iframe width='0' height='0' src='https://www.youtube.com/embed/df-eLzao63I?si=r5zJfPvxGQvvJRkR&amp;controls=0&amp;autoplay=1' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>"
+        }
+    ]
+}

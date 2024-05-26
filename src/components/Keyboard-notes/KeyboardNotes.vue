@@ -273,10 +273,16 @@ export default defineComponent({
             console.log("LALALA REWIND", room.rewind);
 
             this.rewindCounter++;
-            if (this.rewindCounter === room.rewind.length + 1) {
+            if (this.rewindCounter === room.rewind.length) {
                 this.socket.emit("clear rewind", this.player.roomId);
             }
 
+        });
+
+        this.socket.on('endgame', () => {
+            if (!this.player.host) {
+                this.endGame();
+            }
         })
 
         this.socket.on('MainGame', (userIdeas: any) => {
@@ -584,9 +590,12 @@ export default defineComponent({
         },
 
         endGame() {
+
             if (this.player.host) {
-                this.socket.emit('endgame', this.roomId);
+                this.socket.emit("endgame", this.player.roomId);
             }
+            this.resetGame();
+
         },
 
         Firststep() {
@@ -715,7 +724,9 @@ export default defineComponent({
             this.currentIndex = 0;
 
             this.rewindId = this.generateID();
-            this.socket.emit('play', this.roomId);
+            if (this.player.host) {
+                this.socket.emit('play', this.roomId);
+            }
             for (let index = 0; index < this.maxRounds; index++) {
                 this.rewind.push([{
                     ideas: '',

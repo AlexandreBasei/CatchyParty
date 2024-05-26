@@ -174,11 +174,16 @@ export default defineComponent({
       this.rewindCounter++;
       
       if (this.rewindCounter === room.rewind.length) {
-        console.log("STITIIIIIII");
         this.showRewind = true;
         this.socket.emit("clear rewind", this.player.roomId);
       }
 
+    });
+
+    this.socket.on('endgame', () => {
+      if (!this.player.host) {
+        this.endgame();
+      }
     });
 
   },

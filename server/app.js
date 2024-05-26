@@ -140,6 +140,19 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on("CLASSICO/randomize", (classico, roomId) => {
+        console.log("[CLASSICO] Classico json", classico);
+        io.to(roomId).emit("randomize", classico);
+    });
+
+    socket.on("CLASSICO/nextRound", (roomId) => {
+        rooms.forEach(room => {
+            if (room.id === roomId) {
+                io.to(roomId).emit('nextRound', room);
+            }
+        });
+    });
+
     socket.on("endgame", (roomId) => {
         io.to(roomId).emit("endgame");
     })

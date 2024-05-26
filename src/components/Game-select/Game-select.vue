@@ -1,5 +1,5 @@
 <template>
-    <h1>Current round : {{ currentRound }}</h1>
+    <!-- <h1>Current round : {{ currentRound }}</h1> -->
     <div class="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>
@@ -97,7 +97,7 @@
         </section>
         <!-- TODO passer en paramètre de component, l'interRoundDuration -->
         <Kbnotes v-else-if="game === 1" :socket="socket" :roomId="player.roomId"></Kbnotes>
-        <ClassicoComponent v-else-if="game === 2" :socket="socket" :roomId="player.roomId"></ClassicoComponent>
+        <ClassicoComponent v-else-if="game === 2" :socket="socket" :player="player"></ClassicoComponent>
         <WtsComponent v-else-if="game === 3" :socket="socket" :player="player"></WtsComponent>
     </div>
 </template>
