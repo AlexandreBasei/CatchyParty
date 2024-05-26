@@ -2,7 +2,8 @@
     <div class="content2">
         <!-- Affichage du temps restant -->
         <div id="timer" v-show="showTimer">
-            {{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}
+            dzadazdza
+            <p>{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
         </div>
         <main class="game-main" v-show="showGame">
             <section class="listen">
@@ -10,7 +11,9 @@
                 <hr>
                 <div id="listen">
                     <p>Écoutez...</p>
-                    <div v-if="classico">{{ classico[Math.floor(Math.random() * 3)].title }}</div>
+                    <iframe width='500' height='500' src='https://www.youtube.com/embed/fx2Z5ZD_Rbo?si=FdwjOp9ySJ8b7_KT'
+                        title='YouTube video player' frameborder='0' allow='autoplay;'
+                        referrerpolicy='strict-origin-when-cross-origin'></iframe>
                 </div>
             </section>
         </main>
@@ -87,6 +90,7 @@ export default defineComponent({
             rewindAll: [] as any,
             rewindCounter: 0 as number,
             selectedCard: 0 as number,
+            randomSong: 0 as number,
             currentTurn: 0 as number,
             maxTurns: 5,
             nextRoundCounter: 0 as number,
@@ -100,12 +104,20 @@ export default defineComponent({
             this.randomizeClassico();
         }
 
-        this.socket.on("randomize", (classico: Classico[]) => {
+        this.socket.on("randomize", (classico: Classico[], randomSong: number) => {
             if (!this.player.host) {
                 this.classico = classico;
+                this.randomSong = randomSong;
             }
-            console.log(this.classico);
-            
+
+            const music = document.querySelector("iframe")!;
+            music.src = classico[randomSong].url;
+
+            const videoWindow = music.contentWindow!;
+
+            // Démarrer la vidéo en appelant la méthode play() sur la fenêtre interne
+            videoWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+            this.turnTimer();
             this.showGame = true;
         });
 
@@ -140,6 +152,8 @@ export default defineComponent({
 
             if (this.room.players.length === this.nextRoundCounter && this.currentTurn === this.maxTurns) {
                 this.showGame = false;
+                const iframe = document.querySelector("iframe");
+                iframe?.remove;
                 // this.showRewind = true;
                 this.socket.emit("CLASSICO/rewind", this.rewindTab, this.player);
             }
@@ -166,6 +180,7 @@ export default defineComponent({
     },
 
     methods: {
+
         turnTimer() {
             setInterval(() => {
                 setInterval(() => {
@@ -178,7 +193,9 @@ export default defineComponent({
             classico.sort(() => Math.random() - 0.5);
             this.classico = classico.slice(0, 3);
 
-            this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId);
+            this.randomSong = Math.floor(Math.random() * 3);
+
+            this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
         },
 
         selectCard(number: number) {
@@ -204,7 +221,23 @@ export default defineComponent({
 
             const cards: any = document.querySelectorAll(".song-card");
 
-            document.querySelector("iframe")?.remove;
+            let isFound;
+            
+            const currentSong = this.classico[this.randomSong].title + "\n\n" + this.classico[this.randomSong].artiste + "\n\n" + this.classico[this.randomSong].date;
+            
+
+            if (cards[this.selectedCard].innerText === currentSong) {
+                console.log("OUIIIII");
+                
+            }
+            else {
+                console.log("NOOOON");
+                
+            }
+            console.log(cards[this.selectedCard].innerText);
+            console.log(currentSong);
+            
+            
 
             this.rewindTab.push({ username: this.player.username, music: cards[this.selectedCard].innerText });
 
