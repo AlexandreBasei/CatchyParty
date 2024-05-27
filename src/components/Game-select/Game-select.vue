@@ -94,7 +94,6 @@
                 </div>
             </form>
         </section>
-        <!-- TODO passer en paramètre de component, l'interRoundDuration -->
         <Kbnotes v-else-if="game === 1" :socket="socket"></Kbnotes>
         <ClassicoComponent v-else-if="game === 2" :socket="socket"></ClassicoComponent>
         <WtsComponent v-else-if="game === 3" :socket="socket"></WtsComponent>
@@ -174,7 +173,7 @@ export default defineComponent({
             dots: '' as string,
             maxDots: 3,
             interval: undefined as number | undefined,
-            interRoundDuration: 5
+            interRoundDuration: undefined as number | undefined
         }
     },  
     created() {

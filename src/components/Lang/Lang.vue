@@ -1,46 +1,31 @@
 <template>
-    <div @click="changeLangToEn()" class="langCont"  v-if="lang === 'fr'">
-        <img src="@/assets/france.png" alt="france" class="lang">
-    </div>
-
-    <div @click="changeLangToFr()" class="langCont" v-if="lang === 'en'">
-        <img src="@/assets/united-kingdom.png" alt="france" class="lang">
+    <div @click="toggleLang" class="langCont">
+        <img :src="lang === 'fr' ? require('@/assets/france.png') : require('@/assets/united-kingdom.png')" 
+             :alt="lang === 'fr' ? 'france' : 'united-kingdom'" 
+             class="lang">
     </div>
 </template>
+
 
 <script lang="ts">
     import { defineComponent } from 'vue';
 
-    interface LangComponent {
-        lang: string;
-        changeLangToEn(): void;
-        changeLangToFr(): void;
-    }
 
     export default defineComponent({
         name: 'langApp',
-        data(): LangComponent {
+        data() {
             return {
                 lang: 'fr',
-            } as LangComponent;
+            };
         },
         methods: {
-            changeLangToEn(this: LangComponent){
-                if(this.lang == 'fr'){
-                    this.lang = 'en';
-                    localStorage.setItem('lang',this.lang);
-                    location.reload();
-                }
-            },
-            changeLangToFr(this: LangComponent){
-                if(this.lang == 'en'){
-                    this.lang = 'fr';
-                    localStorage.setItem('lang',this.lang);
-                    location.reload();
-                }
-            },
+            toggleLang() {
+                this.lang = this.lang === 'fr' ? 'en' : 'fr';
+                localStorage.setItem('lang', this.lang);
+                location.reload();
+            }
         },
-        mounted(this: LangComponent) {
+        mounted() {
             const getLang = localStorage.getItem('lang');
                 if(getLang){
                     this.lang = getLang;
