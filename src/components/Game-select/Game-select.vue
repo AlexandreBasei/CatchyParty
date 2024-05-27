@@ -1,5 +1,5 @@
 <template>
-    <h1>Current round : {{ currentRound }}</h1>
+    <!-- <h1>Current round : {{ currentRound }}</h1> -->
     <div class="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>

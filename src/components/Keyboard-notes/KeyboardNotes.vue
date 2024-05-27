@@ -1,18 +1,24 @@
 <template>
     <div class="Kbnotes">
-        <section class="rewindAll">
+        <section class="rewindAll" v-show="showRewind">
             <div class="rewind" v-for="(rewindGroup, index) in groupedRewindAll" :key="index"
                 v-bind:id="'joueur' + index">
-                <div v-for="(items, innerIndex) in rewindGroup" :key="innerIndex" style="border: 5px solid black;">
-                    <h1>{{ $t('MANCHE') }} {{ items[0].rewindOrder + 1 }}</h1>
-                    <h2>{{ items[0].ideas.senderName }} {{ $t('A_SOUMIS_IDEE') }} {{ items[0].ideas.idea }}</h2>
-                    <h2 v-if="items[0].sendedMusic.length > 0">{{ $t('MUSIQUE_COMPOSEE_PAR') }} {{
-                items[0].sendedMusic[0].composerName }}</h2>
-                    <button @click="playSounds(items[0].sendedMusic)">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+                <div class="rewindGroup">
+                    <div v-for="(items, innerIndex) in rewindGroup" :key="innerIndex">
+                        <h1>{{ $t('MANCHE') }} {{ items[0].rewindOrder + 1 }}</h1>
+                        <h2>{{ items[0].ideas.senderName }} {{ $t('A_SOUMIS_IDEE') }} {{ items[0].ideas.idea }}</h2>
+                        <h2 v-if="items[0].sendedMusic.length > 0">{{ $t('MUSIQUE_COMPOSEE_PAR') }} {{
+                    items[0].sendedMusic[0].composerName }}</h2>
+                        <button @click="playSounds(items[0].sendedMusic)">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+                    </div>
                 </div>
-                <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
-                <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-                <button v-if="player.host" @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+
+                <div class="buttons-container">
+                    <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
+                    <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
+                    <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+                </div>
+                
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -85,6 +91,7 @@
                 $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
+            <!-- <span>{{ interRoundDuration }}</span> -->
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
             <input type="text" v-model="userIdeaInput" :placeholder="$t('NOM_DE_LA_MUSIQUE')">
             <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
@@ -190,7 +197,7 @@ export default defineComponent({
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
+            roundDuration: 5, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0,
             secondsLeft: 0,
@@ -329,14 +336,14 @@ export default defineComponent({
 
                         if (nextDiv instanceof HTMLElement && div instanceof HTMLElement) {
                             div.style.display = "none";
-                            nextDiv.style.display = "block";
+                            nextDiv.style.display = "flex";
                         }
                     }
                     else {
                         const previousDiv = document.getElementById('joueur' + (id - 1));
                         if (previousDiv instanceof HTMLElement && div instanceof HTMLElement) {
                             div.style.display = "none";
-                            previousDiv.style.display = "block";
+                            previousDiv.style.display = "flex";
                         }
                     }
                 }
@@ -613,7 +620,7 @@ export default defineComponent({
                         this.showIdea = false;
                         this.timerInterGame = true;
 
-                        this.secondsLeft = 10;
+                        this.secondsLeft = this.roundDuration;
 
                         // Décompte des 30 secondes sur le front-end
                         const countdownInterval = setInterval(() => {

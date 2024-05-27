@@ -28,14 +28,6 @@
   gap: 20px;
 }
 
-.rewindAll .rewind:not(:first-child) {
-  display: none;
-}
-
-.rewindAll:first-child {
-  display: block;
-}
-
 .main-game{
   display: flex;
   flex-flow: wrap column;
@@ -244,4 +236,10 @@
 
 #play:hover .play{
   filter: brightness(1);
+}
+
+
+.after-game{
+  display: flex;
+  flex-direction: column;
 }
