@@ -238,7 +238,7 @@ export default defineComponent({
         },
 
         back(){
-            this.homepage = true;
+            window.location.search = '?room=';
         },
 
         changeLanguage() {

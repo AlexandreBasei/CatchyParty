@@ -175,7 +175,8 @@ export default defineComponent({
             dots: '' as string,
             maxDots: 3,
             interval: undefined as number | undefined,
-            interRoundDuration: 5
+            interRoundDuration: 5,
+            isKicked: false,
         }
     },  
     created() {
@@ -190,7 +191,9 @@ export default defineComponent({
         },
     },
     mounted() {
-
+        //Message de confirmation reload page
+        // window.addEventListener("beforeunload", this.beforeUnloadHandler);
+        
         // setInterval(() => {
             this.updRooms();
         // }, 20);
@@ -214,6 +217,7 @@ export default defineComponent({
 
         this.socket.on('kicked', (kickedId: string) => {
             if (this.player.socketId === kickedId) {
+                this.isKicked = true;
                 this.exitRoom();
                 console.log('kicked');
             }
@@ -283,6 +287,13 @@ export default defineComponent({
 
     },
     methods: {
+        beforeUnloadHandler(event:any) {
+            if (!this.isKicked) {
+                const confirmationMessage = "Êtes-vous sûr de vouloir quitter cette page ? Vous quitterez la partie en cours";
+                (event || window.event).returnValue = confirmationMessage; // For IE and Firefox
+                return confirmationMessage; // For other browsers
+            }
+        },
         updRooms() {
             this.socket.emit('get rooms');
 

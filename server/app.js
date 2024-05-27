@@ -293,6 +293,7 @@ function exitRoom(socketId) {
                         const randomIndex = Math.floor(Math.random() * r.players.length);
                         const randomPlayer = r.players[randomIndex];
                         randomPlayer.host = true;
+                        io.to(randomPlayer.socketId).emit("new host", randomPlayer.socketId);
                         console.log(`[new host] - ${r.id} - ${randomPlayer.username}`);
                     }
                 }

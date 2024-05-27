@@ -1,19 +1,27 @@
 <template>
     <div class="content2">
-        <!-- Affichage du temps restant -->
-        <div id="timer" v-show="showTimer">
-            dzadazdza
-            <p>{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
-        </div>
+        <section class="rewindAll" v-show="showRewind">
+            <h1>REWIND</h1>
+        </section>
         <main class="game-main" v-show="showGame">
             <section class="listen">
                 <h3>Round {{ currentTurn + 1 }}</h3>
                 <hr>
+                <div id="timer" v-show="showTimer">
+                    <p>{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
+                    <p>{{ $t('TEMPS_RESTANT') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
+                    <label for="volume-slider">Volume</label>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
+                        @input="setVolume" />
+                </div>
                 <div id="listen">
                     <p>Écoutez...</p>
-                    <iframe width='500' height='500' src='https://www.youtube.com/embed/fx2Z5ZD_Rbo?si=FdwjOp9ySJ8b7_KT'
-                        title='YouTube video player' frameborder='0' allow='autoplay;'
-                        referrerpolicy='strict-origin-when-cross-origin'></iframe>
+                </div>
+                <div id="anecdoteDiv" v-show="showResponse">
+                    <h3>Réponse</h3>
+                    <p id="response"></p>
+                    <h3>Anecdote</h3>
+                    <p id="anecdote"></p>
                 </div>
             </section>
         </main>
@@ -44,7 +52,7 @@
 
             </div>
         </div>
-        <button @click="nextRound" disabled id="submit" class="submitBtn" style="margin: auto;"
+        <button @click="validateCard" disabled id="submit" class="submitBtn" style="margin: auto;"
             v-show="showGame">Valider la
             sélection</button>
         <p v-show="isSubmitDisabled && showGame">En attente des autres joueurs...</p>
@@ -54,6 +62,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import io from 'socket.io-client';
+import { Howl, Howler } from 'howler';
 import data from './data.json';
 
 interface Classico {
@@ -62,7 +71,6 @@ interface Classico {
     artiste: string;
     anecdote: string;
     date: string;
-    url: string;
 }
 
 export default defineComponent({
@@ -81,9 +89,12 @@ export default defineComponent({
         return {
             classico: [] as Classico[],
             room: [] as any,
+            currentSound: 0 as any,
+            volume: 0.5 as number,
             isSubmitDisabled: false,
             showGame: false,
             showRewind: false,
+            showResponse: false,
             showTimer: true,
             showEnd: false,
             rewindTab: [] as any,
@@ -94,8 +105,12 @@ export default defineComponent({
             currentTurn: 0 as number,
             maxTurns: 5,
             nextRoundCounter: 0 as number,
-            turnDuration: 30000,
-            timer: 30000,
+            turnDuration: 10,
+            responseDuration: 10,
+            timer: 30,
+            responseTimer: 15,
+            timerInterval: 0 as any,
+            responseInterval: 0 as any,
         }
     },
 
@@ -110,13 +125,9 @@ export default defineComponent({
                 this.randomSong = randomSong;
             }
 
-            const music = document.querySelector("iframe")!;
-            music.src = classico[randomSong].url;
+            const soundToPlay = this.classico[this.randomSong].id;
+            this.playSound(soundToPlay);
 
-            const videoWindow = music.contentWindow!;
-
-            // Démarrer la vidéo en appelant la méthode play() sur la fenêtre interne
-            videoWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
             this.turnTimer();
             this.showGame = true;
         });
@@ -124,10 +135,15 @@ export default defineComponent({
         this.socket.on("nextRound", (room: any) => {
             this.room = room;
             this.nextRoundCounter++;
+
             this.timer = this.turnDuration;
 
             if (this.room.players.length === this.nextRoundCounter && this.currentTurn < this.maxTurns) {
-                this.randomizeClassico();
+                if (this.player.host) {
+                    this.randomizeClassico();
+                }
+
+                this.stopSound();
 
                 const cards: any = document.querySelectorAll(".song-card");
 
@@ -152,9 +168,8 @@ export default defineComponent({
 
             if (this.room.players.length === this.nextRoundCounter && this.currentTurn === this.maxTurns) {
                 this.showGame = false;
-                const iframe = document.querySelector("iframe");
-                iframe?.remove;
-                // this.showRewind = true;
+                this.stopSound();
+                this.showRewind = true;
                 this.socket.emit("CLASSICO/rewind", this.rewindTab, this.player);
             }
         });
@@ -182,16 +197,86 @@ export default defineComponent({
     methods: {
 
         turnTimer() {
-            setInterval(() => {
-                setInterval(() => {
+            this.clearIntervals();
+            this.timer = this.turnDuration;
+            this.showResponse = false;
+
+            this.timerInterval = setInterval(() => {
+                if (this.timer === 0) {
+                    this.timer = this.turnDuration;
+                    this.displayResponse();
+                } else {
                     this.timer--;
-                }, 1000);
-            }, this.turnDuration);
+                }
+            }, 1000);
         },
+
+        displayResponse() {
+            this.clearIntervals();
+            const classico = this.classico[this.randomSong];
+
+            const title = document.getElementById("response")!;
+            title.innerText = `${classico.title}, ${classico.artiste}, ${classico.title}, ${classico.date}`;
+
+            const anecdote = document.getElementById("anecdote")!;
+            anecdote.innerText = classico.anecdote;
+
+            this.responseTimer = this.responseDuration;
+            this.showResponse = true;
+
+            this.responseInterval = setInterval(() => {
+                if (this.responseTimer === 0) {
+                    this.stopSound();
+                    this.socket.emit("CLASSICO/nextRound", this.player.roomId);
+                    this.turnTimer();
+                } else {
+                    this.responseTimer--;
+                }
+            }, 1000);
+        },
+
+        clearIntervals() {
+            if (this.timerInterval) {
+                clearInterval(this.timerInterval);
+                this.timerInterval = null;
+            }
+            if (this.responseInterval) {
+                clearInterval(this.responseInterval);
+                this.responseInterval = null;
+            }
+        },
+
+        playSound(note: number) {
+            this.stopSound();
+            // Charger et jouer le son correspondant à la note
+            this.currentSound = new Howl({
+                src: [`./musics/${note}.mp3`], // Chemin vers les fichiers audio locaux
+                volume: 0.5
+            });
+            console.log(this.currentSound);
+
+            this.currentSound.play();
+        },
+
+        stopSound() {
+            // Arrêter le son en cours
+            if (this.currentSound) {
+                Howler.stop();
+            }
+        },
+
+        setVolume() {
+            if (this.currentSound) {
+                this.currentSound.volume(this.volume);
+            }
+        },
+
         randomizeClassico() {
             const classico: Classico[] = data.classico;
             classico.sort(() => Math.random() - 0.5);
             this.classico = classico.slice(0, 3);
+            console.log(this.classico);
+
 
             this.randomSong = Math.floor(Math.random() * 3);
 
@@ -214,7 +299,7 @@ export default defineComponent({
             this.selectedCard = number;
         },
 
-        nextRound() {
+        validateCard() {
             const submit: any = document.getElementById("submit");
             submit.disabled = true;
             this.isSubmitDisabled = true;
@@ -222,22 +307,22 @@ export default defineComponent({
             const cards: any = document.querySelectorAll(".song-card");
 
             let isFound;
-            
+
             const currentSong = this.classico[this.randomSong].title + "\n\n" + this.classico[this.randomSong].artiste + "\n\n" + this.classico[this.randomSong].date;
-            
+
 
             if (cards[this.selectedCard].innerText === currentSong) {
                 console.log("OUIIIII");
-                
+
             }
             else {
                 console.log("NOOOON");
-                
+
             }
             console.log(cards[this.selectedCard].innerText);
             console.log(currentSong);
-            
-            
+
+
 
             this.rewindTab.push({ username: this.player.username, music: cards[this.selectedCard].innerText });
 
@@ -245,8 +330,6 @@ export default defineComponent({
 
             afterSelectionDiv.style.opacity = "0.3";
             afterSelectionDiv.style.pointerEvents = "all";
-
-            this.socket.emit("CLASSICO/nextRound", this.player.roomId);
         },
 
         endgame() {
