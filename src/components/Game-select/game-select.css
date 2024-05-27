@@ -385,3 +385,59 @@ form .messages{
 }
 
 
+
+
+
+.rewindAll{
+    width: 100%;
+    height: 100%;
+}
+.rewindAll .rewind:not(:first-child) {
+    display: none;
+}
+
+.rewindAll:first-child {
+    display: block;
+}
+
+.rewind {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rewindGroup {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.rewindGroup h1 {
+    background-color: var(--darkgrey);
+    border-radius: var(--borderradius);
+    margin: 0px;
+    padding: 10px;
+}
+.rewindGroup > *{
+    background-color: var(--black);
+    aspect-ratio: 1/1;
+    border-radius: var(--borderradius);
+    width: 20%;
+    padding: 20px;
+}
+
+.end-game-button{
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+
+.rewind .buttons-container{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.rewind2{
+    /* border: 2px solid white; */
+}

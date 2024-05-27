@@ -5,27 +5,10 @@ h3 {
     padding: 0px 20px;
 }
 
-.rewindAll .rewind:not(:first-child) {
-    display: none;
-}
-
-.rewindAll:first-child {
-    display: block;
-}
-
-.rewind {
-    border: 2px solid black;
-    margin-bottom: 20px;
-}
-
-.rewind2{
-    border: 2px solid white;
-}
-
 .content-2 {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    gap: 20px;
 }
 
 .song-card {
@@ -35,6 +18,7 @@ h3 {
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: center;
 }
 
 .song-card:hover {
@@ -85,22 +69,29 @@ h3 {
 }
 
 .songCont {
-    overflow-x: scroll;
+    overflow-x: auto;
     position: relative;
+}
+.songCont::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--black);
+}
+
+.songCont::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--tertiary)
 }
 
 .song-cards {
     display: flex;
     gap: 1em;
-    margin-left: 5%;
-    width: 90%;
+    justify-content: center;
 }
 
 .game-main {
-    height: 30%;
+    height: auto;
     background-color: var(--primary);
     border-radius: 20px;
-    margin: 5% 5% 0 5%;
 }
 
 .vilo,
@@ -113,6 +104,10 @@ h3 {
     left: 0;
     bottom: 0;
     z-index: -1;
+}
+
+.description{
+    padding: 10px 20px;
 }
 
 /* .playersList {
@@ -146,41 +141,15 @@ input[type="submit"] {
     margin-top: 30px !important;
 }
 
-main section {
-    width: 100%;
-}
-
 main {
     align-items: flex-start;
     justify-content: flex-start;
 }
 
+
 /* } */
 
 @media only screen and (min-width: 800px) {
-    .song-cards {
-        display: flex;
-        gap: 1em;
-        justify-content: center;
-        margin-bottom: 5vh;
-    }
-
-    .game-main {
-        height: 40vh;
-        background-color: var(--primary);
-        border-radius: 20px;
-        position: relative;
-    }
-
-    .content-2 {
-        width: 80%;
-        margin: 2% 5% 0 0%;
-    }
-
-    .songCont {
-        margin-top: 10vh;
-    }
-
     h3 {
         margin-top: 0;
     }
@@ -191,12 +160,6 @@ main {
         bottom: 0;
         z-index: -1;
         width: 100vh;
-    }
-
-    .description {
-        width: 90%;
-        ;
-        padding: 1% 5% 0;
     }
 
     .vilo {
