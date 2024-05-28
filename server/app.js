@@ -140,6 +140,11 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on("CLASSICO/start", (player) => {
+        console.log("[CLASSICO] start game");
+        io.to(player.roomId).emit("CLASSICO/start game");
+    })
+
     socket.on("CLASSICO/randomize", (classico, roomId, randomSong) => {
         io.to(roomId).emit("randomize", classico, randomSong);
     });
@@ -147,7 +152,7 @@ io.on('connection', (socket) => {
     socket.on("CLASSICO/nextRound", (roomId) => {
         rooms.forEach(room => {
             if (room.id === roomId) {
-                io.to(roomId).emit('nextRound', room);
+                io.to(roomId).emit('CLASSICO/nextRound', room);
             }
         });
     });
@@ -155,7 +160,6 @@ io.on('connection', (socket) => {
     socket.on('CLASSICO/rewind', (rewind, player) => {
         rooms.forEach(room => {
             if (room.id === player.roomId) {
-                console.log("[CLASSICO] Rewind : ", rewind);
                 room.rewind.push(rewind);
                 io.to(player.roomId).emit('CLASSICO/final rewind', room);
             }
@@ -163,6 +167,19 @@ io.on('connection', (socket) => {
     });
 
     socket.on("endgame", (roomId) => {
+        io.to(roomId).emit("endgame");
+    })
+    
+    socket.on("WTS/start", (player) => {
+        console.log("[WTS] start game");
+        io.to(player.roomId).emit("WTS/start game");
+    })
+
+    socket.on("WTS/endgame", (roomId) => {
+        io.to(roomId).emit("endgame");
+    })
+
+    socket.on("CLASSICO/endgame", (roomId) => {
         io.to(roomId).emit("endgame");
     })
 

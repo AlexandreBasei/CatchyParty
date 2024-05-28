@@ -14,7 +14,7 @@
         </div>
         <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
         <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-        <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+        <button v-if="player.host" @click="WTSendgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
       </div>
     </section>
     <main class="game-main" v-show="showGame">
@@ -30,31 +30,31 @@
       <div class="after-selection"></div>
 
       <div class="song-cards">
-        <div class="song-card" v-if="musics[0]" @click="selectCard(0)">
+        <div class="song-card" v-if="musics[0]" @click="WTSselectCard(0)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[0].title }}</p>
           <p>{{ musics[0].artiste }}</p>
           <p>{{ musics[0].album }}</p>
         </div>
-        <div class="song-card" v-if="musics[1]" @click="selectCard(1)">
+        <div class="song-card" v-if="musics[1]" @click="WTSselectCard(1)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[1].title }}</p>
           <p>{{ musics[1].artiste }}</p>
           <p>{{ musics[1].album }}</p>
         </div>
-        <div class="song-card" v-if="musics[2]" @click="selectCard(2)">
+        <div class="song-card" v-if="musics[2]" @click="WTSselectCard(2)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[2].title }}</p>
           <p>{{ musics[2].artiste }}</p>
           <p>{{ musics[2].album }}</p>
         </div>
-        <div class="song-card" v-if="musics[3]" @click="selectCard(3)">
+        <div class="song-card" v-if="musics[3]" @click="WTSselectCard(3)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[3].title }}</p>
           <p>{{ musics[3].artiste }}</p>
           <p>{{ musics[3].album }}</p>
         </div>
-        <div class="song-card" v-if="musics[4]" @click="selectCard(4)">
+        <div class="song-card" v-if="musics[4]" @click="WTSselectCard(4)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[4].title }}</p>
           <p>{{ musics[4].artiste }}</p>
@@ -63,7 +63,7 @@
 
       </div>
     </div>
-    <button @click="nextRound" disabled id="submit" class="submitBtn" style="margin: auto;" v-show="showGame">Valider la
+    <button @click="WTSnextRound" disabled id="submit" class="submitBtn" style="margin: auto;" v-show="showGame">Valider la
       sélection</button>
     <p v-show="isSubmitDisabled && showGame">En attente des autres joueurs...</p>
   </div>
@@ -127,7 +127,7 @@ export default defineComponent({
     };
   },
   mounted() {
-    this.resetGame();
+    this.resetWTSGame();
     this.randomizeSituation();
     this.randomizeMusics();
     this.maxTurns--;
@@ -180,9 +180,9 @@ export default defineComponent({
 
     });
 
-    this.socket.on('endgame', () => {
+    this.socket.on('WTSendgame', () => {
       if (!this.player.host) {
-        this.endgame();
+        this.WTSendgame();
       }
     });
 
@@ -211,7 +211,7 @@ export default defineComponent({
         }
       });
     },
-    resetGame() {
+    resetWTSGame() {
       this.content = '' as string;
       this.musics = [] as Music[];
       this.currentTurn = 0 as number;
@@ -246,7 +246,7 @@ export default defineComponent({
       afterSelectionDiv.style.pointerEvents = "none";
     },
 
-    selectCard(number: number) {
+    WTSselectCard(number: number) {
       const cards: any = document.querySelectorAll(".song-card");
 
       cards.forEach((card: any) => {
@@ -275,7 +275,7 @@ export default defineComponent({
       this.musics = musics.slice(0, 5);
     },
 
-    nextRound() {
+    WTSnextRound() {
       const submit: any = document.getElementById("submit");
       submit.disabled = true;
       this.isSubmitDisabled = true;
@@ -292,15 +292,15 @@ export default defineComponent({
       this.socket.emit("WTS/nextRound", this.player.roomId);
     },
 
-    endgame() {
+    WTSendgame() {
       this.showEnd = true;
       this.showGame = false;
       this.showRewind = false;
       setTimeout(() => {
         if (this.player.host) {
-          this.socket.emit("endgame", this.player.roomId);
+          this.socket.emit("WTS/endgame", this.player.roomId);
         }
-        this.resetGame();
+        this.resetWTSGame();
       }, 3000)
     }
   }

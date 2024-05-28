@@ -1,11 +1,15 @@
 <template>
     <div class="content2">
+        <section v-show="showEnd">
+            <h2>Démarrage du jeu suivant...</h2>
+        </section>
         <section class="rewindAll" v-show="showRewind">
             <h2>Résultats de la partie</h2>
             <div v-for="(rewind, index) in sortedRewindAll" :key="index">
                     <h4>{{ rewind.username }}</h4>
                     <p>Musiques trouvées : {{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
             </div>
+            <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
         </section>
         <div id="timer-container" v-show="showTimer">
             <div>
@@ -121,7 +125,7 @@ export default defineComponent({
             selectedCard: -1 as number,
             randomSong: 0 as number,
             currentTurn: 0 as number,
-            maxTurns: 1,
+            maxTurns: 1, //Ne pas oublier de le changer aussi dans resetGame
             nextRoundCounter: 0 as number,
             turnDuration: 10,
             responseDuration: 10,
@@ -142,10 +146,15 @@ export default defineComponent({
     },
 
     mounted() {
-        if (this.player.host) {
-            this.randomizeClassico();
-        }
         this.maxTurns--;
+
+        this.socket.on("CLASSICO/start game", () => {
+            if (this.player.host) {
+                console.log("START GAME");
+                
+                this.randomizeClassico();
+            }
+        });
 
         this.socket.on("randomize", (classico: Classico[], randomSong: number) => {
             if (!this.player.host) {
@@ -160,7 +169,7 @@ export default defineComponent({
             this.showGame = true;
         });
 
-        this.socket.on("nextRound", (room: any) => {
+        this.socket.on("CLASSICO/nextRound", (room: any) => {
             this.room = room;
             this.nextRoundCounter++;
             this.selectedCard = -1;
@@ -192,7 +201,6 @@ export default defineComponent({
                 afterSelectionDiv.style.pointerEvents = "none";
 
                 this.currentTurn++;
-                console.log("Next round");
                 this.nextRoundCounter = 0;
             }
 
@@ -214,14 +222,12 @@ export default defineComponent({
 
             if (this.rewindCounter === room.rewind.length) {
                 this.showRewind = true;
-                console.log(this.rewindAll);
-
                 this.socket.emit("clear rewind", this.player.roomId);
             }
 
         });
 
-        this.socket.on('endgame', () => {
+        this.socket.on('CLASSICO/endgame', () => {
             if (!this.player.host) {
                 this.endgame();
             }
@@ -299,7 +305,6 @@ export default defineComponent({
                 src: [`./musics/${note}.mp3`], // Chemin vers les fichiers audio locaux
                 volume: 0.5
             });
-            console.log(this.currentSound);
 
             this.currentSound.play();
         },
@@ -321,8 +326,6 @@ export default defineComponent({
             const classico: Classico[] = data.classico;
             classico.sort(() => Math.random() - 0.5);
             this.classico = classico.slice(0, 3);
-            console.log(this.classico);
-
 
             this.randomSong = Math.floor(Math.random() * 3);
 
@@ -381,13 +384,15 @@ export default defineComponent({
             this.showRewind = false;
             setTimeout(() => {
                 if (this.player.host) {
-                    this.socket.emit("endgame", this.player.roomId);
+                    this.socket.emit("CLASSICO/endgame", this.player.roomId);
                 }
-                this.resetGame();
+                this.resetClassicoGame();
             }, 3000)
         },
 
-        resetGame() {
+        resetClassicoGame() {
+            console.log("RESET CLASSICO");
+            this.clearIntervals();
             this.classico = [] as Classico[];
             this.room = [] as any;
             this.currentSound = 0 as any;
@@ -408,7 +413,7 @@ export default defineComponent({
             this.selectedCard = -1 as number;
             this.randomSong = 0 as number;
             this.currentTurn = 0 as number;
-            this.maxTurns = 5;
+            this.maxTurns = 1;
             this.nextRoundCounter = 0 as number;
             this.turnDuration = 10;
             this.responseDuration = 10;
@@ -422,9 +427,9 @@ export default defineComponent({
 
             this.maxTurns--;
 
-            if (this.player.host) {
-                this.randomizeClassico();
-            }
+            // if (this.player.host) {
+            //     this.randomizeClassico();
+            // }
 
             const cards: any = document.querySelectorAll(".song-card");
 

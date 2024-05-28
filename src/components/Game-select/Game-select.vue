@@ -109,6 +109,7 @@ import Kbnotes from "@/components/Keyboard-notes/KeyboardNotes.vue";
 import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
 import WtsComponent from '../Wts/WtsComponent.vue';
 import ClassicoComponent from '../Classico/ClassicoComponent.vue';
+import { Emit } from 'vue-property-decorator';
 
 interface Room {
     id: string;
@@ -232,12 +233,19 @@ export default defineComponent({
             if (this.currentRound + 1 <= gamesChosen.length) {
                 switch (this.gamesChosen[this.currentRound]) {
                 case 1:
+                    console.log("jeu 1");
                     this.game = 1;
                     break;
                 case 2:
+                    console.log("jeu 2");
+                    if (this.player.host) {
+                        this.socket.emit("CLASSICO/start", this.player);
+                    }
                     this.game = 2;
                     break;
                 case 3:
+                    console.log("jeu 3");
+                    
                     this.game = 3;
                     break;
                 default:
