@@ -1,20 +1,29 @@
 <template>
     <div class="content2">
         <section class="rewindAll" v-show="showRewind">
-            <h1>REWIND</h1>
+            <h2>Résultats de la partie</h2>
+            <div v-for="(rewind, index) in sortedRewindAll" :key="index">
+                    <h4>{{ rewind.username }}</h4>
+                    <p>Musiques trouvées : {{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
+            </div>
         </section>
+        <div id="timer-container" v-show="showTimer">
+            <div>
+                <label for="volume-slider">Volume</label>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
+                    @input="setVolume" />
+            </div>
+            <div>
+                <p v-show="showRoundTimer">{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
+                <p v-show="showResponseTimer">{{ $t('RESPONSE TIMER') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
+            </div>
+        </div>
         <main class="game-main" v-show="showGame">
+
             <section class="listen">
-                <h3>Round {{ currentTurn + 1 }}</h3>
+                <h3>Round {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
                 <hr>
-                <div id="timer" v-show="showTimer">
-                    <p>{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
-                    <p>{{ $t('TEMPS_RESTANT') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
-                    <label for="volume-slider">Volume</label>
-                    <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
-                        @input="setVolume" />
-                </div>
-                <div id="listen">
+                <div id="listen" v-show="showListen">
                     <p>Écoutez...</p>
                 </div>
                 <div id="anecdoteDiv" v-show="showResponse">
@@ -25,7 +34,7 @@
                 </div>
             </section>
         </main>
-        <div class="songCont" v-show="showGame">
+        <div class="songCont" v-show="showCards">
             <div class="after-selection"></div>
 
             <div class="song-cards">
@@ -52,10 +61,9 @@
 
             </div>
         </div>
-        <button @click="validateCard" disabled id="submit" class="submitBtn" style="margin: auto;"
-            v-show="showGame">Valider la
+        <button @click="validateCard" disabled id="submit" class="submitBtn" v-show="showCards">Valider la
             sélection</button>
-        <p v-show="isSubmitDisabled && showGame">En attente des autres joueurs...</p>
+        <p v-show="isSubmitDisabled && showCards">En attente des autres joueurs...</p>
     </div>
 </template>
 
@@ -71,6 +79,12 @@ interface Classico {
     artiste: string;
     anecdote: string;
     date: string;
+}
+
+interface Rewind {
+    username: string;
+    foundCount: number;
+    noFoundCount: number;
 }
 
 export default defineComponent({
@@ -93,17 +107,21 @@ export default defineComponent({
             volume: 0.5 as number,
             isSubmitDisabled: false,
             showGame: false,
+            showCards: true,
             showRewind: false,
             showResponse: false,
+            showListen: true,
             showTimer: true,
+            showRoundTimer: true,
+            showResponseTimer: false,
             showEnd: false,
-            rewindTab: [] as any,
+            rewindObj: {} as Rewind,
             rewindAll: [] as any,
             rewindCounter: 0 as number,
-            selectedCard: 0 as number,
+            selectedCard: -1 as number,
             randomSong: 0 as number,
             currentTurn: 0 as number,
-            maxTurns: 5,
+            maxTurns: 1,
             nextRoundCounter: 0 as number,
             turnDuration: 10,
             responseDuration: 10,
@@ -111,13 +129,23 @@ export default defineComponent({
             responseTimer: 15,
             timerInterval: 0 as any,
             responseInterval: 0 as any,
+            foundCount: 0 as number,
+            noFoundCount: 0 as number,
+            validated: false,
         }
+    },
+
+    computed: {
+        sortedRewindAll() {
+            return this.rewindAll.slice().sort((a: any, b: any) => b.foundCount - a.foundCount);
+        },
     },
 
     mounted() {
         if (this.player.host) {
             this.randomizeClassico();
         }
+        this.maxTurns--;
 
         this.socket.on("randomize", (classico: Classico[], randomSong: number) => {
             if (!this.player.host) {
@@ -135,6 +163,8 @@ export default defineComponent({
         this.socket.on("nextRound", (room: any) => {
             this.room = room;
             this.nextRoundCounter++;
+            this.selectedCard = -1;
+            this.validated = false;
 
             this.timer = this.turnDuration;
 
@@ -168,9 +198,12 @@ export default defineComponent({
 
             if (this.room.players.length === this.nextRoundCounter && this.currentTurn === this.maxTurns) {
                 this.showGame = false;
+                this.showTimer = false;
+                this.showCards = false;
+                this.clearIntervals();
                 this.stopSound();
                 this.showRewind = true;
-                this.socket.emit("CLASSICO/rewind", this.rewindTab, this.player);
+                this.socket.emit("CLASSICO/rewind", this.rewindObj, this.player);
             }
         });
 
@@ -181,6 +214,8 @@ export default defineComponent({
 
             if (this.rewindCounter === room.rewind.length) {
                 this.showRewind = true;
+                console.log(this.rewindAll);
+
                 this.socket.emit("clear rewind", this.player.roomId);
             }
 
@@ -197,6 +232,10 @@ export default defineComponent({
     methods: {
 
         turnTimer() {
+            this.showRoundTimer = true;
+            this.showResponseTimer = false;
+            this.showListen = true;
+            this.showCards = true;
             this.clearIntervals();
             this.timer = this.turnDuration;
             this.showResponse = false;
@@ -204,6 +243,9 @@ export default defineComponent({
             this.timerInterval = setInterval(() => {
                 if (this.timer === 0) {
                     this.timer = this.turnDuration;
+                    if (!this.validated) {
+                        this.validateCard();
+                    }
                     this.displayResponse();
                 } else {
                     this.timer--;
@@ -215,8 +257,12 @@ export default defineComponent({
             this.clearIntervals();
             const classico = this.classico[this.randomSong];
 
+            this.showRoundTimer = false;
+            this.showCards = false;
+            this.showListen = false;
+            this.showResponseTimer = true;
             const title = document.getElementById("response")!;
-            title.innerText = `${classico.title}, ${classico.artiste}, ${classico.title}, ${classico.date}`;
+            title.innerText = `${classico.title}, ${classico.artiste}, ${classico.date}`;
 
             const anecdote = document.getElementById("anecdote")!;
             anecdote.innerText = classico.anecdote;
@@ -306,30 +352,27 @@ export default defineComponent({
 
             const cards: any = document.querySelectorAll(".song-card");
 
-            let isFound;
-
             const currentSong = this.classico[this.randomSong].title + "\n\n" + this.classico[this.randomSong].artiste + "\n\n" + this.classico[this.randomSong].date;
 
-
-            if (cards[this.selectedCard].innerText === currentSong) {
-                console.log("OUIIIII");
-
+            if (this.selectedCard === -1) {
+                this.noFoundCount++;
             }
             else {
-                console.log("NOOOON");
-
+                if (cards[this.selectedCard].innerText === currentSong) {
+                    this.foundCount++;
+                }
+                else {
+                    this.noFoundCount++;
+                }
             }
-            console.log(cards[this.selectedCard].innerText);
-            console.log(currentSong);
 
-
-
-            this.rewindTab.push({ username: this.player.username, music: cards[this.selectedCard].innerText });
+            this.rewindObj = { username: this.player.username, foundCount: this.foundCount, noFoundCount: this.noFoundCount };
 
             const afterSelectionDiv: any = document.querySelector(".after-selection");
 
             afterSelectionDiv.style.opacity = "0.3";
             afterSelectionDiv.style.pointerEvents = "all";
+            this.validated = true;
         },
 
         endgame() {
@@ -346,15 +389,36 @@ export default defineComponent({
 
         resetGame() {
             this.classico = [] as Classico[];
+            this.room = [] as any;
+            this.currentSound = 0 as any;
+            this.volume = 0.5 as number;
+            this.isSubmitDisabled = false;
+            this.showGame = false;
+            this.showCards = true;
+            this.showRewind = false;
+            this.showResponse = false;
+            this.showListen = true;
+            this.showTimer = true;
+            this.showRoundTimer = true;
+            this.showResponseTimer = false;
+            this.showEnd = false;
+            this.rewindObj = {} as Rewind;
+            this.rewindAll = [] as any;
+            this.rewindCounter = 0 as number;
+            this.selectedCard = -1 as number;
+            this.randomSong = 0 as number;
             this.currentTurn = 0 as number;
             this.maxTurns = 5;
             this.nextRoundCounter = 0 as number;
-            this.room = [] as any;
-            this.isSubmitDisabled = false;
-            this.showGame = true;
-            this.showEnd = false;
-            this.rewindTab = [] as any;
-            this.selectedCard = 0 as number;
+            this.turnDuration = 10;
+            this.responseDuration = 10;
+            this.timer = 30;
+            this.responseTimer = 15;
+            this.timerInterval = 0 as any;
+            this.responseInterval = 0 as any;
+            this.foundCount = 0 as number;
+            this.noFoundCount = 0 as number;
+            this.validated = false;
 
             this.maxTurns--;
 

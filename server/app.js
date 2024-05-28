@@ -141,7 +141,6 @@ io.on('connection', (socket) => {
     });
 
     socket.on("CLASSICO/randomize", (classico, roomId, randomSong) => {
-        console.log("[CLASSICO] Classico json", classico);
         io.to(roomId).emit("randomize", classico, randomSong);
     });
 
@@ -149,6 +148,16 @@ io.on('connection', (socket) => {
         rooms.forEach(room => {
             if (room.id === roomId) {
                 io.to(roomId).emit('nextRound', room);
+            }
+        });
+    });
+
+    socket.on('CLASSICO/rewind', (rewind, player) => {
+        rooms.forEach(room => {
+            if (room.id === player.roomId) {
+                console.log("[CLASSICO] Rewind : ", rewind);
+                room.rewind.push(rewind);
+                io.to(player.roomId).emit('CLASSICO/final rewind', room);
             }
         });
     });

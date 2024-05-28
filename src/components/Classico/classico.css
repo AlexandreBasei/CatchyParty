@@ -2,15 +2,98 @@
     display: flex;
     flex-direction: column;
     width: 80%;
+    position: relative;
+    justify-content: center;
 }
 
 .game-main {
-    height: 30%;
+    height: fit-content;
+    min-height: 25%;
     background-color: var(--primary);
     border-radius: 20px;
-    margin: 5% 5% 0 5%;
+    margin: 5% 5% 5% 5%;
 }
 
 .songCont {
     position: relative;
+    overflow: hidden;
+    background-size: cover;
+    height: fit-content;
+}
+
+.song-card {
+    background-color: red;
+    border-radius: 20px;
+    width: 20vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.song-card:hover {
+    background-color: var(--tertiary);
+    color: var(--black);
+    cursor: pointer;
+}
+
+#timer-container{
+    display: flex;
+    flex-flow: wrap row;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: -1%;
+    width: 80%;
+    margin-left: 10%;
+}
+
+#timer-container div{
+    background-color: var(--primary);
+    color: var(--white);
+    border: 2px solid var(--white);
+    border-radius: var(--borderradius);
+    padding: 20px 15px;
+}
+
+#timer-container div:first-child{
+    position: relative;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    padding: 3%;
+}
+
+#timer-container div:first-child p{
+    position: absolute;
+}
+
+#submit{
+    margin-top: 50px;
+}
+
+
+.listen div h3, .listen div p{
+    text-align: justify;
+    padding: 0 5%;
+}
+
+.listen div h3{
+    margin-top: 3%;
+}
+
+.listen div p:last-child {
+    line-height: 30px;
+
+    padding: 0 5% 5% 5%;
+}
+
+.after-selection{
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+    border-radius: 1em;
 }
