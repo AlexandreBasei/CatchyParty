@@ -125,7 +125,7 @@ export default defineComponent({
             selectedCard: -1 as number,
             randomSong: 0 as number,
             currentTurn: 0 as number,
-            maxTurns: 1, //Ne pas oublier de le changer aussi dans resetGame
+            maxTurns: 1,
             nextRoundCounter: 0 as number,
             turnDuration: 10,
             responseDuration: 10,
@@ -136,7 +136,7 @@ export default defineComponent({
             foundCount: 0 as number,
             noFoundCount: 0 as number,
             validated: false,
-        }
+        } //Ne pas oublier de changer le maxTurn aussi dans resetGame
     },
 
     computed: {
