@@ -6,8 +6,8 @@ const path = require('path');
 const axios = require('axios');
 var cors = require('cors');
 
-const getLyrics = require("../src/assets/js/getLyrics");
-const getSong = require("../src/assets/js/getSong");
+const getLyrics = require("./src/assets/js/getLyrics");
+const getSong = require("./src/assets/js/getSong");
 const { log } = require('console');
 
 const app = express();
