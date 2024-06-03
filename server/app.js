@@ -14,14 +14,14 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itryYxm1';
 
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:8080",
+        origin: "http://0.0.0.0:10000",
         methods: ["GET", "POST"]
     }
 });
@@ -521,7 +521,7 @@ app.get('/', (req, res) => {
     res.redirect('index.html');
 });
 
-const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
