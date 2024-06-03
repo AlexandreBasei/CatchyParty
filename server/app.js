@@ -21,7 +21,7 @@ const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itr
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:8080",
+        origin: "http://0.0.0.0:10000",
         methods: ["GET", "POST"]
     }
 });
@@ -521,7 +521,7 @@ app.get('/', (req, res) => {
     res.redirect('index.html');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT,'0.0.0.0', () => {
-    console.log(`Serveur en cours d'exécution sur http://0.0.0.0:${PORT}`);
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
