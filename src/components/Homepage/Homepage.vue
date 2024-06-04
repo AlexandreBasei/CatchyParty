@@ -80,7 +80,7 @@ export default defineComponent({
             rooms: [] as Room[],
             pseudo: '',
             tutorialText: '',
-            socket: io('https://catchyparty.onrender.com'),
+            socket: io('0.0.0.0:10000'),
             stepsFr: [
                 "Étape 1 : Choisir un pseudo...",
                 "Étape 2 : Choisir un avatar...",
