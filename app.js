@@ -18,10 +18,9 @@ app.use(express.static(path.join(__dirname, 'dist')));
 
 const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itryYxm1';
 
-
 const io = require("socket.io")(server, {
     cors: {
-        origin: "https://catchyparty.onrender.com",
+        origin: "http://localhost:8080",
         methods: ["GET", "POST"]
     }
 });
@@ -518,10 +517,11 @@ app.get('/search', (req, res) => {
 
 // Route to redirect to index.html
 app.get('/', (req, res) => {
+    console.log("INDEX.HTML")
     res.redirect('index.html');
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT ,() => {
+server.listen(PORT ,() => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
