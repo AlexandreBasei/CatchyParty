@@ -522,6 +522,6 @@ app.get('/', (req, res) => {
 });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, "0.0.0.0" ,() => {
+app.listen(PORT ,() => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
