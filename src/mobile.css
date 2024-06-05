@@ -26,7 +26,7 @@
 
     /* main */
 
-    main{
+    /* main{
         height: 75vh;
         text-align: center;
         padding: 20px 15px;
@@ -34,12 +34,12 @@
         gap: 5%;
         justify-content: center;
         display: flex;
-    }
+    } */
 
 
-    main section{
+    /* main section{
         width: 50%;
-    }
+    } */
 
     .content{
         display: block;

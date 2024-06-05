@@ -1,13 +1,14 @@
 <template>
     <langApp></langApp>
-    <div class="container">
+    <main class="CGU-main">
         <h1>{{ $t('CONTACTEZ_NOUS') }}</h1>
         <p>{{ $t('CONTACTEZ_NOUS_TEXTE') }}</p>
         <div>
             <span id="email">catchyparty0@gmail.com</span>
             <img class="email-icon" src="@/assets/svg/icons/copy.svg" alt="Email Icon" width="20" height="20" @click="copyEmail()">
         </div>
-    </div>
+    </main>
+        
 </template>
 
 <script lang="ts">
