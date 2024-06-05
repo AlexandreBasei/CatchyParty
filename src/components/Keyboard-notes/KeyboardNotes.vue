@@ -8,7 +8,7 @@
                         <h1>{{ $t('MANCHE') }} {{ items[0].rewindOrder + 1 }}</h1>
                         <h2>{{ items[0].ideas.senderName }} {{ $t('A_SOUMIS_IDEE') }} {{ items[0].ideas.idea }}</h2>
                         <h2 v-if="items[0].sendedMusic.length > 0">{{ $t('MUSIQUE_COMPOSEE_PAR') }} {{
-                    items[0].sendedMusic[0].composerName }}</h2>
+            items[0].sendedMusic[0].composerName }}</h2>
                         <button @click="playSounds(items[0].sendedMusic)">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
                     </div>
                 </div>
@@ -16,9 +16,10 @@
                 <div class="buttons-container">
                     <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
                     <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-                    <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+                    <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE')
+                        }}</button>
                 </div>
-                
+
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
@@ -88,7 +89,7 @@
             </div>
 
             <button id="play" @click="handlePlayClick()"><img src="@/assets/svg/play.svg" class="play" alt="play">{{
-                $t('ECOUTE_TA_MUSIQUE') }}</button>
+            $t('ECOUTE_TA_MUSIQUE') }}</button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <!-- <span>{{ interRoundDuration }}</span> -->
@@ -264,10 +265,11 @@ export default defineComponent({
             this.player.idea = true;
         });
 
-        this.socket.on('newTabToGuess', (NotesToGuess: any, composerName: string) => {
+        this.socket.on('newTabToGuess', (NotesToGuess: any) => {
             this.tabnotes = NotesToGuess;
             this.rewind[this.currentRound][0].receivedMusic = [NotesToGuess, this.player.username];
             console.log(this.tabnotes);
+            console.log('NOTES RECUES');
             this.player.tabAttributed = true;
         });
 

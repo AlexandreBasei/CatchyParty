@@ -71,38 +71,38 @@ io.on('connection', (socket) => {
 
 
     socket.on('sendTabNotes', (tabnotes, player) => {
-        let playersLENGTH = 0;
-        let isDone = false;
         rooms.forEach(room => {
             if (player.roomId === room.id) {
+                let playersLENGTH = room.players.length;
+                let isDone = false;
+
                 room.players.forEach(p => {
 
-                    if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
-
+                    if (p.socketId !== player.socketId && p.tabAttributed === false && !isDone) {
+                        console.log("Player random", p.username);
+                        console.log("Moi", player.username);
                         NotesToGuess.push({ id: p.socketId, tabnotes: tabnotes });
                         console.log(tabnotes);
                         p.tabAttributed = true;
                         io.to(p.socketId).emit('newTabToGuess', tabnotes);
-                        isDone = !isDone;
+                        isDone = true;
                         console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
+                        return;
+                    } else {
+                        console.log("pas bon ça Player random", p.username);
+                        console.log("pas bon ça Moi", player.username);
                     }
-
-                    else {
-                        console.log("pas bon ça");
-                    }
-
-                    playersLENGTH = room.players.length;
-
                 });
+
+                if (NotesToGuess.length === playersLENGTH - 1) {
+                    console.log('Guess attributed c bon');
+                }
+
+                console.log(NotesToGuess);
             }
         });
-
-        if (NotesToGuess.length === playersLENGTH) {
-            console.log('Guess attributed c bon');
-        }
-
-        console.log(NotesToGuess);
     });
+
 
     socket.on('sendPlayer', (player) => {
         io.to(player.socketId).emit('receivePlayer', player);
@@ -169,7 +169,7 @@ io.on('connection', (socket) => {
     socket.on("endgame", (roomId) => {
         io.to(roomId).emit("endgame");
     })
-    
+
     socket.on("WTS/start", (player) => {
         console.log("[WTS] start game");
         io.to(player.roomId).emit("WTS/start game");
