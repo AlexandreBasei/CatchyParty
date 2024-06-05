@@ -434,6 +434,7 @@ form .messages{
 .end-game-button{
     background-color: var(--primary) !important;
     color: var(--white) !important;
+    border: 2px solid transparent !important;
 }
 
 .rewind .buttons-container{

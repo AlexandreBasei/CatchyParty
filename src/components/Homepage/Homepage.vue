@@ -80,7 +80,7 @@ export default defineComponent({
             rooms: [] as Room[],
             pseudo: '',
             tutorialText: '',
-            socket: io('http://0.0.0.0:4000'),
+            socket: io('https://localhost:4000'),
             stepsFr: [
                 "Étape 1 : Choisir un pseudo...",
                 "Étape 2 : Choisir un avatar...",
