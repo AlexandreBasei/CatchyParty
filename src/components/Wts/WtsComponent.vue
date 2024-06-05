@@ -4,8 +4,8 @@
       <h2>Round terminé !</h2>
     </section>
     <section class="rewindAll" v-show="showRewind">
-      <div class="rewind" v-for="(rewinds, index) in rewindAll" :key="index" v-bind:id="'joueur' + index">
-        <h2>Choix de {{ rewinds[index].username }}</h2>
+      <div class="rewind" v-for="(rewinds, index) in WTSRewindAll" :key="index" v-bind:id="'joueur' + index">
+        <h2 v-if="rewinds[index].username">Choix de {{ rewinds[index].username }}</h2>
         <div class="rewind2" v-for="(rewind, index2) in rewinds" :key="index2">
           <h3>Situation :</h3>
           <p>{{ rewind.situation }}</p>
@@ -121,7 +121,7 @@ export default defineComponent({
       showRewind: false,
       showEnd: false,
       rewindTab: [] as any,
-      rewindAll: [] as any,
+      WTSRewindAll: [] as any,
       rewindCounter: 0 as number,
       selectedCard: 0 as number,
     };
@@ -163,18 +163,20 @@ export default defineComponent({
 
       if (this.room.players.length === this.nextRoundCounter && this.currentTurn === this.maxTurns) {
         this.showGame = false;
-        // this.showRewind = true;
+        this.showRewind = true;
         this.socket.emit("WTS/rewind", this.rewindTab, this.player);
       }
     });
 
     this.socket.on('WTS/final rewind', (room: any) => {
-      this.rewindAll = room.rewind;
+      this.WTSRewindAll = room.rewind;
 
       this.rewindCounter++;
       
       if (this.rewindCounter === room.rewind.length) {
         this.showRewind = true;
+        console.log("clearing rewind...", this.WTSRewindAll);
+        
         this.socket.emit("clear rewind", this.player.roomId);
       }
 
@@ -282,6 +284,8 @@ export default defineComponent({
 
       const cards: any = document.querySelectorAll(".song-card");
 
+      console.log(this.player.username);
+      
       this.rewindTab.push({ username: this.player.username, situation: this.content, music: cards[this.selectedCard].innerText });
 
       const afterSelectionDiv: any = document.querySelector(".after-selection");
@@ -296,6 +300,8 @@ export default defineComponent({
       this.showEnd = true;
       this.showGame = false;
       this.showRewind = false;
+      console.log("ENDGAAAAAAME");
+      
       setTimeout(() => {
         if (this.player.host) {
           this.socket.emit("WTS/endgame", this.player.roomId);

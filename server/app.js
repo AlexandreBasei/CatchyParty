@@ -176,6 +176,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on("WTS/endgame", (roomId) => {
+        console.log("WTS ENDGAME");
         io.to(roomId).emit("endgame");
     })
 
