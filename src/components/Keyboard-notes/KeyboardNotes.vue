@@ -469,7 +469,7 @@ export default defineComponent({
 
         handlePlayGuessingClick() {
             console.log(this.notesDuration2);
-            this.playSounds(this.notesDuration2);
+            this.playSounds(this.tabnotes);
         },
 
         handleDrop(event: DragEvent) {
