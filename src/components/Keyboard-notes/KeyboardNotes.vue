@@ -199,7 +199,7 @@ export default defineComponent({
             remainingTime: 0,
             roundDuration: 5, // Durée de chaque tour en secondes
             interRoundDuration: 10,
-            timerInterval: 0,
+            timerInterval: 0 as any,
             secondsLeft: 0,
             player: {} as Player,
             assignedIdea: {} as AssignedIdea,
@@ -609,7 +609,7 @@ export default defineComponent({
             this.firstStepGame = true;
         },
         playRound() {
-            this.timerInterval = window.setInterval(() => {
+            this.timerInterval = setInterval(() => {
                 this.timerInGame = true;
                 this.timerInterGame = false;
                 if (this.remainingTime <= 0) {
