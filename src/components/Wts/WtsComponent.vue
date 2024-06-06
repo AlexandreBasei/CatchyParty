@@ -5,7 +5,7 @@
     </section>
     <section class="rewindAll" v-show="showRewind">
       <div class="rewind" v-for="(rewinds, index) in WTSRewindAll" :key="index" v-bind:id="'joueur' + index">
-        <h3 v-if="rewinds[index].username">Choix de {{ rewinds[index].username }}</h3>
+        <h3 v-if="rewinds[index].username">{{ $t('CHOIX_DE') }} {{ rewinds[index].username }}</h3>
         <div class="rewind2" v-for="(rewind, index2) in rewinds" :key="index2">
           <h3>{{ $t('SITUATION') }}</h3>
           <p>{{ rewind.situation }}</p>
@@ -79,6 +79,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import data from './data.json';
+import dataEn from './dataEn.json';
 
 // Permet de définir le type de chaques éléments du json
 interface Situation {
@@ -113,6 +114,7 @@ export default defineComponent({
       currentTurn: 0 as number,
       maxTurns: 5,
       situations: data.situations as Situation[],
+      situationsEn: dataEn.situations as Situation[],
       nextRoundCounter: 0 as number,
       room: [] as any,
       isSubmitDisabled: false,
@@ -123,9 +125,18 @@ export default defineComponent({
       WTSRewindAll: [] as any,
       rewindCounter: 0 as number,
       selectedCard: 0 as number,
+      lang: ''
     };
   },
   mounted() {
+    const getLang = localStorage.getItem('lang');
+      if(getLang){
+          this.lang = getLang;
+      } else{
+          this.lang = 'fr';
+          localStorage.setItem('lang',this.lang);
+      }
+
     this.resetWTSGame();
     this.randomizeSituation();
     this.randomizeMusics();
@@ -218,6 +229,7 @@ export default defineComponent({
       this.currentTurn = 0 as number;
       this.maxTurns = 5;
       this.situations = data.situations as Situation[];
+      this.situationsEn = dataEn.situations as Situation[];
       this.nextRoundCounter = 0 as number;
       this.room = [] as any;
       this.isSubmitDisabled = false;
@@ -264,10 +276,14 @@ export default defineComponent({
     },
     // Obtenir une situation aléatoire
     randomizeSituation() {
-      const randomSituation = this.situations[Math.floor(Math.random() * this.situations.length)];
-
-      // Récupérer la description de la situation aléatoire
-      this.content = randomSituation.description;
+      if(this.lang == "fr"){
+        const randomSituation = this.situations[Math.floor(Math.random() * this.situations.length)];
+        this.content = randomSituation.description;
+      }else{
+        const randomSituation = this.situationsEn[Math.floor(Math.random() * this.situationsEn.length)];
+              // Récupérer la description de la situation aléatoire
+        this.content = randomSituation.description;
+      }
     },
 
     randomizeMusics() {

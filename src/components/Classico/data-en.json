@@ -1,0 +1,74 @@
+{
+    "classico": [
+        {
+            "id": 0,
+            "title": "Requiem en D mineur, Lacrimosa dies illa, K.626",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "In 1791, Mozart received an anonymous commission to compose a requiem. The man who placed the order was actually an emissary of Count Franz von Walsegg, who intended to present the work as his own to commemorate the death of his wife. Mozart, already weakened by illness, worked intensely on the requiem, but he could not complete it before his death on December 5, 1791. Legend has it that Mozart was convinced he was writing this requiem for his own funeral, which added a tragic touch to the work.",
+            "date": "1791"
+        },
+        {
+            "id": 1,
+            "title": "Symphony No. 5",
+            "artiste": "Ludwig Van Beethoven",
+            "anecdote": "The opening of Symphony No. 5 is famous for its four initial notes: `ta-ta-ta-taa`. One day, one of his students asked Beethoven what this striking motif meant. Beethoven replied that it was 'fate knocking at the door.' This powerful and dramatic opening, repeated throughout the first movement, symbolizes struggle and victory, recurring themes in Beethoven's work, who himself was battling deafness at the time of composing this symphony.",
+            "date": "1805-1807"
+        },
+        {
+            "id": 2,
+            "title": "La Primavera (Spring), The Four Seasons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "When he composed The Four Seasons in 1723, Vivaldi not only wrote the music but also provided sonnets to accompany each season, probably written by himself. These sonnets describe the scenes and emotions that the music is supposed to evoke, making these concertos among the first works of programmatic music, where the music tells a story or depicts specific images.",
+            "date": "1725"
+        },
+        {
+            "id": 3,
+            "title": "L'estate (Summer), The Four Seasons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "It is said that Vivaldi was so inspired by the violent summer storms he observed in Italy that he wanted to capture their intensity and turbulence in his music. During one of the early performances, the orchestra played the storm passage with such vigor and realism that some members of the audience were frightened, genuinely believing a storm was approaching.",
+            "date": "1725"
+        },
+        {
+            "id": 4,
+            "title": "L'autunno (Autumn), The Four Seasons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Although Vivaldi's concertos were popular in his time, they fell into obscurity after his death. In the early 1920s, a collector of musical manuscripts in Turin, Italy, discovered a significant collection of Vivaldi's scores, including the original manuscripts of The Four Seasons. These scores were in quite poor condition, with some parts even missing, but they were carefully restored. The rediscovery of these scores was a revelation for the world of classical music. The Four Seasons quickly regained popularity and became one of the most played and recorded works of all time.",
+            "date": "1725"
+        },
+        {
+            "id": 5,
+            "title": "L'inverno (Winter), The Four Seasons",
+            "artiste": "Antonio Vivaldi",
+            "anecdote": "Over the decades, The Four Seasons have been used in numerous films, commercials, TV shows, and even video games. Their expressive and evocative music has often been chosen to accompany dramatic, romantic, or contemplative scenes, thus enhancing their emotional impact. For example, the first movement of the Summer Concerto was used in films such as John Boorman's Excalibur and Anthony Minghella's The Talented Mr. Ripley, while the second movement of the Winter Concerto was used in Stanley Kubrick's A Clockwork Orange.",
+            "date": "1725"
+        },
+        {
+            "id": 6,
+            "title": "Symphonie n° 40 en sol mineur, K.550",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "At the age of 14, Mozart traveled to Rome to attend Holy Week. During this visit, he heard Allegri's famous Miserere, a sacred choral piece of nine minutes that was jealously guarded by the Vatican and forbidden to be reproduced. Upon returning to his lodging, Mozart, thanks to his incredible musical memory, managed to transcribe the entire piece from memory. This feat was discovered by the Vatican, but instead of punishing Mozart, Pope Clement XIV was so impressed by his talent that he made him a Knight of the Golden Spur.",
+            "date": "1788"
+        },
+        {
+            "id": 7,
+            "title": "Eine Kleine Nachtmusik",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "Although Eine kleine Nachtmusik is one of Mozart's most famous works today, there is little information about the exact circumstances of its creation. It is not known why Mozart composed this work or for whom it was intended. There is no dedication in the original manuscript, and there is no reference to this piece in Mozart's correspondence. Moreover, there is no record of Mozart playing this piece himself, nor any mention of its first performance during his lifetime. This contrasts with other compositions by Mozart for which he often made announcements or comments in his correspondence.",
+            "date": "1787"
+        },
+        {
+            "id": 8,
+            "title": "Les noces de Figaro, Ouverture, K. 492",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "When Mozart adapted Beaumarchais' play into an opera, he chose Lorenzo Da Ponte to write the libretto. Da Ponte was an Italian poet and librettist, and their collaboration produced some of the most famous operatic works, including The Marriage of Figaro. However, when the opera was completed in 1786, it quickly faced censorship opposition. The subversive and politically charged subject of Beaumarchais' play, combined with the social and political satire in Da Ponte's libretto, caused concerns among the Austrian authorities. Emperor Joseph II initially banned the performance of the opera, fearing that its revolutionary content might provoke unrest. Mozart and Da Ponte had to struggle to obtain permission to perform it. Eventually, after several adjustments and negotiations, they managed to persuade the emperor to allow the play to be presented to the public.",
+            "date": "1786"
+        },
+        {
+            "id": 9,
+            "title": "Piano Concerto No. 21 - Andante",
+            "artiste": "Wolfgang Amadeus Mozart",
+            "anecdote": "When Mozart played this concerto for the first time in public in Vienna in 1785, he is said to have improvised a remarkably complex and virtuosic cadenza during the first movement. It was a common practice at the time for soloists to compose or improvise their own cadenza, a solo section often located towards the end of a concerto movement. However, what made this performance particularly memorable is that Mozart had not written a cadenza for this concerto, and he is said to have improvised this cadenza on the spot, based on the musical themes of the movement. This demonstration of virtuosity and musical genius left the audience stunned and added to Mozart's reputation as a prodigious pianist and exceptional improviser.",
+            "date": "1785"
+        }
+    ]
+}

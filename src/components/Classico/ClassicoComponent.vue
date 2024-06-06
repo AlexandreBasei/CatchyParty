@@ -75,6 +75,7 @@ import { defineComponent } from 'vue';
 import io from 'socket.io-client';
 import { Howl, Howler } from 'howler';
 import data from './data.json';
+import dataEn from './data-en.json';
 
 interface Classico {
     id: number;
@@ -135,6 +136,7 @@ export default defineComponent({
             foundCount: 0 as number,
             noFoundCount: 0 as number,
             validated: false,
+            lang: '',
         } //Ne pas oublier de changer le maxTurn aussi dans resetGame
     },
 
@@ -145,6 +147,14 @@ export default defineComponent({
     },
 
     mounted() {
+        const getLang = localStorage.getItem('lang');
+        if(getLang){
+            this.lang = getLang;
+        } else{
+            this.lang = 'fr';
+            localStorage.setItem('lang',this.lang);
+        }
+
         this.maxTurns--;
 
         this.socket.on("CLASSICO/start game", () => {
@@ -322,13 +332,23 @@ export default defineComponent({
         },
 
         randomizeClassico() {
-            const classico: Classico[] = data.classico;
-            classico.sort(() => Math.random() - 0.5);
-            this.classico = classico.slice(0, 3);
+            if(this.lang == "fr"){
+                const classico: Classico[] = data.classico;
+                classico.sort(() => Math.random() - 0.5);
+                this.classico = classico.slice(0, 3);
 
-            this.randomSong = Math.floor(Math.random() * 3);
+                this.randomSong = Math.floor(Math.random() * 3);
 
-            this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+                this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+            }else{
+                const classico: Classico[] = dataEn.classico;
+                classico.sort(() => Math.random() - 0.5);
+                this.classico = classico.slice(0, 3);
+
+                this.randomSong = Math.floor(Math.random() * 3);
+
+                this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+            }
         },
 
         selectCard(number: number) {
