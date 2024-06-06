@@ -1,0 +1,26 @@
+@media only screen and (max-width: 800px) {
+
+    #timer-container {
+        gap: 20px;
+        justify-content: center;
+        padding-top: 50px;
+    }
+
+    #timer-container div:first-child{
+        width: 100%;
+    }
+
+    .songCont{
+        width: 100%;
+        overflow-x: unset !important;
+    }
+
+    .song-card{
+        width: 19vh !important;
+    }
+
+    .song-cards{
+        flex-wrap: wrap;
+    }
+
+}

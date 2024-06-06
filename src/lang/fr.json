@@ -69,7 +69,7 @@
     "SALON_EXISTE_PAS": "Le salon que tu essaies de rejoindre n'existe pas",
     "RETOURNER_A_ACCUEIL": "Retourner à l'accueil",
     "QUITTER_PARTIE": "Quitter la partie",
-    "REGLES": "Rules",
+    "REGLES": "Règles",
     "REGLES_TEXTE_1": "Bienvenue dans le monde... Le but du jeu, choisir la meilleure carte correspondant à la situation décrite.",
     "REGLES_TEXTE_2": "Utilisez le titre, le nom de l'album ou l'artiste pour être le plus drôle de vos amis.",
     "REGLES_TEXTE_3": "Vous devez être aussi créatif que possible afin d'être sélectionné pour être le gestionnaire (celui qui décide qui est le plus drôle).",
@@ -99,5 +99,14 @@
     "SUPPRIMER_LA_NOTE": "Supprimer la note",
     "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : ",
     "TERMINER_LA_MANCHE": "Terminer la manche",
-    "RESPONSE TIMER": "Début du tour suivant dans : "
+    "RESPONSE TIMER": "Début du tour suivant dans : ",
+    "VOLUME": "Volume",
+    "DEMARRER_JEU_SUIVANT" : "Démarrage du jeu suivant...",
+    "RESULTAT" : "Résultats de la partie",
+    "MUSIQUES_TROUVEE": "Musiques trouvées : ",
+    "ANECDOTE": "Anecdote",
+    "REPONSE": "Réponse",
+    "SITUATION": "Situation",
+    "MUSIQUE_CHOISIE": "Musique choisie :",
+    "CHOIX_DE": "Choix de"
 }

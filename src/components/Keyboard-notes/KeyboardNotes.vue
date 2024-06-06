@@ -253,11 +253,15 @@ export default defineComponent({
     // Ici tout le code procédural
     mounted() {
         this.resetGame();
-
+        const getInfos = document.getElementById("infosComponent");
         const keys = document.querySelectorAll(".key");
         // const noteContainer = document.getElementById("note-container")!;
         const noteOption = document.getElementById("note-option")!;
         const optionNoteContainer = document.getElementById("option-note-container")!;
+
+        if(getInfos){
+            getInfos.style.display = 'none';
+        }
 
         keys.forEach((key) => {
             key.addEventListener("dragstart", (event) => {

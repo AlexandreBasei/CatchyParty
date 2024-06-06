@@ -2,7 +2,7 @@
 
   <headerApp></headerApp>
   <RouterView />
-  <div class="footer">
+  <div class="footer" id="footer">
     <footerApp></footerApp>
   </div>
 </template>

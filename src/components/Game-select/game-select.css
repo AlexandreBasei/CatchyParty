@@ -411,7 +411,7 @@ form .messages{
 .rewind {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 25px;
 }
 
 .rewindGroup {
@@ -448,5 +448,6 @@ form .messages{
 }
 
 .rewind2{
-    /* border: 2px solid white; */
+    background: var(--primary);
+    border-radius: var(--borderradius);
 }
