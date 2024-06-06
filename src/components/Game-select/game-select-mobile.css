@@ -44,6 +44,7 @@
     .content{
         flex-wrap: wrap;
         width: 100%;
+        gap: 20px;
     }
 
     .personalization-options > div{
