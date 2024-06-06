@@ -1,6 +1,7 @@
 <template>
     <!-- <h1>Current round : {{ currentRound }}</h1> -->
-    <div class="content">
+     <InfosComponent></InfosComponent>
+    <div class="content" id="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>
             <div class="playersContainer" v-for="room in rooms" :key="room.id">
@@ -108,6 +109,7 @@ import io from 'socket.io-client';
 import Kbnotes from "@/components/Keyboard-notes/KeyboardNotes.vue";
 import ProfilePicture from "@/components/ProfilePicture/ProfilePicture.vue";
 import WtsComponent from '../Wts/WtsComponent.vue';
+import InfosComponent from '../Infos/Infos.vue';
 import ClassicoComponent from '../Classico/ClassicoComponent.vue';
 import { Emit } from 'vue-property-decorator';
 
@@ -147,6 +149,7 @@ export default defineComponent({
         ProfilePicture,
         WtsComponent,
         ClassicoComponent,
+        InfosComponent
     },
 
     props: {
@@ -198,6 +201,11 @@ export default defineComponent({
         // setInterval(() => {
             this.updRooms();
         // }, 20);
+        const getInfos = document.getElementById("infosComponent");
+
+        if(getInfos){
+            getInfos.style.display = 'block';
+        }
 
         this.socket.on('join room', (player: any) => {
             this.player = player;
