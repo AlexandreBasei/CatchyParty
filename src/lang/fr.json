@@ -99,5 +99,11 @@
     "SUPPRIMER_LA_NOTE": "Supprimer la note",
     "EMAIL_COPIEE": "L'email a été copié dans le presse-papiers : ",
     "TERMINER_LA_MANCHE": "Terminer la manche",
-    "RESPONSE TIMER": "Début du tour suivant dans : "
+    "RESPONSE TIMER": "Début du tour suivant dans : ",
+    "VOLUME": "Volume",
+    "DEMARRER_JEU_SUIVANT" : "Démarrage du jeu suivant...",
+    "RESULTAT" : "Résultats de la partie",
+    "MUSIQUES_TROUVEE": "Musiques trouvées : ",
+    "ANECDOTE": "Anecdote",
+    "REPONSE": "Réponse"
 }

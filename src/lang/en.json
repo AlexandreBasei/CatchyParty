@@ -99,6 +99,12 @@
     "SUPPRIMER_LA_NOTE": "Delete note",
     "EMAIL_COPIEE": "The email has been copied to the clipboard : ",
     "TERMINER_LA_MANCHE": "End round",
-    "RESPONSE TIMER": "Starting next round in : "
+    "RESPONSE TIMER": "Starting next round in : ",
+    "VOLUME": "Volume",
+    "DEMARRER_JEU_SUIVANT" : "Starting the next game...",
+    "RESULTAT" : "Results of the game",
+    "MUSIQUES_TROUVEE": "Found music:",
+    "ANECDOTE": "Anecdote",
+    "REPONSE": "Response"
   }
   
