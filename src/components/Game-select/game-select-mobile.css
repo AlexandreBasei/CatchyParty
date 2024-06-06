@@ -50,7 +50,7 @@
         flex-wrap: wrap;
     }
 
-    select, input[type=text], button{
+    /* select, input[type=text], button{
         width: 100%;
-    }
+    } */
 }

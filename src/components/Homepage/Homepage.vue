@@ -12,9 +12,9 @@
         </div>
 
         <div class="avatar-choice">
-            <h3 v-if="homepage === true && !roomId">{{ $t('AVATAR') }}</h3>
+            <h3 class="no-background" v-if="homepage === true && !roomId">{{ $t('AVATAR') }}</h3>
             <div v-else v-for="room in rooms" :key="room.id">
-                <h3 v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
+                <h3 class="no-background" v-if="room.id === roomId">{{ $t('REJOINDRE_SALLE') }} {{ room.players[0].username }}</h3>
             </div>
             
             <div class="avatar-container">
