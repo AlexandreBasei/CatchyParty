@@ -47,9 +47,6 @@ export default defineComponent({
             games: [
                 { id: 1, name: "Keyboard-notes", image: require("@/assets/svg/partinies/solar.svg") },
                 { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
-                { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") },
-                { id: 1, name: "Keyboard-notes", image: require("@/assets/svg/partinies/solar.svg") },
-                { id: 2, name: "Classico", image: require("@/assets/svg/partinies/vilo.svg") },
                 { id: 3, name: "What's the situation ?", image: require("@/assets/svg/partinies/blingbling.svg") }
             ],
             rulesFr: [
