@@ -76,6 +76,8 @@ io.on('connection', (socket) => {
                 let playersLENGTH = room.players.length;
                 let isDone = false;
 
+                console.log(tabnotes);
+
                 room.players.forEach(p => {
 
                     if (p.socketId !== player.socketId && p.tabAttributed === false && !isDone) {

@@ -194,7 +194,7 @@ export default defineComponent({
             noteSelectedId: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 1000, // Durée de chaque tour en secondes
+            roundDuration: 40, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0 as any,
             secondsLeft: 0,
@@ -209,6 +209,7 @@ export default defineComponent({
             rewindOrder: 0,
             currentIndex: 0,
             music: [] as Notes[],
+            music2: [] as Notes[],
             isPlaying: false,
         }
     },
@@ -504,8 +505,8 @@ export default defineComponent({
                 this.timerInterGame = false;
                 if (this.remainingTime <= 0) {
                     clearInterval(this.timerInterval);
-                    this.rewind[this.currentRound][0].sendedMusic = this.notesDuration;
-                    this.socket.emit('sendTabNotes', this.notesDuration, this.player);
+                    this.rewind[this.currentRound][0].sendedMusic = this.music;
+                    this.socket.emit('sendTabNotes', this.music, this.player);
 
                     this.timerInterval = 0;
                     this.currentRound++;
@@ -559,23 +560,10 @@ export default defineComponent({
         resetRound() {
             this.player.idea = false;
             this.player.tabAttributed = false;
-            this.notesDuration2 = this.notesDuration;
-            this.notesDuration = [];
-
-            const noteContainer = document.getElementById('note-container');
-            const noteOptionContainer = document.getElementById('option-note-container');
-
-            if (noteContainer) {
-                while (noteContainer.firstChild) {
-                    noteContainer.removeChild(noteContainer.firstChild);
-                }
-            }
-
-            if (noteOptionContainer) {
-                while (noteOptionContainer.firstChild) {
-                    noteOptionContainer.removeChild(noteOptionContainer.firstChild);
-                }
-            }
+            this.music2 = this.music;
+            console.log(`je suis la musique apres avant été vidée ${this.music}`);
+            this.music = [];
+            console.log(`je suis la musique apres avoir été vidée ${this.music}`);
         },
 
         resetGame() {
@@ -606,7 +594,7 @@ export default defineComponent({
             this.noteSelectedId = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 1000; // Durée de chaque tour en secondes
+            this.roundDuration = 40; // Durée de chaque tour en secondes
             this.interRoundDuration = 10;
             this.timerInterval = 0;
             this.secondsLeft = 0;
@@ -619,7 +607,8 @@ export default defineComponent({
             this.rewindId = '';
             this.rewindOrder = 0;
             this.currentIndex = 0;
-            this.music= [] as Notes[],
+            this.music = [] as Notes[],
+            this.music2 = [] as Notes[],
             this.isPlaying= false,
 
             this.rewindId = this.generateID();
