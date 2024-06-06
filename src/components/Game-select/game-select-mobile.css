@@ -45,6 +45,7 @@
         flex-wrap: wrap;
         width: 100%;
         gap: 20px;
+        justify-content: center;
     }
 
     .personalization-options > div{
