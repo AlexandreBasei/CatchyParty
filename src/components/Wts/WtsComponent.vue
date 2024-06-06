@@ -30,7 +30,7 @@
       <div class="after-selection"></div>
 
       <div class="song-cards">
-        <div class="song-card" v-if="musics[0]" @click="WTSselectCard(0)">
+        <div class="song-card" v-if="musics[0]" @click="WTSselectCard(0)" >
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
           <p>{{ musics[0].title }}</p>
           <p>{{ musics[0].artiste }}</p>
@@ -136,6 +136,8 @@ export default defineComponent({
       this.room = room;
       this.nextRoundCounter++;
 
+
+
       if (this.room.players.length === this.nextRoundCounter && this.currentTurn < this.maxTurns) {
         this.randomizeSituation();
         this.randomizeMusics();
@@ -145,7 +147,7 @@ export default defineComponent({
         cards.forEach((card: any) => {
           card.style.backgroundColor = "#19647e";
           card.style.color = "#f9fafa";
-
+          card.classList.remove("card-flip");
         });
 
         const submit: any = document.getElementById("submit");
@@ -250,10 +252,12 @@ export default defineComponent({
 
     WTSselectCard(number: number) {
       const cards: any = document.querySelectorAll(".song-card");
+      
 
       cards.forEach((card: any) => {
         card.style.backgroundColor = "#19647e";
         card.style.color = "#f9fafa";
+
 
       });
       cards[number].style.backgroundColor = "#f4d35e";
@@ -283,6 +287,12 @@ export default defineComponent({
       this.isSubmitDisabled = true;
 
       const cards: any = document.querySelectorAll(".song-card");
+
+      cards.forEach((card: any) => {
+        card.querySelectorAll("p").forEach((p: HTMLElement) => p.innerText = "");
+        card.classList.add("card-flip");
+        
+      });
 
       console.log(this.player.username);
       

@@ -188,3 +188,15 @@ main {
         transform: translateX(-50%);
     }
 }
+.song-card {
+    transition: transform 0.5s ease; /* Animation de retournement */
+  }
+  
+  .card-flip {
+    transform: rotateY(180deg); /* Retournement des cartes */
+  }
+
+  .song-card.flip p {
+    opacity: 0; /* Rendre le texte des balises <p> transparent */
+    transition: opacity 0.3s ease; /* Ajouter une transition pour une animation fluide */
+  }
