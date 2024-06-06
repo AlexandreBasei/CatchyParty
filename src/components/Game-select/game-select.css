@@ -288,6 +288,9 @@
     z-index: 5;
     border-radius: var(--borderradius);
     overflow: hidden;
+
+    padding: 30px;
+    box-sizing: border-box;
 }
 .guest-settings::before{
     content: "";
