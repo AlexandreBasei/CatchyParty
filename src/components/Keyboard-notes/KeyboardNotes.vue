@@ -19,91 +19,75 @@
                     <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE')
                         }}</button>
                 </div>
-
             </div>
         </section>
         <div class="end-game" v-show="showEndGame">
             <h2 id="play">{{ $t('PARTIE_TERMINEE') }}</h2>
         </div>
 
-        <!-- <div class="Waiting-game" v-show="showWaitingGame">
-            <button @click="socket.emit('play');" v-show="!showMainGame && !showAfterGame && !showEndGame"
-                :disabled="gameStarted">{{ $t('KEYBOARD_NOTES') }}</button>
-        </div> -->
         <div class="first-step" v-show="firstStepGame">
             <label for="userIdea">{{ $t('ENTREZ_NOM_MUSIQUE') }}</label>
-            <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')" class="justHere">
+            <input type="text" v-model="userIdeaInput" :placeholder="$t('JUSTE_ICI')" class="justHere" @keyup.enter="submitIdea">
             <button @click="submitIdea()" :disabled="ideaSubmitted">{{ $t('VALIDER') }}</button>
             <p v-if="ideaSubmitted">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
         </div>
 
         <div class="main-game" v-show="showMainGame">
-            <!-- Affichage du temps restant -->
-            <div id="timer" v-show="timerInGame">
-                {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
+            <div class="timer" v-show="timerInGame || timerInterGame">
+                {{ $t('TEMPS_RESTANT') }} {{ timerInGame ? remainingTime : secondsLeft }} {{ $t('SECONDES') }}
             </div>
-            <!-- Affichage du temps restant dans le décompte des 30 secondes -->
-            <div id="countdown" v-show="timerInterGame">
-                {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
-            </div>
+
             <div class="topBlock">
-                <!-- <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
-                    <div v-if="item.receiverId === socket.id">
-                        <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
-                    </div>
-                </div> -->
                 <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea && item.receiverId === socket.id">
                     <h3>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</h3>
                 </div>
 
-                <div id="piano">
-                    <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
-                    <div class="key" data-note="A1" @click="playSound('A1')" draggable="true">A1</div>
-                    <div class="key" data-note="A2" @click="playSound('A2')" draggable="true">A2</div>
-                    <div class="key" data-note="B0" @click="playSound('B0')" draggable="true">B0</div>
-                    <div class="key" data-note="B1" @click="playSound('B1')" draggable="true">B1</div>
-                    <div class="key" data-note="B2" @click="playSound('B2')" draggable="true">B1</div>
-                    <div class="key" data-note="C1" @click="playSound('C1')" draggable="true">C1</div>
-                    <div class="key" data-note="C2" @click="playSound('C2')" draggable="true">C2</div>
-                    <div class="key" data-note="C3" @click="playSound('C3')" draggable="true">C3</div>
-                    <div class="key" data-note="D1" @click="playSound('D1')" draggable="true">D1</div>
-                    <div class="key" data-note="D2" @click="playSound('D2')" draggable="true">D2</div>
-                    <div class="key" data-note="D3" @click="playSound('D3')" draggable="true">D3</div>
-                    <div class="key" data-note="E1" @click="playSound('E1')" draggable="true">E1</div>
-                    <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
+                <div class="piano">
+                    <div v-for="octave in 3" :key="octave" class="octave">
+                        <div v-for="note in ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']" :key="note">
+                            <div :class="{ 'key': true, 'bemole': isBemole(note) }" :data-note="`${note}${octave + 2}`" @click="playSound(`${note}${octave + 2}`)" draggable="true">{{ `${note}${octave + 2}` }}</div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
             
             <div class="bottomBlock">
-                <!-- <div class="note-parameters">
-                    <button @click="noteContainerMenu()">{{ $t('SUITE_DE_NOTE') }}</button>
-                    <button @click="noteOptionMenu()">{{ $t('REGLAGES_DE_DUREE') }}</button>
-                    <div id="note-container" v-show="showNoteContainer">
-                        <p>{{ $t('GLISSE_LES_NOTES') }} {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
-                    </div>
-                    <div id="note-option-container" v-show="showNoteOption">
-                        <div id="option-note-container"></div>
-                        <div id="note-option">
-                            <p>{{ $t('AUCUNE_NOTE_SELECTIONNEE') }}</p>
-                        </div>
-                    </div>
-                    <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
-                    <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
-                </div> -->
                 <div class="note-parameters">
                     <div id="note-option-container">
-                        <div id="option-note-container"></div>
-                        <div id="note-option">
-                            <p>{{ $t('GLISSE_LES_NOTES') }} {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
+                        <h3>{{ $t('TA_MUSIQUE') }}</h3>
+
+                        <div id="option-note-container" class="piano">
+                            <p v-show="music.length === 0">{{ $t('GLISSE_LES_NOTES') }} {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
+                            <div v-for="(note, index) in music" :key="note.infos.id" 
+                                :class="{ 'key': true, 'selected-note': note.infos.id === noteSelectedId }" 
+                                @click="selectNoteAndPlaySound(note.infos.id)"
+                                :style="{ width: `${note.infos.duration * 50}px`, 'margin-right': `${index < music.length - 1 ? note.infos.interval * 20 : 0}px` }">
+                                {{ note.infos.note }}
+                            </div>
+                        </div>
+
+                        <div id="note-option" v-if="music.length > 0 && noteSelectedId && selectedNote">
+                            <div>
+                                <span>{{ $t('NOTE_DURATION') }}</span>
+                                <input type="range" min="0.5" max="2" step="0.25" v-model="selectedNote.infos.duration">
+                                <p>{{ selectedNote.infos.duration }}s</p>
+                            </div>
+                            <div>
+                                <span>{{ $t('NOTE_INTERVAL') }}</span>
+                                <input type="range" min="0.0" max="2" step="0.25" v-model="selectedNote.infos.interval">
+                                <p>{{ selectedNote.infos.interval }}s</p>
+                            </div>
                         </div>
                     </div>
-                    <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
-                    <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                    <button @click="deleteNote()" v-if="noteSelectedId">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
                 </div>
             </div>
 
-            <button id="play" @click="handlePlayClick()"><img src="@/assets/svg/play.svg" class="play" alt="play">{{
-            $t('ECOUTE_TA_MUSIQUE') }}</button>
+            <button id="play" @click="handlePlayClick()" :disabled="isPlaying">
+                <img src="@/assets/svg/play.svg" class="play" alt="play">
+                {{$t('ECOUTE_TA_MUSIQUE') }}
+            </button>
         </div>
         <div class="after-game" v-show="showAfterGame">
             <!-- <span>{{ interRoundDuration }}</span> -->
@@ -209,10 +193,10 @@ export default defineComponent({
             timerInGame: false,
             maxRounds: 3,
             currentRound: 0,
-            noteSelected: "",
+            noteSelectedId: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 500, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0 as any,
             secondsLeft: 0,
@@ -226,6 +210,8 @@ export default defineComponent({
             rewindId: '',
             rewindOrder: 0,
             currentIndex: 0,
+            music: [] as Notes[],
+            isPlaying: false,
         }
     },
 
@@ -248,6 +234,9 @@ export default defineComponent({
             });
 
             return Object.values(grouped);
+        },
+        selectedNote() {
+            return this.music.find(note => note.infos.id === this.noteSelectedId);
         }
     },
     // Ici tout le code procédural
@@ -256,8 +245,8 @@ export default defineComponent({
         const getInfos = document.getElementById("infosComponent");
         const keys = document.querySelectorAll(".key");
         // const noteContainer = document.getElementById("note-container")!;
-        const noteOption = document.getElementById("note-option")!;
-        const optionNoteContainer = document.getElementById("option-note-container")!;
+        // const noteOption = document.getElementById("note-option")!;
+        const optionNoteContainer = document.getElementById("note-option-container")!;
 
         if(getInfos){
             getInfos.style.display = 'none';
@@ -328,7 +317,6 @@ export default defineComponent({
                 }
             });
 
-            // console.log(`${this.assignedIdea}`);
             this.firstStepGame = false;
             this.showMainGame = true;
             this.showAfterGame = false;
@@ -343,17 +331,17 @@ export default defineComponent({
         });
 
         optionNoteContainer.addEventListener("dragover", (event) => {
-            console.log("dragover")
             event.preventDefault();
         });
 
         optionNoteContainer.addEventListener("drop", (event) => {
-            console.log("drop")
             this.handleDrop(event);
         });
     },
-    //Ici les fonctions (méthodes)
     methods: {
+        isBemole(note: string) {
+            return note.length === 2 && note[1] === 'b';
+        },
         rewindBtns(order: number, id: number) {
             const rewindDivs = document.querySelectorAll('.rewind');
 
@@ -379,224 +367,109 @@ export default defineComponent({
         },
 
         updateDuration(id: string, duration: number) {
-            for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].infos.id === id) {
-                    this.notesDuration[i].infos.duration = duration;
-                    break;
-                }
+            const note = this.music.find(note => note.infos.id === id);
+            if (note) {
+                note.infos.duration = duration;
             }
         },
 
         updateInterval(id: string, interval: number) {
-            for (let i = 0; i < this.notesDuration.length; i++) {
-                if (this.notesDuration[i].infos.id === id) {
-                    this.notesDuration[i].infos.interval = interval;
-                    break;
-                }
+            const note = this.music.find(note => note.infos.id === id);
+            if (note) {
+                note.infos.interval = interval;
             }
         },
-
-        noteOptionMenu() {
-            const notesAll = document.querySelectorAll('#note-option div')!;
-            const noNoteMsg: any = document.querySelector('#note-option p')!;
-
-            if (this.noteSelected) {
-                noNoteMsg.style.display = "none";
-                notesAll.forEach((note: any) => {
-                    if (note.id === this.noteSelected) {
-                        note.style.display = "flex";
-                    }
-                    else {
-                        note.style.display = "none";
-                    }
-                });
-            }
-            else {
-                noNoteMsg.style.display = 'flex';
-                notesAll.forEach((note: any) => {
-                    note.style.display = "none";
-                });
-            }
-            // this.showNoteContainer = false;
-            // this.showNoteOption = true;
-        },
-
-        // noteContainerMenu() {
-        //     this.showNoteContainer = true;
-        //     this.showNoteOption = false;
-        // },
 
         deleteNote() {
-            const allNotes = document.querySelectorAll("#note-container span");
-            const allNotes2 = document.querySelectorAll("#option-note-container span");
-            const allNotesOptions = document.querySelectorAll('#note-option div')!;
-            const noteContainerMessage: any = document.querySelector('#note-container p');
-            const noteOptionMessage: any = document.querySelector('#note-option p');
-
-            allNotes.forEach(note => {
-                if (note.id === this.noteSelected) {
-                    note.remove();
-                }
-                allNotes2.forEach(note2 => {
-                    if (note2.id === this.noteSelected + "_2") {
-                        note2.remove();
-                    }
-                });
-
-                allNotesOptions.forEach(note3 => {
-                    if (note3.id === this.noteSelected) {
-                        note3.remove();
-                    }
-                });
-            });
-
-            noteContainerMessage.style.display = "block";
-            noteOptionMessage.style.display = "block";
-
-            const index = this.notesDuration.findIndex(note => note.infos.id === this.noteSelected);
-
-            // Vérifier si la note avec l'ID donné a été trouvée
-            if (index !== -1) {
-                // Retirer la note du tableau
-                this.notesDuration.splice(index, 1);
+            this.music = this.music.filter(note => note.infos.id !== this.noteSelectedId);
+            if (this.music.length){
+                this.noteSelectedId = this.music[0].infos.id;
+            } else {
+                this.noteSelectedId = "";
             }
-
-            this.noteSelected = "";
         },
 
-        playSounds(soundList: any) {
-            let currentTime = 0;
-            soundList.forEach((item: any, index: any) => {
-                console.log(item.infos.note);
-                const sound = new Howl({
-                    src: [`./sounds/${item.infos.note}.mp3`] // Path to local audio files
+        playSounds(soundList: any[] = []) {
+            if (!this.isPlaying){
+                this.isPlaying = true;
+                const notesToPlay = soundList.length > 0 ? soundList : this.music;
+                let currentTime = 0;
+
+                notesToPlay.forEach((item: any, index: any) => {
+                    const sound = new Howl({
+                        src: [`./sounds/${item.infos.note}.mp3`]
+                    });
+
+                    if (sound) {
+                        const duration = parseFloat(item.infos.duration);
+                        const interval = parseFloat(item.infos.interval);
+
+                        setTimeout(() => {
+                            console.log(`Playing sound: ${item.infos.note} for ${duration} seconds`);
+                            sound.play();
+
+                            setTimeout(() => {
+                                console.log(`Stopping sound: ${item.infos.note}`);
+                                sound.stop();
+                            }, duration * 1000);
+                            console.log("currentTime: "+ currentTime);
+
+
+
+                        }, currentTime * 1000);
+
+                        currentTime += (duration + interval);
+                    }
                 });
-                if (sound) {
-                    setTimeout(() => {
-                        sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000);
-                    }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (soundList[index + 1] ? parseFloat(soundList[index + 1].infos.interval.toString()) : 0));
-                }
-            });
+                setTimeout(() => {
+                    this.isPlaying = false;
+                }, currentTime * 1000);     
+            }
+        },
+
+
+        selectNoteAndPlaySound(noteId: string) {
+            this.selectNote(noteId);
+            const note = this.music.find(note => note.infos.id === noteId);
+            if (note){
+                this.playSound(note.infos.note);
+            }
         },
 
         handlePlayClick() {
-            console.log(this.notesDuration);
-            this.playSounds(this.notesDuration);
+            this.playSounds(this.music);
         },
 
         handlePlayGuessingClick() {
-            console.log(this.notesDuration2);
             this.playSounds(this.tabnotes);
+        },
+
+        selectNote(noteId: string) {
+            this.noteSelectedId = noteId;
         },
 
         handleDrop(event: DragEvent) {
             event.preventDefault();
-
-            const noteContainer = document.getElementById("note-container")!;
-
             if (event instanceof DragEvent) {
                 const note = event.dataTransfer?.getData('text/plain') || '';
-                const noteParameters = document.createElement('div');
-                const noteElement = document.createElement('span');
-                const noteElement2 = document.createElement('span');
-
                 const noteId = this.generateID();
 
-                noteParameters.id = noteId;
+                const newNote: Notes = {
+                    composerName: this.player.username,
+                    infos: {
+                        id: noteId,
+                        note: note,
+                        duration: 1, // Durée par défaut
+                        interval: 0 // Intervalle par défaut
+                    }
+                };
 
-                noteElement.id = noteId;
-                noteElement2.id = noteId + '_2';
-                noteElement.className = 'note';
-                noteElement2.className = 'note';
-                noteElement.textContent = note;
-                noteElement2.textContent = note;
+                this.music.push(newNote); 
+                this.selectNote(newNote.infos.id)
 
-                noteParameters.dataset.duration = '1'; // Default duration
-
-                const durationInput = document.createElement('input');
-                durationInput.type = 'range';
-                durationInput.min = '0.2';
-                durationInput.max = '2';
-                durationInput.step = '0.1';
-                durationInput.value = '1';
-
-                durationInput.addEventListener('change', () => {
-                    this.updateDuration(noteParameters.id, parseFloat(durationInput.value));
-                    // noteElement.style.width = 20 + durationInput.value + 'px';
+                this.sounds[note] = new Howl({
+                    src: [`./sounds/${note}.mp3`] // Chemin vers les fichiers audio locaux
                 });
-
-                const noteOption = document.getElementById('note-option');
-                const optionNoteContainer = document.getElementById('option-note-container');
-
-                if (noteOption && optionNoteContainer) {
-                    noteOption.appendChild(noteParameters);
-                    noteParameters.appendChild(durationInput);
-
-                    const intervalInput = document.createElement('input');
-                    intervalInput.type = 'range';
-                    intervalInput.min = '0.0';
-                    intervalInput.max = '3';
-                    intervalInput.step = '0.1';
-                    intervalInput.value = '0';
-
-                    intervalInput.addEventListener('change', () => {
-                        this.updateInterval(noteParameters.id, parseFloat(intervalInput.value));
-                        // noteElement.style.marginRight = 10 + intervalInput.value + 'px';
-                    });
-
-                    noteElement2.addEventListener('click', () => {
-                        this.noteSelected = noteId;
-                        const allNotes = optionNoteContainer.querySelectorAll('.note');
-                        allNotes.forEach((note: any) => {
-                            note.style.backgroundColor = 'white';
-                        });
-                        noteElement2.style.backgroundColor = '#03ac98';
-
-                        const notesAll = document.querySelectorAll('#note-option div');
-                        const noNoteMsg: any = document.querySelector('#note-option p');
-
-                        if (this.noteSelected) {
-                            if (noNoteMsg) noNoteMsg.style.display = 'none';
-                            notesAll.forEach((note: any) => {
-                                if (note.id === this.noteSelected) {
-                                    note.style.display = 'flex';
-                                } else {
-                                    note.style.display = 'none';
-                                }
-                            });
-                        } else {
-                            if (noNoteMsg) noNoteMsg.style.display = 'flex';
-                            notesAll.forEach((note: any) => {
-                                note.style.display = 'none';
-                            });
-                        }
-                    });
-
-                    noteParameters.appendChild(intervalInput);
-                    noteContainer.appendChild(noteElement);
-                    optionNoteContainer.appendChild(noteElement2);
-
-                    const noteContainerMsg = noteContainer.querySelector('p');
-                    if (noteContainerMsg) noteContainerMsg.style.display = 'none';
-
-                    // Load the sound for this note
-                    this.sounds[note] = new Howl({
-                        src: [`./sounds/${note}.mp3`] // Path to local audio files
-                    });
-
-                    // Store the note and its duration
-                    this.notesDuration.push({
-                        composerName: this.player.username,
-                        infos: {
-                            id: noteParameters.id,
-                            note: note,
-                            duration: parseFloat(noteParameters.dataset.duration),
-                            interval: parseFloat(intervalInput.value)
-                        }
-                    });
-                }
             }
         },
 
@@ -618,17 +491,16 @@ export default defineComponent({
         },
 
         endGame() {
-
             if (this.player.host) {
                 this.socket.emit("endgame", this.player.roomId);
             }
             this.resetGame();
-
         },
 
         Firststep() {
             this.firstStepGame = true;
         },
+
         playRound() {
             this.timerInterval = setInterval(() => {
                 this.timerInGame = true;
@@ -734,10 +606,10 @@ export default defineComponent({
             this.timerInGame = false;
             this.maxRounds = 3;
             this.currentRound = 0;
-            this.noteSelected = "";
+            this.noteSelectedId = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 1000; // Durée de chaque tour en secondes
+            this.roundDuration = 10; // Durée de chaque tour en secondes
             this.interRoundDuration = 10;
             this.timerInterval = 0;
             this.secondsLeft = 0;
@@ -750,6 +622,8 @@ export default defineComponent({
             this.rewindId = '';
             this.rewindOrder = 0;
             this.currentIndex = 0;
+            this.music= [] as Notes[],
+            this.isPlaying= false,
 
             this.rewindId = this.generateID();
             if (this.player.host) {
@@ -800,6 +674,6 @@ export default defineComponent({
 </script>
 
 <style lang="css" scoped>
-@import url('./kbnotes.css');
-@import url('./kbnotes-mobile.css');
+    @import url('./kbnotes.css');
+    @import url('./kbnotes-mobile.css');
 </style>

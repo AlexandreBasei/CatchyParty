@@ -101,3 +101,11 @@
     }
     
   }
+
+  @media only screen and (max-width: 800px) {
+    .timer{
+        position: inherit;
+        transform: inherit;
+        top: auto;
+    }
+  }
