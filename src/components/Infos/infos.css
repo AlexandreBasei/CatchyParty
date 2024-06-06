@@ -23,6 +23,10 @@ button:not(.no-hover):hover .infos-icon{
 }
 
 .popUp{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
     position: fixed;
     top: 50%;
     left: 50%;
@@ -41,14 +45,9 @@ button:not(.no-hover):hover .infos-icon{
     background: var(--secondary);
     color: var(--white);
     border-radius: var(--borderradius);
-    margin-top: 30px;
 }
 
 .rulesText{
     text-align: justify;
-    padding: 0 30px 30px 30px;
-}
-
-.rulesGame{
-    padding-top: 30px;
+    padding: 0 30px;
 }

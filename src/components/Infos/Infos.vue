@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="rules">
+        <div class="rules" v-if="rules">
             <div class="rule">
                     <h3 class="rulesGame" v-if="lang == 'fr'">
                         {{ selectedGameFr }}
@@ -26,9 +26,9 @@
                     </h3>
             </div>
             <div class="rule-text">
-                    <p class="rulesText">
-                        {{ rules }}
-                    </p>
+                <p class="rulesText">
+                    {{ rules }}
+                </p>
             </div>
         </div>
      </div>

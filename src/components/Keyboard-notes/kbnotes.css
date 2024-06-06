@@ -9,6 +9,8 @@
   flex-direction: column;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+
+  max-width: 70%;
 }
 
 .justHere{
@@ -16,7 +18,7 @@
 }
 
 .first-step {
-  width: 80%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,6 +32,8 @@
   align-items: center;
   position: relative;
   gap: 20px;
+
+  width: 100%;
 }
 
 .rotateGif{
@@ -151,10 +155,30 @@
   gap: 10px;
 }
 
+.piano-container{
+  overflow-x: auto;
+  padding-bottom: 20px;
+  position: relative;
+  display: flex;
+}
+.piano-container::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--darkgrey);
+  border-radius: 8px;
+}
+
+.piano-container::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--tertiary)
+}
+
 .piano {
   display: flex;
-  gap: 20px;
+  gap: 2px;
   justify-content: center;
+  flex-wrap: nowrap;
+}
+#option-note-container.piano{
   flex-wrap: wrap;
 }
 
@@ -166,11 +190,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: var(--borderradius);
   cursor: pointer;
-  border: 1px solid transparent;
+  box-sizing: border-box;
 
   transition: all 0.2s ease;
+}
+.bottomBlock .key{
+  border-radius: var(--borderradius);
 }
 
 .key.bemole{
@@ -188,9 +214,6 @@
 
 .octave{
   display: flex;
-  gap: 2px;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 #play{
