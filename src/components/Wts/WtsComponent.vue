@@ -1,15 +1,15 @@
 <template>
   <div class="content-2">
     <section v-show="showEnd">
-      <h2>Round terminé !</h2>
+      <h2>{{ $t('PARTIE_TERMINEE') }}</h2>
     </section>
     <section class="rewindAll" v-show="showRewind">
       <div class="rewind" v-for="(rewinds, index) in WTSRewindAll" :key="index" v-bind:id="'joueur' + index">
-        <h2 v-if="rewinds[index].username">Choix de {{ rewinds[index].username }}</h2>
+        <h3 v-if="rewinds[index].username">Choix de {{ rewinds[index].username }}</h3>
         <div class="rewind2" v-for="(rewind, index2) in rewinds" :key="index2">
-          <h3>Situation :</h3>
+          <h3>{{ $t('SITUATION') }}</h3>
           <p>{{ rewind.situation }}</p>
-          <h3>Musique choisie :</h3>
+          <h3>{{ $t('MUSIQUE_CHOISIE') }}</h3>
           <p>{{ rewind.music }}</p>
         </div>
         <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
@@ -19,7 +19,7 @@
     </section>
     <main class="game-main" v-show="showGame">
       <section class="description">
-        <h3>Round {{ currentTurn + 1 }}</h3>
+        <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }}</h3>
         <hr>
         <div id="story">
           <p>{{ content }}</p>
@@ -63,9 +63,8 @@
 
       </div>
     </div>
-    <button @click="WTSnextRound" disabled id="submit" class="submitBtn" style="margin: auto;" v-show="showGame">Valider la
-      sélection</button>
-    <p v-show="isSubmitDisabled && showGame">En attente des autres joueurs...</p>
+    <button @click="WTSnextRound" disabled id="submit" class="submitBtn" style="margin: auto;" v-show="showGame">{{ $t('VALIDER') }}</button>
+    <p v-show="isSubmitDisabled && showGame">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
   </div>
 
   <!-- <img src="../../assets/svg/symfony.svg" alt="symfony" class="symfony"> -->
@@ -200,14 +199,14 @@ export default defineComponent({
 
             if (nextDiv instanceof HTMLElement && div instanceof HTMLElement) {
               div.style.display = "none";
-              nextDiv.style.display = "block";
+              nextDiv.style.display = "flex";
             }
           }
           else {
             const previousDiv = document.getElementById('joueur' + (id - 1));
             if (previousDiv instanceof HTMLElement && div instanceof HTMLElement) {
               div.style.display = "none";
-              previousDiv.style.display = "block";
+              previousDiv.style.display = "flex";
             }
           }
         }
