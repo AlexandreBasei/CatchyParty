@@ -1,23 +1,23 @@
 <template>
     <div class="content2">
         <section v-show="showEnd">
-            <h2>Démarrage du jeu suivant...</h2>
+            <h2>{{ $t('DEMARRER_JEU_SUIVANT') }}</h2>
         </section>
         <section class="rewindAll" v-show="showRewind">
-            <h2>Résultats de la partie</h2>
+            <h2>{{ $t('RESULTAT') }}</h2>
             <div v-for="(rewind, index) in sortedRewindAll" :key="index">
                     <h4>{{ rewind.username }}</h4>
-                    <p>Musiques trouvées : {{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
+                    <p>{{ $t('MUSIQUES_TROUVEE') }}{{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
             </div>
             <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
         </section>
         <div id="timer-container" v-show="showTimer">
             <div>
-                <label for="volume-slider">Volume</label>
+                <label for="volume-slider">{{ $t('VOLUME') }}</label>
                 <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
                     @input="setVolume" />
             </div>
-            <div>
+            <div class="timer">
                 <p v-show="showRoundTimer">{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
                 <p v-show="showResponseTimer">{{ $t('RESPONSE TIMER') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
             </div>
@@ -25,15 +25,15 @@
         <main class="game-main" v-show="showGame">
 
             <section class="listen">
-                <h3>Round {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
+                <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
                 <hr>
                 <div id="listen" v-show="showListen">
-                    <p>Écoutez...</p>
+                    <p>{{ $t('ECOUTE') }}</p>
                 </div>
                 <div id="anecdoteDiv" v-show="showResponse">
-                    <h3>Réponse</h3>
+                    <h3>{{ $t('REPONSE') }}</h3>
                     <p id="response"></p>
-                    <h3>Anecdote</h3>
+                    <h3>{{ $t('ANECDOTE') }}</h3>
                     <p id="anecdote"></p>
                 </div>
             </section>
@@ -65,9 +65,8 @@
 
             </div>
         </div>
-        <button @click="validateCard" disabled id="submit" class="submitBtn" v-show="showCards">Valider la
-            sélection</button>
-        <p v-show="isSubmitDisabled && showCards">En attente des autres joueurs...</p>
+        <button @click="validateCard" disabled id="submit" class="submitBtn" v-show="showCards">{{ $t('VALIDER') }}</button>
+        <p v-show="isSubmitDisabled && showCards">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
     </div>
 </template>
 

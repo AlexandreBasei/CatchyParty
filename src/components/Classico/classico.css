@@ -4,6 +4,8 @@
     width: 80%;
     position: relative;
     justify-content: center;
+    gap: inherit;
+    align-items: center;
 }
 
 .game-main {
@@ -11,13 +13,12 @@
     min-height: 25%;
     background-color: var(--primary);
     border-radius: 20px;
+    width: 100%;
 }
 
 .songCont {
     position: relative;
-    overflow: hidden;
     background-size: cover;
-    height: fit-content;
 }
 
 .song-card {
@@ -40,10 +41,9 @@
     display: flex;
     flex-flow: wrap row;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: -1%;
-    width: 80%;
-    margin-left: 10%;
+    align-items: flex-start;
+    width: 100%;
+    align-items: center;
 }
 
 #timer-container div{
@@ -56,10 +56,12 @@
 
 #timer-container div:first-child{
     position: relative;
-    height: 10%;
+    height: 50px;
     display: flex;
     align-items: center;
-    padding: 3%;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 20px;
 }
 
 #timer-container div:first-child p{
