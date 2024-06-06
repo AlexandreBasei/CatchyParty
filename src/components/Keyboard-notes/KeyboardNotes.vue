@@ -16,8 +16,7 @@
                 <div class="buttons-container">
                     <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
                     <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-                    <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE')
-                        }}</button>
+                    <button v-if="player.host" class="end-game-button" @click="endGame()">{{ $t('TERMINER_LA_MANCHE')}}</button>
                 </div>
             </div>
         </section>
@@ -42,14 +41,13 @@
                     <h3>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</h3>
                 </div>
 
-                <div class="piano">
+                <div class="piano-container">
                     <div v-for="octave in 3" :key="octave" class="octave">
                         <div v-for="note in ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']" :key="note">
                             <div :class="{ 'key': true, 'bemole': isBemole(note) }" :data-note="`${note}${octave + 2}`" @click="playSound(`${note}${octave + 2}`)" draggable="true">{{ `${note}${octave + 2}` }}</div>
                         </div>
                     </div>
                 </div>
-
             </div>
             
             <div class="bottomBlock">
@@ -196,7 +194,7 @@ export default defineComponent({
             noteSelectedId: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
+            roundDuration: 1000, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0 as any,
             secondsLeft: 0,
@@ -427,7 +425,6 @@ export default defineComponent({
             }
         },
 
-
         selectNoteAndPlaySound(noteId: string) {
             this.selectNote(noteId);
             const note = this.music.find(note => note.infos.id === noteId);
@@ -609,7 +606,7 @@ export default defineComponent({
             this.noteSelectedId = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 10; // Durée de chaque tour en secondes
+            this.roundDuration = 1000; // Durée de chaque tour en secondes
             this.interRoundDuration = 10;
             this.timerInterval = 0;
             this.secondsLeft = 0;
