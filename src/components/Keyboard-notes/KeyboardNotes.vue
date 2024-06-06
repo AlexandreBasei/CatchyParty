@@ -47,11 +47,15 @@
                 {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
             </div>
             <div class="topBlock">
-                <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
+                <!-- <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea">
                     <div v-if="item.receiverId === socket.id">
                         <p>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</p>
                     </div>
+                </div> -->
+                <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea && item.receiverId === socket.id">
+                    <h3>{{ $t('IDEE_ATTRIBUEE') }} {{ item.idea }}</h3>
                 </div>
+
                 <div id="piano">
                     <div class="key" data-note="A0" @click="playSound('A0')" draggable="true">A0</div>
                     <div class="key" data-note="A1" @click="playSound('A1')" draggable="true">A1</div>
@@ -69,18 +73,28 @@
                     <div class="key" data-note="E2" @click="playSound('E2')" draggable="true">E2</div>
                 </div>
             </div>
-            <hr class="line">
+            
             <div class="bottomBlock">
-                <div class="note-parameters">
+                <!-- <div class="note-parameters">
                     <button @click="noteContainerMenu()">{{ $t('SUITE_DE_NOTE') }}</button>
                     <button @click="noteOptionMenu()">{{ $t('REGLAGES_DE_DUREE') }}</button>
                     <div id="note-container" v-show="showNoteContainer">
-                        <p>{{ $t('GLISSE_LES_NOTES') }} <br> {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
+                        <p>{{ $t('GLISSE_LES_NOTES') }} {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
                     </div>
                     <div id="note-option-container" v-show="showNoteOption">
                         <div id="option-note-container"></div>
                         <div id="note-option">
                             <p>{{ $t('AUCUNE_NOTE_SELECTIONNEE') }}</p>
+                        </div>
+                    </div>
+                    <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                    <button disabled @click="deleteNote()" v-if="!noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
+                </div> -->
+                <div class="note-parameters">
+                    <div id="note-option-container">
+                        <div id="option-note-container"></div>
+                        <div id="note-option">
+                            <p>{{ $t('GLISSE_LES_NOTES') }} {{ $t('POUR_COMPOSER_TA_MUSIQUE') }}</p>
                         </div>
                     </div>
                     <button @click="deleteNote()" v-if="noteSelected">{{ $t('SUPPRIMER_LA_NOTE') }}</button>
@@ -189,8 +203,8 @@ export default defineComponent({
             showIdea: false,
             showRewind: false,
             showWaitingGame: true,
-            showNoteContainer: true,
-            showNoteOption: false,
+            // showNoteContainer: true,
+            // showNoteOption: false,
             timerInterGame: false,
             timerInGame: false,
             maxRounds: 3,
@@ -198,7 +212,7 @@ export default defineComponent({
             noteSelected: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 5, // Durée de chaque tour en secondes
+            roundDuration: 500, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0 as any,
             secondsLeft: 0,
@@ -241,7 +255,7 @@ export default defineComponent({
         this.resetGame();
 
         const keys = document.querySelectorAll(".key");
-        const noteContainer = document.getElementById("note-container")!;
+        // const noteContainer = document.getElementById("note-container")!;
         const noteOption = document.getElementById("note-option")!;
         const optionNoteContainer = document.getElementById("option-note-container")!;
 
@@ -324,11 +338,13 @@ export default defineComponent({
             this.gameStarted = true; // Met à jour gameStarted pour désactiver le bouton "Jouer"
         });
 
-        noteContainer.addEventListener("dragover", (event) => {
+        optionNoteContainer.addEventListener("dragover", (event) => {
+            console.log("dragover")
             event.preventDefault();
         });
 
-        noteContainer.addEventListener("drop", (event) => {
+        optionNoteContainer.addEventListener("drop", (event) => {
+            console.log("drop")
             this.handleDrop(event);
         });
     },
@@ -397,15 +413,14 @@ export default defineComponent({
                     note.style.display = "none";
                 });
             }
-            this.showNoteContainer = false;
-            this.showNoteOption = true;
+            // this.showNoteContainer = false;
+            // this.showNoteOption = true;
         },
 
-        noteContainerMenu() {
-
-            this.showNoteContainer = true;
-            this.showNoteOption = false;
-        },
+        // noteContainerMenu() {
+        //     this.showNoteContainer = true;
+        //     this.showNoteOption = false;
+        // },
 
         deleteNote() {
             const allNotes = document.querySelectorAll("#note-container span");
@@ -709,8 +724,8 @@ export default defineComponent({
             this.showIdea = false;
             this.showRewind = false;
             this.showWaitingGame = true;
-            this.showNoteContainer = true;
-            this.showNoteOption = false;
+            // this.showNoteContainer = true;
+            // this.showNoteOption = false;
             this.timerInterGame = false;
             this.timerInGame = false;
             this.maxRounds = 3;
@@ -718,7 +733,7 @@ export default defineComponent({
             this.noteSelected = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 10; // Durée de chaque tour en secondes
+            this.roundDuration = 1000; // Durée de chaque tour en secondes
             this.interRoundDuration = 10;
             this.timerInterval = 0;
             this.secondsLeft = 0;
