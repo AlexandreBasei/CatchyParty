@@ -1,6 +1,6 @@
 <template>
     <langApp></langApp>
-    <main class="CGU-main">
+    <main class="contact-main">
         <h1>{{ $t('CONTACTEZ_NOUS') }}</h1>
         <p>{{ $t('CONTACTEZ_NOUS_TEXTE') }}</p>
         <div>
