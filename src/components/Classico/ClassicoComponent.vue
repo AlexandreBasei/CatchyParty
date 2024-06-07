@@ -230,15 +230,14 @@ export default defineComponent({
         });
 
         this.socket.on('CLASSICO/final rewind', (room: any) => {
-            this.rewindAll = room.rewind;
 
             this.rewindCounter++;
 
             if (this.rewindCounter === room.rewind.length) {
                 this.showRewind = true;
-                this.socket.emit("clear rewind", this.player.roomId);
-            }
 
+            }
+            this.rewindAll = room.rewind;
         });
 
         this.socket.on('CLASSICO/endgame', () => {
@@ -402,6 +401,8 @@ export default defineComponent({
         },
 
         endgame() {
+            this.socket.emit("clear rewind", this.player.roomId);
+            this.rewindAll = [];
             this.showEnd = true;
             this.showGame = false;
             this.showRewind = false;
