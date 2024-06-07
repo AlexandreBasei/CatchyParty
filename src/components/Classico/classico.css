@@ -1,29 +1,35 @@
 .content2 {
     display: flex;
     flex-direction: column;
-    width: 80%;
+    width: 70%;
     position: relative;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: inherit;
+    align-items: center;
 }
 
 .game-main {
     height: fit-content;
-    min-height: 25%;
-    background-color: var(--primary);
-    border-radius: 20px;
+    background-color: var(--black);
+    border-radius: var(--borderradius);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.game-main h3 {
+    background-color: var(--darkgrey);
 }
 
 .songCont {
     position: relative;
-    overflow: hidden;
-    background-size: cover;
-    height: fit-content;
+    width: 100%;
 }
 
 .song-card {
-    background-color: red;
-    border-radius: 20px;
-    width: 20vh;
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
+    width: auto;
+    min-width: 150px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -40,10 +46,12 @@
     display: flex;
     flex-flow: wrap row;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: -1%;
-    width: 80%;
-    margin-left: 10%;
+    align-items: flex-start;
+    width: 100%;
+    align-items: center;
+    gap: 30px;
+
+    margin-bottom: 20px;
 }
 
 #timer-container div{
@@ -56,10 +64,12 @@
 
 #timer-container div:first-child{
     position: relative;
-    height: 10%;
+    height: 50px;
     display: flex;
     align-items: center;
-    padding: 3%;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 20px;
 }
 
 #timer-container div:first-child p{
@@ -70,21 +80,37 @@
     margin-top: 50px;
 }
 
+.listen {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.game-main.listen #listen {
+    width: 100%;
+}
+.game-main.listen #listen p{
+    margin: 0;
+}
+.game-main.listen > h3{
+    background-color: var(--white);
+    color: var(--black);
+}
 
-.listen div h3, .listen div p{
+
+/* .listen div h3, .listen div p{
     text-align: justify;
     padding: 0 5%;
 }
 
 .listen div h3{
     margin-top: 3%;
-}
+} */
 
-.listen div p:last-child {
+/* .listen div p:last-child {
     line-height: 30px;
 
     padding: 0 5% 5% 5%;
-}
+} */
 
 .after-selection{
     width: 100%;
@@ -95,4 +121,81 @@
     pointer-events: none;
     transition: opacity .2s ease;
     border-radius: 1em;
+
+    overflow-x: auto;
 }
+
+#anecdoteDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.after-selection::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--black);
+}
+
+.after-selection::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--tertiary)
+}
+
+.rewindAll{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.rewindAll .block {
+    background-color: var(--primary);
+    padding: 20px;
+    border-radius: var(--borderradius);
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listen {
+    padding: 20px;
+}
+
+.rewindAll .player-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.rewindAll .player-score span{
+    position: relative;
+}
+
+.rewindAll .player-score.first-player span::before {
+    content: '';
+    display: block;
+    position: absolute;
+    background-image: url(http://localhost:8080/img/crownny.e5a5625d.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.rewindAll .player-score span {
+    padding: 10px 20px;
+    background: linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
+    border-radius: var(--borderradius);
+    color: var(--black);
+    font-weight: bold;
+}
+

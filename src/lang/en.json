@@ -53,6 +53,7 @@
     "EN_ATTENTE_DE_JOUEURS": "In waiting for other players",
     "IDEE_ATTRIBUEE": "Your idea is: ",
     "ECOUTE_TA_MUSIQUE": "Listen to your music",
+    "TA_MUSIQUE": "Your music",
     "QUELLE_MUSIQUE_ENTENDUE_?": "Which music did you hear?",
     "ECOUTE_LA_MUSIQUE": "Listen the music",
     "PARTIE_TERMINEE": "Game over",
@@ -92,13 +93,23 @@
     "AFFICHER_LE_SUIVANT": "Show next",
     "NOM_DE_LA_MUSIQUE": "Music name",
     "SUITE_DE_NOTE": "Suite of notes",
-    "REGLAGES_DE_DUREE": "Duration settings",
+    "NOTE_DURATION": "Note duration:",
+    "NOTE_INTERVAL": "Interval between two notes:",
     "GLISSE_LES_NOTES": "Drag the notes into this area",
     "POUR_COMPOSER_TA_MUSIQUE": "to compose your music !",
     "AUCUNE_NOTE_SELECTIONNEE": "No notes selected",
     "SUPPRIMER_LA_NOTE": "Delete note",
     "EMAIL_COPIEE": "The email has been copied to the clipboard : ",
     "TERMINER_LA_MANCHE": "End round",
-    "RESPONSE TIMER": "Starting next round in : "
+    "RESPONSE TIMER": "Starting next round in : ",
+    "VOLUME": "Volume",
+    "DEMARRER_JEU_SUIVANT" : "Starting the next game...",
+    "RESULTAT" : "Results of the game",
+    "MUSIQUES_TROUVEE": "Found music:",
+    "ANECDOTE": "Anecdote",
+    "REPONSE": "Response",
+    "SITUATION": "Situation",
+    "MUSIQUE_CHOISIE": "Selected music :",
+    "CHOIX_DE": "Choice of"
   }
   

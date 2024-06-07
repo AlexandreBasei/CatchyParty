@@ -1,0 +1,8 @@
+.contact-main p{
+    text-align: justify;
+}
+
+.contact-main div {
+    display: flex;
+    gap: 20px;
+}

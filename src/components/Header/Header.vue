@@ -1,9 +1,8 @@
 <template>
     <header>
-        <RouterLink to="/" class="headerLink">
-        <!-- <img alt="logo" src="@/assets/logo.svg" @click="reload"> -->
-        <img alt="logo" src="@/assets/svg/logo.svg" @click="reload">
-        </RouterLink>
+        <!-- <RouterLink to="/" class="headerLink"> -->
+        <img alt="logo" src="@/assets/svg/logo.svg" @click="reload()">
+        <!-- </RouterLink> -->
     </header>
 </template>
 
@@ -13,7 +12,7 @@ export default ({
 
     methods: {
         reload() {
-            window.location.search = '?room=';
+            window.location.href = 'http://localhost:8080/?room='
         },
     }
 });

@@ -1,73 +1,74 @@
 <template>
     <div class="content2">
         <section v-show="showEnd">
-            <h2>Démarrage du jeu suivant...</h2>
+            <h2>{{ $t('DEMARRER_JEU_SUIVANT') }}</h2>
         </section>
         <section class="rewindAll" v-show="showRewind">
-            <h2>Résultats de la partie</h2>
-            <div v-for="(rewind, index) in sortedRewindAll" :key="index">
-                    <h4>{{ rewind.username }}</h4>
-                    <p>Musiques trouvées : {{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
+            <div class="block">
+                <h3>{{ $t('RESULTAT') }}</h3>
+                <div v-for="(rewind, index) in rewindAll" :key="index" 
+                    :class="['player-score', { 'first-player': rewind.foundCount === maxScore }]">
+                    <span>{{ rewind.username }}</span>
+                    <p>{{ $t('MUSIQUES_TROUVEE') }}{{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
+                </div>
             </div>
+
+            
             <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
         </section>
         <div id="timer-container" v-show="showTimer">
             <div>
-                <label for="volume-slider">Volume</label>
+                <label for="volume-slider">{{ $t('VOLUME') }}</label>
                 <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
                     @input="setVolume" />
             </div>
-            <div>
+            <div class="timer flow">
                 <p v-show="showRoundTimer">{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
                 <p v-show="showResponseTimer">{{ $t('RESPONSE TIMER') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
             </div>
         </div>
-        <main class="game-main" v-show="showGame">
-
-            <section class="listen">
-                <h3>Round {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
-                <hr>
-                <div id="listen" v-show="showListen">
-                    <p>Écoutez...</p>
-                </div>
-                <div id="anecdoteDiv" v-show="showResponse">
-                    <h3>Réponse</h3>
-                    <p id="response"></p>
-                    <h3>Anecdote</h3>
-                    <p id="anecdote"></p>
-                </div>
-            </section>
+        <main class="game-main listen" v-show="showGame">
+            <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
+            
+            <div id="listen" v-show="showListen">
+                <p>{{ $t('ECOUTE') }}</p>
+            </div>
+            <div id="anecdoteDiv" v-show="showResponse">
+                <h3>{{ $t('REPONSE') }}</h3>
+                <p id="response"></p>
+                <h3>{{ $t('ANECDOTE') }}</h3>
+                <p id="anecdote"></p>
+            </div>
         </main>
         <div class="songCont" v-show="showCards">
-            <div class="after-selection"></div>
+            <!-- <div class="after-selection"></div> -->
 
             <div class="song-cards">
 
                 <div class="song-card" v-if="classico[0]" @click="selectCard(0)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[0].title }}</p>
+                    <h3>{{ classico[0].title }}</h3>
                     <p>{{ classico[0].artiste }}</p>
                     <p>{{ classico[0].date }}</p>
                 </div>
 
                 <div class="song-card" v-if="classico[1]" @click="selectCard(1)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[1].title }}</p>
+                    <h3>{{ classico[1].title }}</h3>
                     <p>{{ classico[1].artiste }}</p>
                     <p>{{ classico[1].date }}</p>
                 </div>
                 <div class="song-card" v-if="classico[2]" @click="selectCard(2)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[2].title }}</p>
+                    <h3>{{ classico[2].title }}</h3>
                     <p>{{ classico[2].artiste }}</p>
                     <p>{{ classico[2].date }}</p>
                 </div>
 
             </div>
         </div>
-        <button @click="validateCard" disabled id="submit" class="submitBtn" v-show="showCards">Valider la
-            sélection</button>
-        <p v-show="isSubmitDisabled && showCards">En attente des autres joueurs...</p>
+        <button @click="validateCard" disabled id="submit" class="submitBtn" v-show="showCards">{{ $t('VALIDER') }}</button>
+        <p v-show="isSubmitDisabled && showCards">{{ $t('EN_ATTENTE_DE_JOUEURS') }}</p>
     </div>
 </template>
 
@@ -76,6 +77,7 @@ import { defineComponent } from 'vue';
 import io from 'socket.io-client';
 import { Howl, Howler } from 'howler';
 import data from './data.json';
+import dataEn from './data-en.json';
 
 interface Classico {
     id: number;
@@ -127,8 +129,8 @@ export default defineComponent({
             currentTurn: 0 as number,
             maxTurns: 1,
             nextRoundCounter: 0 as number,
-            turnDuration: 10,
-            responseDuration: 10,
+            turnDuration: 40,
+            responseDuration: 40,
             timer: 30,
             responseTimer: 15,
             timerInterval: 0 as any,
@@ -136,6 +138,7 @@ export default defineComponent({
             foundCount: 0 as number,
             noFoundCount: 0 as number,
             validated: false,
+            lang: '',
         } //Ne pas oublier de changer le maxTurn aussi dans resetGame
     },
 
@@ -143,9 +146,20 @@ export default defineComponent({
         sortedRewindAll() {
             return this.rewindAll.slice().sort((a: any, b: any) => b.foundCount - a.foundCount);
         },
+        maxScore() {
+            return Math.max(...this.rewindAll.map((player: any) => player.foundCount));
+        }
     },
 
     mounted() {
+        const getLang = localStorage.getItem('lang');
+        if(getLang){
+            this.lang = getLang;
+        } else{
+            this.lang = 'fr';
+            localStorage.setItem('lang',this.lang);
+        }
+
         this.maxTurns--;
 
         this.socket.on("CLASSICO/start game", () => {
@@ -195,10 +209,10 @@ export default defineComponent({
                 const submit: any = document.getElementById("submit");
                 submit.disabled = false;
                 this.isSubmitDisabled = false;
-                const afterSelectionDiv: any = document.querySelector(".after-selection");
+                // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-                afterSelectionDiv.style.opacity = "0";
-                afterSelectionDiv.style.pointerEvents = "none";
+                // afterSelectionDiv.style.opacity = "0";
+                // afterSelectionDiv.style.pointerEvents = "none";
 
                 this.currentTurn++;
                 this.nextRoundCounter = 0;
@@ -216,15 +230,14 @@ export default defineComponent({
         });
 
         this.socket.on('CLASSICO/final rewind', (room: any) => {
-            this.rewindAll = room.rewind;
 
             this.rewindCounter++;
 
             if (this.rewindCounter === room.rewind.length) {
                 this.showRewind = true;
-                this.socket.emit("clear rewind", this.player.roomId);
-            }
 
+            }
+            this.rewindAll = room.rewind;
         });
 
         this.socket.on('CLASSICO/endgame', () => {
@@ -236,7 +249,6 @@ export default defineComponent({
     },
 
     methods: {
-
         turnTimer() {
             this.showRoundTimer = true;
             this.showResponseTimer = false;
@@ -323,13 +335,23 @@ export default defineComponent({
         },
 
         randomizeClassico() {
-            const classico: Classico[] = data.classico;
-            classico.sort(() => Math.random() - 0.5);
-            this.classico = classico.slice(0, 3);
+            if(this.lang == "fr"){
+                const classico: Classico[] = data.classico;
+                classico.sort(() => Math.random() - 0.5);
+                this.classico = classico.slice(0, 3);
 
-            this.randomSong = Math.floor(Math.random() * 3);
+                this.randomSong = Math.floor(Math.random() * 3);
 
-            this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+                this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+            }else{
+                const classico: Classico[] = dataEn.classico;
+                classico.sort(() => Math.random() - 0.5);
+                this.classico = classico.slice(0, 3);
+
+                this.randomSong = Math.floor(Math.random() * 3);
+
+                this.socket.emit("CLASSICO/randomize", this.classico, this.player.roomId, this.randomSong);
+            }
         },
 
         selectCard(number: number) {
@@ -371,14 +393,16 @@ export default defineComponent({
 
             this.rewindObj = { username: this.player.username, foundCount: this.foundCount, noFoundCount: this.noFoundCount };
 
-            const afterSelectionDiv: any = document.querySelector(".after-selection");
+            // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-            afterSelectionDiv.style.opacity = "0.3";
-            afterSelectionDiv.style.pointerEvents = "all";
+            // afterSelectionDiv.style.opacity = "0.3";
+            // afterSelectionDiv.style.pointerEvents = "all";
             this.validated = true;
         },
 
         endgame() {
+            this.socket.emit("clear rewind", this.player.roomId);
+            this.rewindAll = [];
             this.showEnd = true;
             this.showGame = false;
             this.showRewind = false;
@@ -415,8 +439,8 @@ export default defineComponent({
             this.currentTurn = 0 as number;
             this.maxTurns = 1;
             this.nextRoundCounter = 0 as number;
-            this.turnDuration = 10;
-            this.responseDuration = 10;
+            this.turnDuration = 40;
+            this.responseDuration = 40;
             this.timer = 30;
             this.responseTimer = 15;
             this.timerInterval = 0 as any;
@@ -442,10 +466,10 @@ export default defineComponent({
             const submit: any = document.getElementById("submit");
             submit.disabled = false;
             this.isSubmitDisabled = false;
-            const afterSelectionDiv: any = document.querySelector(".after-selection");
+            // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-            afterSelectionDiv.style.opacity = "0";
-            afterSelectionDiv.style.pointerEvents = "none";
+            // afterSelectionDiv.style.opacity = "0";
+            // afterSelectionDiv.style.pointerEvents = "none";
         },
     }
 })

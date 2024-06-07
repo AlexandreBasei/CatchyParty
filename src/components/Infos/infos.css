@@ -1,0 +1,53 @@
+.infos-icon{
+    filter: brightness(0);
+    width: 40px;
+}
+
+.infosBtn{
+    right: 5vh !important;
+    border-radius: var(--borderradius);
+    position: absolute;
+    top: 5vh;
+    padding: 10px 10px 8px 10px;
+}
+
+button:not(.no-hover):hover .infos-icon{
+    filter: brightness(10);
+}
+
+.game-infos-container{
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.popUp{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    border-radius: var(--borderradius);
+    width: 80%;
+    max-width: 500px;
+    text-align: center;
+}
+
+.rules{
+    background: var(--secondary);
+    color: var(--white);
+    border-radius: var(--borderradius);
+}
+
+.rulesText{
+    text-align: justify;
+    padding: 0 30px;
+}

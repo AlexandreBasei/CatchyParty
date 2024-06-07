@@ -1,7 +1,7 @@
 .content{
     width: 1500px;
-    max-width: 90%;
-    gap: 25px;
+    max-width: 95%;
+    gap: 5%;
     display: flex;
 }
 .content > *:nth-child(2){
@@ -87,7 +87,7 @@
 } */
 
 .personalization-section {
-    width: 80%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -151,7 +151,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    width: 150px;
+    width: 125px;
     aspect-ratio: 1/1;
 }
 .personalization-section.hosting .games-selected .game-container::before {
@@ -288,6 +288,9 @@
     z-index: 5;
     border-radius: var(--borderradius);
     overflow: hidden;
+
+    padding: 30px;
+    box-sizing: border-box;
 }
 .guest-settings::before{
     content: "";
@@ -408,7 +411,7 @@ form .messages{
 .rewind {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 25px;
 }
 
 .rewindGroup {
@@ -434,6 +437,7 @@ form .messages{
 .end-game-button{
     background-color: var(--primary) !important;
     color: var(--white) !important;
+    border: 2px solid transparent !important;
 }
 
 .rewind .buttons-container{
@@ -444,5 +448,11 @@ form .messages{
 }
 
 .rewind2{
-    /* border: 2px solid white; */
+    background: var(--primary);
+    border-radius: var(--borderradius);
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }

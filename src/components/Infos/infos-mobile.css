@@ -1,0 +1,10 @@
+@media only screen and (max-width: 800px) {
+    .infosBtn{
+        position: inherit;
+    }
+
+    .popUp{
+        top: 60%;
+    }
+}
+

@@ -3,17 +3,14 @@
   flex-flow: wrap column;
   justify-content: center;
   align-items: center;
-}
 
-.Kbnotes{
-  padding: 0px 40px;
   border-radius: var(--borderradius);
-  width: -webkit-fill-available;
   text-align: center;
-  display: flex;
   flex-direction: column;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
+
+  max-width: 70%;
 }
 
 .justHere{
@@ -21,7 +18,7 @@
 }
 
 .first-step {
-  width: 80%;
+  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,34 +31,13 @@
   justify-content: center;
   align-items: center;
   position: relative;
-}
+  gap: 20px;
 
-#piano {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.key {
-  width: 75px;
-  aspect-ratio: 1 / 0.9;
-  cursor: pointer;
-  border: 1px solid var(--black);
-  background-color: #D9D9D9;
-  color: #3374C1;
-  border-radius: 20px;
-  font-size: 1.1em;
+  width: 100%;
 }
 
 .rotateGif{
   display: none;
-}
-
-.line{
-  border: 1px solid white;
-  width: 90vh;
-  margin: 20px;
 }
 
 .bottomBlock, .topBlock{
@@ -82,11 +58,6 @@
   flex-flow: wrap row;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
-  background-color: #19647e;
-  width: 50%;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .note-parameters button:first-child {
@@ -96,11 +67,14 @@
 .note-parameters button:last-child{
   margin: 20px 0;
 
-  background-color: rgb(255, 77, 77);
+  background-color: red;
   color: white;
   padding: 10px 20px;
   border-radius: 10rem;
   cursor: pointer;
+}
+.note-parameters button:last-child:hover{
+  background-color: var(--black);
 }
 
 .note-parameters button:last-child:disabled{
@@ -111,7 +85,7 @@
 #note-container {
   min-height: 200px;
   min-width: 100%;
-  border: 1px solid black;
+  background-color: var(--black);
   border-radius: 2rem;
   display: flex;
   flex-flow: wrap row;
@@ -131,115 +105,153 @@
   flex-flow: wrap column;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  gap: 20px;
+}
+
+#option-note-container {
+  align-items: center;
+  min-height: 110px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+
+  /* border: 1px solid black; */
+  border-radius: var(--borderradius);
+
+  position: relative;
+
+  overflow: hidden;
+}
+#option-note-container * {
+  z-index: 1;
+}
+#option-note-container::before {
+  content: '';
+  background-color: var(--white);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.topBlock{
+  background-color: var(--black);
 }
 
 #note-option {
-  min-height: 200px;
-  min-width: 100%;
-  border: 1px solid black;
-  border-radius: 2rem;
-  margin-top: 20px;
+  width: 100%;
   display: flex;
-  flex-flow: wrap row;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  flex-direction: column;
 }
 
 #note-option div {
   display: flex;
-  flex-flow: wrap column;
-  justify-content: right;
   align-items: center;
-  width: 80%;
-  margin-left: 20%;
-  /* gap: 20px; */
+  gap: 10px;
 }
 
-#note-option div input {
+.piano-container{
+  overflow-x: auto;
+  padding-bottom: 20px;
   position: relative;
+  display: flex;
+}
+.piano-container::-webkit-scrollbar {
+  width: 10px;
+  background-color: var(--darkgrey);
+  border-radius: 8px;
 }
 
-#note-option div input:first-child::before{
-  content: "Durée de la note :";
-  position: absolute;
-  left: -80%;
-  top:32%;
+.piano-container::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: var(--tertiary)
 }
 
-#note-option div input:last-child::before{
-  content: "Intervalle entre deux notes :";
-  position: absolute;
-  left: -80%;
-  top:32%;
-}
-
-#note-option p{
-  display: none;
-}
-
-#option-note-container {
-  display: flex !important;
-  flex-flow: wrap row;
+.piano {
+  display: flex;
+  gap: 2px;
   justify-content: center;
-  align-items: center;
-  min-height: 50px;
-  width: 90%;
-  gap: 15px;
+  flex-wrap: nowrap;
+}
+#option-note-container.piano{
+  flex-wrap: wrap;
 }
 
-#option-note-container .note{
-  height: 50px;
-  border-radius: 1rem;
-  width: 40px;
-}
-
-.note {
-  min-width: 40px;
-  height: 100px;
-  background-color: #fff;
-  color: black;
+.key {
+  width: 75px;
+  height: 75px;
+  background-color: var(--white);
+  color: var(--black);
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 20rem;
   cursor: pointer;
+  box-sizing: border-box;
+
+  transition: all 0.2s ease;
+}
+.bottomBlock .key{
+  border-radius: var(--borderradius);
 }
 
-#timer{
-  position: absolute;
-  right: 0;
-  top: -20px;
-  transform: translateY(-100%);
-  background-color: var(--primary);
+.key.bemole{
+  background-color: var(--black);
   color: var(--white);
-  border: 2px solid var(--white);
-  border-radius: var(--borderradius);
-  padding: 20px 15px;
+  border: 1px solid var(--white);
+  width: 50px;
+}
+
+.key.selected-note,
+.key:hover {
+  background-color: var(--tertiary);
+}
+
+
+.octave{
+  display: flex;
 }
 
 #play{
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 20px;
 }
 
-.play{
-  width: 40px;
-}
-
-.play:not(:hover){
-  filter: brightness(0);
-}
-
-#play:hover .play{
+#play:hover:not(:disabled) .play{
   filter: brightness(1);
 }
 
+#play img{
+  width: 40px;
+}
+
+#play img:not(:hover),
+#play:disabled img{
+  filter: brightness(0);
+}
 
 .after-game{
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  position: relative;
+}
+
+.guess-container {
+  background-color: var(--black);
+  padding: 20px;
+  border-radius: var(--borderradius);
+}
+
+.guess-input-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }

@@ -1,13 +1,3 @@
-.song-card{
-    background-color: var(--primary);
-    border-radius: var(--borderradius);
-    width: 20vh;
-}
-
-
-
-
-
 @media only screen and (max-width: 600px) {
 
     .songCont{

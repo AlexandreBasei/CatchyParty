@@ -1,30 +1,46 @@
-/* Modification du fichier game-select en 800px pour avoir affichage mobile sous 800px au lieu de 600px */
+
 p,
 h3 {
     text-align: center;
-    padding: 0px 20px;
 }
-
+#story{
+    text-wrap: balance;
+}
 .content-2 {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    align-items: center;
+    width: 70%;
 }
 
 .song-card {
     background-color: var(--secondary);
-    border-radius: 20px;
+    border-radius: var(--borderradius);
     width: 20vh;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-}
+    padding: 10px;
+    box-sizing: border-box;
 
+    gap: 20px;
+}
+.song-card p {
+    margin: 0;
+}
 .song-card:hover {
     background-color: var(--tertiary);
     color: var(--black);
     cursor: pointer;
+}
+.song-card h3{
+    color: var(--white) !important;
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .after-selection {
@@ -68,30 +84,26 @@ h3 {
     overflow: hidden;
 }
 
-.songCont {
+.song-cards {
+    display: flex;
+    gap: 1em;
+    /* justify-content: center; */
     overflow-x: auto;
-    position: relative;
 }
-.songCont::-webkit-scrollbar {
+.song-cards::-webkit-scrollbar {
     width: 10px;
     background-color: var(--black);
 }
 
-.songCont::-webkit-scrollbar-thumb {
+.song-cards::-webkit-scrollbar-thumb {
     border-radius: 8px;
     background-color: var(--tertiary)
 }
 
-.song-cards {
-    display: flex;
-    gap: 1em;
-    justify-content: center;
-}
-
 .game-main {
-    height: auto;
-    background-color: var(--primary);
-    border-radius: 20px;
+    padding: 10px 20px;
+    background-color: var(--black);
+    border-radius: var(--borderradius);
 }
 
 .vilo,
@@ -106,8 +118,13 @@ h3 {
     z-index: -1;
 }
 
-.description{
+/* .description{
     padding: 10px 20px;
+    background-color: var(--black);
+    border-radius: var(--borderradius);
+} */
+.description h3 {
+    background-color: var(--darkgrey);
 }
 
 /* .playersList {
@@ -187,4 +204,34 @@ main {
         left: 50%;
         transform: translateX(-50%);
     }
+}
+.song-card {
+    transition: transform 0.5s ease; /* Animation de retournement */
+}
+  
+.card-flip {
+    transform: rotateY(180deg); /* Retournement des cartes */
+    pointer-events: none;
+}
+
+.song-card.flip p,
+.song-card.card-flip h3 {
+    opacity: 0; /* Rendre le texte des balises <p> transparent */
+    transition: opacity 0.3s ease; /* Ajouter une transition pour une animation fluide */
+}
+
+.rewind > h3:first-of-type{
+    background: var(--darkgrey);
+    padding: 30px;
+}
+
+#rewind-buttons-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.rewind p {
+    margin: 0;
 }
