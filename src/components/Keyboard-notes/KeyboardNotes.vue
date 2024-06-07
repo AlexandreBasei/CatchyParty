@@ -32,8 +32,8 @@
         </div>
 
         <div class="main-game" v-show="showMainGame">
-            <div class="timer" v-show="timerInGame || timerInterGame">
-                {{ $t('TEMPS_RESTANT') }} {{ timerInGame ? remainingTime : secondsLeft }} {{ $t('SECONDES') }}
+            <div class="timer" v-if="remainingTime">
+                {{ $t('TEMPS_RESTANT') }} {{ remainingTime }} {{ $t('SECONDES') }}
             </div>
 
             <div class="topBlock">
@@ -88,10 +88,18 @@
             </button>
         </div>
         <div class="after-game" v-show="showAfterGame">
+            <div class="timer" v-if="secondsLeft">
+                {{ $t('TEMPS_RESTANT') }} {{ secondsLeft }} {{ $t('SECONDES') }}
+            </div>
             <!-- <span>{{ interRoundDuration }}</span> -->
-            <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
-            <input type="text" v-model="userIdeaInput" :placeholder="$t('NOM_DE_LA_MUSIQUE')">
-            <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+            <div class="guess-container">
+                <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
+
+                <div class="guess-input-container">
+                    <input type="text" v-model="userIdeaInput" :placeholder="$t('NOM_DE_LA_MUSIQUE')">
+                    <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
+                </div>
+            </div>
         </div>
     </div>
     <img src="@/assets/gif/rotate.gif" alt="rotate phone" class="rotateGif">

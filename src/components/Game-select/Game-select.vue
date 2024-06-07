@@ -1,6 +1,6 @@
 <template>
     <!-- <h1>Current round : {{ currentRound }}</h1> -->
-     <InfosComponent></InfosComponent>
+    <InfosComponent  v-if="game === 0"/>
     <div class="content" id="content">
         <section class="playersList">
             <h3>{{ $t('JOUEURS') }}</h3>

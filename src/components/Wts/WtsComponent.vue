@@ -20,7 +20,7 @@
     <main class="game-main" v-show="showGame">
       <section class="description">
         <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }}</h3>
-        <hr>
+        
         <div id="story">
           <p>{{ content }}</p>
         </div>
@@ -32,33 +32,33 @@
       <div class="song-cards">
         <div class="song-card" v-if="musics[0]" @click="WTSselectCard(0)" >
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-          <p>{{ musics[0].title }}</p>
+          <h3>{{ musics[0].title }}</h3>
           <p>{{ musics[0].artiste }}</p>
-          <p>{{ musics[0].album }}</p>
+          <!-- <p>{{ musics[0].album }}</p> -->
         </div>
         <div class="song-card" v-if="musics[1]" @click="WTSselectCard(1)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-          <p>{{ musics[1].title }}</p>
+          <h3>{{ musics[1].title }}</h3>
           <p>{{ musics[1].artiste }}</p>
-          <p>{{ musics[1].album }}</p>
+          <!-- <p>{{ musics[1].album }}</p> -->
         </div>
         <div class="song-card" v-if="musics[2]" @click="WTSselectCard(2)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-          <p>{{ musics[2].title }}</p>
+          <h3>{{ musics[2].title }}</h3>
           <p>{{ musics[2].artiste }}</p>
-          <p>{{ musics[2].album }}</p>
+          <!-- <p>{{ musics[2].album }}</p> -->
         </div>
         <div class="song-card" v-if="musics[3]" @click="WTSselectCard(3)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-          <p>{{ musics[3].title }}</p>
+          <h3>{{ musics[3].title }}</h3>
           <p>{{ musics[3].artiste }}</p>
-          <p>{{ musics[3].album }}</p>
+          <!-- <p>{{ musics[3].album }}</p> -->
         </div>
         <div class="song-card" v-if="musics[4]" @click="WTSselectCard(4)">
           <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-          <p>{{ musics[4].title }}</p>
+          <h3>{{ musics[4].title }}</h3>
           <p>{{ musics[4].artiste }}</p>
-          <p>{{ musics[4].album }}</p>
+          <!-- <p>{{ musics[4].album }}</p> -->
         </div>
 
       </div>
@@ -338,5 +338,5 @@ export default defineComponent({
 </script>
 
 <style lang="css" scoped>
-@import './style.css';
+@import './wts.css';
 </style>
