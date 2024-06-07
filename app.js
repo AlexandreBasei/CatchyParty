@@ -20,7 +20,7 @@ const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itr
 
 const io = require("socket.io")(server, {
     cors: {
-        origin: "http://localhost:8080",
+        origin: "https://catchyparty.onrender.com",
         methods: ["GET", "POST"]
     }
 });
