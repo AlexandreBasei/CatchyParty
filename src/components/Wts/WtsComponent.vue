@@ -302,16 +302,15 @@ export default defineComponent({
       this.isSubmitDisabled = true;
 
       const cards: any = document.querySelectorAll(".song-card");
-
+      console.log(this.player.username);
+      
+      this.rewindTab.push({ username: this.player.username, situation: this.content, music: cards[this.selectedCard].innerText });
+      
       cards.forEach((card: any) => {
         card.querySelectorAll("p").forEach((p: HTMLElement) => p.innerText = "");
         card.classList.add("card-flip");
         
       });
-
-      console.log(this.player.username);
-      
-      this.rewindTab.push({ username: this.player.username, situation: this.content, music: cards[this.selectedCard].innerText });
 
       const afterSelectionDiv: any = document.querySelector(".after-selection");
 
