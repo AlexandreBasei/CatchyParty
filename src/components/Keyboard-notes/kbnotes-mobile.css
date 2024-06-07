@@ -1,0 +1,36 @@
+@media only screen and (max-width: 600px) {
+
+  /* .key {
+    width: 50px;
+    height: 100px;
+    border: 1px solid black;
+    cursor: pointer;
+  } */
+  
+  #note-container {
+    min-height: 200px;
+    border: 1px solid black;
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (max-width: 600px) and (orientation: portrait) {
+  .rotateGif {
+    display: block;
+    width: 100%;
+  }
+
+  .Kbnotes{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 600px) and (orientation: landscape) {
+  .rotateGif {
+    display: none;
+  }
+
+  .Kbnotes{
+    display: flex;
+  }
+}

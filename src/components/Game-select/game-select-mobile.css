@@ -1,0 +1,58 @@
+@media only screen and (max-width: 800px) {
+
+    .personalization-main {
+        height: auto;
+        margin: 5% 5% 15% 5%;
+        width: 70%;
+    }
+
+    .personalization-section {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+
+    .player-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .playersList {
+        padding: 20px;
+        display: flex;
+        flex-flow: wrap column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .playersList p {
+        margin: 0 0 0 0;
+    }
+
+    #shareLink{
+        margin-top: 15px;
+    }
+
+    .settings form{
+        flex-wrap: wrap;
+    }
+
+    .content{
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .personalization-options > div{
+        flex-wrap: wrap;
+    }
+
+    /* select, input[type=text], button{
+        width: 100%;
+    } */
+}

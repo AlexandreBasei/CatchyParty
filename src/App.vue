@@ -1,44 +1,28 @@
 <template>
 
-  <!-- <headerApp></headerApp>
-
-  <home_page></home_page>
-  <footerApp></footerApp> -->
-
+  <headerApp></headerApp>
   <RouterView />
+  <div class="footer" id="footer">
+    <footerApp></footerApp>
+  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
-import footerApp from './components/footer/footer.vue';
-import headerApp from './components/header/header.vue';
-import home_page from './components/homepage/homepage.vue';
-import cguApp from './components/CGU/cgu.vue';
+import footerApp from '@/components/Footer/Footer.vue';
+import headerApp from '@/components/Header/Header.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    // footerApp,
-    // headerApp,
-    // home_page,
-    // cguApp
+    footerApp,
+    headerApp,
   }
 });
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: white;
-  /* margin-top: 60px; */
-  width: 100%;
-}
-</style>
-<style lang="scss or less">
-  import './main.css';
-  import './mobile.css';
+<style lang="css" scoped>
+  @import './main.css';
+  @import './mobile.css';
 </style>

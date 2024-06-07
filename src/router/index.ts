@@ -1,19 +1,20 @@
 import { createRouter, createWebHistory } from "vue-router";
-import cguApp from "../components/CGU/cgu.vue";
-import home_page from "../components/homepage/homepage.vue";
-import contactApp from "../components/contact/contact.vue";
-import aboutApp from "../components/about/about.vue";
-import game_select from "../components/game-select/game-select.vue";
-import game1_screen from "../components/game1-screen/game1-screen.vue";
-import game2_screen from "../components/game2-screen/game2-screen.vue";
-import game3_screen from "../components/game3-screen/game3-screen.vue";
-import game4_screen from "../components/game4-screen/game4-screen.vue";
-import game5_screen from "../components/game5-screen/game5-screen.vue";
-import game6_screen from "../components/game6-screen/game6-screen.vue";
-import validation_screen from "../components/validation-screen/validation-screen.vue";
-import rules_screen from "../components/rules-screen/rules-screen.vue";
-import listen_screen from "../components/listen-screen/listen-screen.vue";
-import ending_screen from "../components/ending-screen/ending-screen.vue";
+import cguApp from "@/components/CGU/CGU.vue";
+import home_page from "@/components/Homepage/Homepage.vue";
+import contactApp from "@/components/Contact/Contact.vue";
+import aboutApp from "@/components/About/About.vue";
+import game_select from "@/components/Game-select/Game-select.vue";
+import game1_screen from "@/components/Game1-screen/Game1-screen.vue";
+import WtsComponent from "@/components/Wts/WtsComponent.vue";
+// import game2_screen from "@/components/Game2-screen/Game2-screen.vue";
+// import game3_screen from "@/components/Game3-screen/Game3-screen.vue";
+// import game4_screen from "@/components/Game4-screen/Game4-screen.vue";
+// import game5_screen from "@/components/Game5-screen/Game5-screen.vue";
+// import game6_screen from "@/components/Game6-screen/Game6-screen.vue";
+import validation_screen from "@/components/Validation-screen/Validation-screen.vue";
+import rules_screen from "@/components/Rules-screen/Rules-screen.vue";
+import listen_screen from "@/components/Listen-screen/Listen-screen.vue";
+import ending_screen from "@/components/Ending-screen/Ending-screen.vue";
 
 const BASE_URL = "/";
 
@@ -43,6 +44,10 @@ const router = createRouter({
         {
             path: "/game1",
             component: game1_screen,
+        },
+        {
+            path: "/wts",
+            component: WtsComponent,
         },
         // {
         //     path: "/game2",
@@ -79,6 +84,10 @@ const router = createRouter({
         {
             path: "/ending-screen",
             component: ending_screen,
+        },
+        {
+            path: "/wts",
+            component: WtsComponent,
         },
     ]
 })

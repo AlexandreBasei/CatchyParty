@@ -1,0 +1,183 @@
+{
+    "situations": [
+        {
+            "id": 1,
+            "description": "You accidentally sent an embarrassing text to the wrong person. What music represents your reaction?"
+        },
+        {
+            "id": 2,
+            "description": "You find yourself stuck in an elevator with someone you find attractive. What music represents your reaction?"
+        },
+        {
+            "id": 3,
+            "description": "You realize you have been wearing your clothes inside out all day. What music represents your reaction?"
+        },
+        {
+            "id": 4,
+            "description": "You said 'I love you' to someone for the first time but they did not respond. What music represents your reaction?"
+        },
+        {
+            "id": 5,
+            "description": "You slipped and fell in public in the entrance hall of your school. What music represents your reaction?"
+        },
+        {
+            "id": 6,
+            "description": "You laughed out loud during a serious moment. What music represents your reaction?"
+        },
+        {
+            "id": 7,
+            "description": "You decided to play a prank on your best friend by sending a message saying you won the lottery and would share your fortune with them. However, your friend took your message seriously and is now planning how to spend the money you do not have. What music represents your reaction?"
+        },
+        {
+            "id": 8,
+            "description": "You are out for a run and suddenly see your friend's husband with another woman in the same park. What music represents your reaction?"
+        },
+        {
+            "id": 9,
+            "description": "You have been working for hours but did not notice your battery was low, and your computer shuts down without saving your work. What music represents your reaction?"
+        },
+        {
+            "id": 10,
+            "description": "In your final year of studies, you have to do a group project to pass the year, but you end up with the person who never works and jeopardizes your degree. What music represents your reaction?"
+        },
+        {
+            "id": 11,
+            "description": "You are in a job interview, then the interviewer leaves the office. You get up and start wandering around their office. Suddenly, the interviewer comes back in and catches you. What music represents your reaction?"
+        }
+    ],
+
+    "musics": [
+       {
+        "id": 1,
+        "title": "La vie en rose",
+        "artiste": "Edith Piaf",
+        "album": "La Vie En Rose"
+       },
+       
+       {
+        "id": 2,
+        "title": "Ne me quitte pas",
+        "artiste": "Jacques Brel",
+        "album": "Les Marquises"
+       },
+
+       {
+        "id": 3,
+        "title": "Je t'aime ... moi non plus",
+        "artiste": "Serge Gainsbourg",
+        "album": "Histoire de Melody Nelson"
+       },
+
+       {
+        "id": 4,
+        "title": "Formidable",
+        "artiste": "Stromae",
+        "album": "Racine carrée"
+       },
+
+       {
+        "id": 5,
+        "title": "Non, je ne regrette rien",
+        "artiste": "Édith Piaf",
+        "album": "Édith Piaf à l'Olympia"
+       },
+
+       {
+        "id": 6,
+        "title": "Les Copains d'abord",
+        "artiste": "Georges Brassens",
+        "album": "Les Copains d'abord"
+       },
+
+       {
+        "id": 7,
+        "title": "Que je t'aime",
+        "artiste": "Johnny Hallyday",
+        "album": "Johnny Hallyday à l'Olympia"
+       },
+
+       {
+        "id": 8,
+        "title": "Désenchantée",
+        "artiste": "Mylène Farmer",
+        "album": "Ainsi soit je..."
+       },
+
+       {
+        "id": 9,
+        "title": "Allumer le feu",
+        "artiste": "Johnny Hallyday",
+        "album": "Ce que je sais"
+       },
+
+       {
+        "id": 10,
+        "title": "La Nuit je mens",
+        "artiste": "Alain Bashung",
+        "album": "Bleu pétrole"
+       },
+
+       {
+        "id": 11,
+        "title": "La groupie du pianiste",
+        "artiste": "Michel Berger",
+        "album": "Beauséjour"
+       },
+
+       {
+        "id": 12,
+        "title": "Je danse le Mia",
+        "artiste": "IAM",
+        "album": "L'École du micro d'argent"
+       },
+
+       {
+        "id": 13,
+        "title": "J'ai demandé à la lune",
+        "artiste": "Indochine",
+        "album": "Paradize"
+       },
+
+       {
+        "id": 14,
+        "title": "J't'emmène au vent",
+        "artiste": "Louise Attaque",
+        "album": "Louise Attaque"
+       },
+
+       {
+        "id": 15,
+        "title": "Résiste",
+        "artiste": "France Gall",
+        "album": "Babacar"
+       },
+
+       {
+        "id": 16,
+        "title": "La puissance",
+        "artiste": "Rohff",
+        "album": "La vie avant la mort"
+       },
+
+       {
+        "id": 17,
+        "title": "Maman ne le sait pas",
+        "artiste": "Ninho",
+        "album": "Destin"
+       },
+
+       {
+        "id": 18,
+        "title": "Zoo",
+        "artiste": "Kaaris",
+        "album": "Or noir"
+       },
+
+       {
+        "id": 19,
+        "title": "Libérée, délivrée",
+        "artiste": "Anaïs Delva",
+        "album": "La Reine des neiges"
+       }
+    ]
+}

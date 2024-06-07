@@ -1,0 +1,121 @@
+form.homepage-form{
+    display: flex;
+    width: 80%;
+    justify-content: space-around;
+    flex-wrap: wrap-reverse;
+}
+
+.avatar-choice {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+}
+.avatar-choice h3{
+    user-select: none;
+    margin: 0;
+}
+
+.avatar-container {
+    max-width: -webkit-fill-available;
+
+    position: relative;
+    border-radius: var(--borderradius);
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    margin: 30px 0px;
+}
+
+ul.arrows{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+}
+ul.arrows > *{
+    padding: 0px;
+    width: 50px;
+    height: 50px;
+    font-weight: bold;
+    border: 0px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    transition: all 0.2s ease;
+}
+ul.arrows button img{
+    width: 40%;
+}
+ul.arrows:nth-of-type(2n+1) >*:hover {
+    transform: translateX(-5px) scale(1.1);
+}
+ul.arrows:nth-of-type(2n) >*:hover {
+    transform: translateX(5px) scale(1.1);
+}
+
+
+.email-icon{
+    cursor: pointer;
+}
+
+.inputs-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.joiningRoom{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.joiningRoom input[type=text]{
+    margin-bottom: 10%;
+}
+
+.joiningRoom button[type=submit]{
+    margin: 10% auto;
+    font-weight: 600;
+}
+
+.backBtn{
+    border-radius: var(--borderradius);
+    
+    position: absolute;
+    left: 5vh;
+    top: 5vh;
+    width: 100px;
+}
+
+
+input,
+.submitBtn{
+    padding: 20px 15px;
+    margin: 10px 0;
+    /* border-radius: var(--borderradius); */
+    width: 300px;
+    max-width: 90vw;
+    box-sizing: border-box;
+
+    /* transition: all 0.5s ease; */
+}
+
+input:hover,
+input:focus,
+.submitBtn:hover{
+    border: 2px solid var(--black);
+}
+
+@media only screen and (min-width: 1000px) {
+
+    .backBtn{
+        margin-bottom: 2vh;
+    }
+    
+}
+

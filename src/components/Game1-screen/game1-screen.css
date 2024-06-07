@@ -1,0 +1,56 @@
+.song-card{
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
+    width: 20vh;
+}
+
+
+
+
+
+@media only screen and (max-width: 600px) {
+
+    .songCont{
+        overflow-x: scroll;
+    }
+
+
+    .vilo, .mus{
+       display: none;
+    }
+
+    .symfony{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+
+}
+
+@media only screen and (min-width: 1000px) {
+    h3{
+        margin-top: 0;
+    }
+
+    .symfony{
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+        width: 100vh;
+    }
+
+    .vilo{
+        position: absolute;
+        right: 0;
+    }
+
+    .mus{
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20vh;
+        rotate: 25deg;
+    }
+}

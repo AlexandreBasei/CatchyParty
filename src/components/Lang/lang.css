@@ -1,0 +1,10 @@
+.lang{
+    width: 5vh;
+    cursor: pointer;
+}
+
+.langCont{
+    position: absolute;
+    top: 5vh;
+    left: 5vh;
+}

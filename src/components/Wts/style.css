@@ -1,0 +1,188 @@
+/* Modification du fichier game-select en 800px pour avoir affichage mobile sous 800px au lieu de 600px */
+p,
+h3 {
+    text-align: center;
+}
+
+.content-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.song-card {
+    background-color: var(--secondary);
+    border-radius: 20px;
+    width: 20vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.song-card:hover {
+    background-color: var(--tertiary);
+    color: var(--black);
+    cursor: pointer;
+}
+
+.after-selection {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+    border-radius: 1em;
+}
+
+.rect-container {
+    position: relative;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.colored-rectangle {
+    width: 100%;
+    height: 12vh;
+    background-color: var(--secondary);
+    border-radius: 20px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+
+/* 
+@media only screen and (max-width: 800px) {
+    /* .content{
+        height: 100vh;
+        overflow: hidden;
+    } */
+
+#app {
+    overflow: hidden;
+}
+
+.song-cards {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+}
+
+.game-main {
+    height: auto;
+    background-color: var(--primary);
+    border-radius: 20px;
+}
+
+.vilo,
+.mus {
+    display: none;
+}
+
+.symfony {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.description{
+    padding: 10px 20px;
+}
+
+/* .playersList {
+        width: 80%;
+        margin: 120px auto auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    } */
+
+.playersContainer {
+    flex-direction: row;
+}
+
+.playerContainer {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.rect-container {
+    margin-top: 0;
+}
+
+.colored-rectangle {
+    width: 90px;
+    margin: 0;
+}
+
+input[type="submit"] {
+    margin-top: 30px !important;
+}
+
+main {
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+
+/* } */
+
+@media only screen and (min-width: 800px) {
+    h3 {
+        margin-top: 0;
+    }
+
+    .symfony {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+        width: 100vh;
+    }
+
+    .vilo {
+        position: absolute;
+        right: 0;
+    }
+
+    .mus {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 20vh;
+        rotate: 25deg;
+    }
+
+    .submitBtn {
+        margin-top: 5vh;
+    }
+
+    .inviteBtn {
+        width: 200px;
+        padding: 10px;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+.song-card {
+    transition: transform 0.5s ease; /* Animation de retournement */
+  }
+  
+  .card-flip {
+    transform: rotateY(180deg); /* Retournement des cartes */
+  }
+
+  .song-card.flip p {
+    opacity: 0; /* Rendre le texte des balises <p> transparent */
+    transition: opacity 0.3s ease; /* Ajouter une transition pour une animation fluide */
+  }

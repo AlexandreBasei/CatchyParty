@@ -1,0 +1,7 @@
+h1{
+    color: var(--secondary);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}

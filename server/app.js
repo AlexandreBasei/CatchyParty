@@ -6,14 +6,15 @@ const path = require('path');
 const axios = require('axios');
 var cors = require('cors');
 
-const getLyrics = require("../src/assets/getLyrics");
-const getSong = require("../src/assets/getSong");
+const getLyrics = require("../src/assets/js/getLyrics");
+const getSong = require("../src/assets/js/getSong");
+const { log } = require('console');
 
 const app = express();
 const server = http.createServer(app);
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 const accessToken = 'UDBHDpaFEmGKgTq1nVV05iYgRYYEiB8pRXAlbxHtuKX-XyHeuWVPeg61itryYxm1';
 
@@ -35,74 +36,76 @@ io.on('connection', (socket) => {
     console.log(`[connection] ${socket.id}`);
     // playersConnected.push(socket.id);
 
-    socket.on('submitIdea', (idea, player) => {
-        let playersLENGTH = 0;
+    socket.on('update rooms', (newRooms) => {
+        rooms = newRooms;
+    })
+
+    socket.on('submitIdea', (idea, player, rewindId) => {
         let isDone = false;
         rooms.forEach(room => {
-            console.log(`${player.roomId} + ${room.id}`);
             if (player.roomId === room.id) {
-                console.log("hey");
+                let playersLENGTH = room.players.length;
                 room.players.forEach(p => {
-
                     if (p.socketId !== player.socketId && p.idea == false && !isDone) {
                         io.to(p.socketId).emit('newUserIdea', idea);
-                        userIdeas.push({ id: p.socketId, idea: idea });
+                        room.roomIdeas.push({ senderName: player.username, receiverName: p.username, receiverId: p.socketId, idea: idea, rewindId: rewindId });
+                        console.log("TAILLE USERIDEA : ", room.roomIdeas.length);
                         p.idea = true;
-                        isDone = !isDone;
-                        console.log(`${userIdeas.length} / ${playersLENGTH}`);
+                        isDone = true;
+                        console.log(`${room.roomIdeas.length} / ${playersLENGTH}`);
                         console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
                     }
-
-                    playersLENGTH = room.players.length;
-
                 });
+                if (room.roomIdeas.length === playersLENGTH) {
+                    console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
+                    room.players.forEach(p => {
+                        p.idea = false;
+                    });
+                    io.to(player.roomId).emit('MainGame', room.roomIdeas);
+                    room.roomIdeas = [];
+                }
             }
         });
-
-        if (userIdeas.length === playersLENGTH) {
-            console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
-            io.emit('MainGame', userIdeas);
-
-        }
         socket.emit('ideaSubmitted');
-        console.log(userIdeas);
     });
 
+
     socket.on('sendTabNotes', (tabnotes, player) => {
-        let playersLENGTH = 0;
-        let isDone = false;
         rooms.forEach(room => {
             if (player.roomId === room.id) {
-                console.log("heyp");
+                let playersLENGTH = room.players.length;
+                let isDone = false;
+
+                console.log(tabnotes);
+
                 room.players.forEach(p => {
 
-                    if (p.socketId !== player.socketId && p.tabAttributed == false && !isDone) {
-                        
+                    if (p.socketId !== player.socketId && p.tabAttributed === false && !isDone) {
+                        console.log("Player random", p.username);
+                        console.log("Moi", player.username);
                         NotesToGuess.push({ id: p.socketId, tabnotes: tabnotes });
                         console.log(tabnotes);
                         p.tabAttributed = true;
                         io.to(p.socketId).emit('newTabToGuess', tabnotes);
-                        isDone = !isDone;
+                        isDone = true;
                         console.log(`${NotesToGuess.length} / ${playersLENGTH}`);
+                        return;
+                    } else {
+                        console.log("pas bon ça Player random", p.username);
+                        console.log("pas bon ça Moi", player.username);
                     }
-
-                    else {
-                        console.log("pas bon ça");
-                    }
-
-                    playersLENGTH = room.players.length;
-
                 });
+
+                if (NotesToGuess.length === playersLENGTH - 1) {
+                    console.log('Guess attributed c bon');
+                }
+
+                console.log(NotesToGuess);
             }
         });
-
-        if (NotesToGuess.length === playersLENGTH) {
-            console.log('Guess attributed c bon');
-        }
-
-        console.log(NotesToGuess);
     });
 
+<<<<<<< HEAD
     socket.on('sumbitGuess', (idea, player) => {
         let playersLENGTH = 0;
         let isDone = false;
@@ -138,24 +141,115 @@ io.on('connection', (socket) => {
 
     socket.on('sendPlayer:3', (player) => {
         io.to(player.socketId).emit('receivePlayer:3', player);
+=======
+
+    socket.on('sendPlayer', (player) => {
+        io.to(player.socketId).emit('receivePlayer', player);
+>>>>>>> 225dd8a29c45eaf4e4daf98e285412768e9d9683
     });
 
-    socket.on('game started', (game) => {
-        console.log("This game start : ", game);
-        if (game === "game1") {
-            io.emit('game start', game);
+    socket.on('update gamesChosen', (roomId, updatedGamesChosen) => {
+        console.log('update gamesChosen to ' + updatedGamesChosen);
+        const room = rooms.find(room => room.id === roomId);
+        if (room) {
+            room.gamesChosen = updatedGamesChosen;
+            io.to(roomId).emit('room updated', room);
+            io.to(roomId).emit('get gamesChosen', updatedGamesChosen);
         }
+    });
+
+    socket.on('game started', (gamesChosen, roomId) => {
+        console.log("[game started executed] GamesChosen :", gamesChosen);
+        io.to(roomId).emit('game start', gamesChosen);
+    });
+
+    socket.on("WTS/nextRound", (roomId) => {
+        rooms.forEach(room => {
+            if (room.id === roomId) {
+                io.to(roomId).emit('nextRound', room);
+            }
+        });
+    });
+
+    socket.on('WTS/rewind', (rewind, player) => {
+        rooms.forEach(room => {
+            if (room.id === player.roomId) {
+                room.rewind.push(rewind);
+                io.to(player.roomId).emit('WTS/final rewind', room);
+            }
+        });
+    });
+
+    socket.on("CLASSICO/start", (player) => {
+        console.log("[CLASSICO] start game");
+        io.to(player.roomId).emit("CLASSICO/start game");
     })
 
-    socket.on('play', () => {
+    socket.on("CLASSICO/randomize", (classico, roomId, randomSong) => {
+        io.to(roomId).emit("randomize", classico, randomSong);
+    });
+
+    socket.on("CLASSICO/nextRound", (roomId) => {
+        rooms.forEach(room => {
+            if (room.id === roomId) {
+                io.to(roomId).emit('CLASSICO/nextRound', room);
+            }
+        });
+    });
+
+    socket.on('CLASSICO/rewind', (rewind, player) => {
+        rooms.forEach(room => {
+            if (room.id === player.roomId) {
+                room.rewind.push(rewind);
+                io.to(player.roomId).emit('CLASSICO/final rewind', room);
+            }
+        });
+    });
+
+    socket.on("endgame", (roomId) => {
+        io.to(roomId).emit("endgame");
+    })
+
+    socket.on("WTS/start", (player) => {
+        console.log("[WTS] start game");
+        io.to(player.roomId).emit("WTS/start game");
+    })
+
+    socket.on("WTS/endgame", (roomId) => {
+        console.log("WTS ENDGAME");
+        io.to(roomId).emit("endgame");
+    })
+
+    socket.on("CLASSICO/endgame", (roomId) => {
+        io.to(roomId).emit("endgame");
+    })
+
+    socket.on("send rounds", (maxRounds, roomId) => {
+        io.to(roomId).emit("get rounds", maxRounds);
+    });
+
+    socket.on('play', (roomId) => {
         // Émettre un événement vers tous les clients pour démarrer la partie
-        io.emit('startGame');
+        io.to(roomId).emit('startGame');
         console.log('La partie démarre...');
     });
 
-    socket.on('random attribute', () => {
-        console.log("hihi ^^");
+    socket.on('rewind', (rewind, player) => {
+        rooms.forEach(room => {
+            if (room.id === player.roomId) {
+                room.rewind.push(rewind);
+                io.to(player.roomId).emit('final rewind', room);
+            }
+        });
     });
+
+    socket.on('clear rewind', (roomId) => {
+        rooms.forEach(room => {
+            if (room.id === roomId) {
+                room.rewind = [];
+            }
+        });
+    })
 
     socket.on('playerData', (player) => {
         console.log(`[playerData] ${player.username}`);
@@ -237,7 +331,7 @@ io.on('connection', (socket) => {
 //     playersConnected.forEach((playerId, index) => {
 //         assignedIdeas.push({ id: playerId, idea: shuffledIdeas[index].idea });
 //     });
-//     console.log('Idées attribuées :', assignedIdeas);
+// console.log('Idées attribuées :', assignedIdeas);
 //     return assignedIdeas;
 // }
 
@@ -266,6 +360,7 @@ function exitRoom(socketId) {
                         const randomIndex = Math.floor(Math.random() * r.players.length);
                         const randomPlayer = r.players[randomIndex];
                         randomPlayer.host = true;
+                        io.to(randomPlayer.socketId).emit("new host", randomPlayer.socketId);
                         console.log(`[new host] - ${r.id} - ${randomPlayer.username}`);
                     }
                 }
@@ -275,7 +370,7 @@ function exitRoom(socketId) {
 }
 
 function createRoom(player) {
-    const room = { id: roomId(), players: [] };
+    const room = { id: roomId(), rewind: [], gamesChosen: [], players: [], roomIdeas: [] };
 
     player.roomId = room.id;
 
@@ -439,9 +534,9 @@ app.get('/lyrics', async (req, res) => {
             io.to(socketId).emit('get lyrics', lyrics);
         });
 
-        getSong(options).then((song) =>
-            console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
-        );
+        // getSong(options).then((song) =>
+        console.log(`${song.id} - ${song.title} - ${song.url} - ${song.albumArt} - ${song.lyrics}`)
+        // );
     } catch (err) {
         console.error("Erreur lors de la récupération des données : ", err);
         return res.sendStatus(500);
@@ -467,7 +562,7 @@ app.get('/', (req, res) => {
     res.redirect('index.html');
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 server.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });

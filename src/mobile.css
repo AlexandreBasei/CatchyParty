@@ -1,6 +1,6 @@
 @media only screen and (max-width: 600px) {
 
-    select, input[type=text], button{
+    /* select, input[type=text], button{
         width: 30vh;
         background-color: var(--quaternary);
         border: 0;
@@ -18,7 +18,7 @@
         padding: 5px;
         border-radius: var(--borderradius);
         width: 30vh;
-    }
+    } */
 
     label{
         margin-bottom: 10px;
@@ -26,8 +26,7 @@
 
     /* main */
 
-    main{
-        flex-wrap: wrap;
+    /* main{
         height: 75vh;
         text-align: center;
         padding: 20px 15px;
@@ -35,12 +34,12 @@
         gap: 5%;
         justify-content: center;
         display: flex;
-    }
+    } */
 
 
-    main section{
+    /* main section{
         width: 50%;
-    }
+    } */
 
     .content{
         display: block;
@@ -74,13 +73,9 @@
         margin-top: 5vh;
     } */
 
-    .game-container{
-        flex: 30%;
-    }
-
-    .playersList{
+    /* .playersList{
         margin: 5%;
-    }
+    } */
     
 
     .playersList p{
@@ -105,4 +100,12 @@
         margin-top: 5px;
     }
     
+  }
+
+  @media only screen and (max-width: 800px) {
+    .timer{
+        position: inherit;
+        transform: inherit;
+        top: auto;
+    }
   }
