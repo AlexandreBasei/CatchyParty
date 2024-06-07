@@ -1,10 +1,11 @@
 <template>
     <div class="Kbnotes">
         <section class="rewindAll" v-show="showRewind">
+            <!-- <h2>{{groupedRewindAll}}</h2> -->
             <div class="rewind" v-for="(rewindGroup, index) in groupedRewindAll" :key="index"
                 v-bind:id="'joueur' + index">
                 <div class="rewindGroup">
-                    <div v-for="(items, innerIndex) in rewindGroup" :key="innerIndex">
+                    <div v-for="items in rewindGroup" :key="items.rewindOrder">
                         <h1>{{ $t('MANCHE') }} {{ items[0].rewindOrder + 1 }}</h1>
                         <h2>{{ items[0].ideas.senderName }} {{ $t('A_SOUMIS_IDEE') }} {{ items[0].ideas.idea }}</h2>
                         <h2 v-if="items[0].sendedMusic.length > 0">{{ $t('MUSIQUE_COMPOSEE_PAR') }} {{
@@ -202,7 +203,7 @@ export default defineComponent({
             noteSelectedId: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 40, // Durée de chaque tour en secondes
+            roundDuration: 10, // Durée de chaque tour en secondes
             interRoundDuration: 10,
             timerInterval: 0 as any,
             secondsLeft: 0,
@@ -282,7 +283,7 @@ export default defineComponent({
         this.socket.on('newTabToGuess', (NotesToGuess: any) => {
             this.tabnotes = NotesToGuess;
             this.rewind[this.currentRound][0].receivedMusic = [NotesToGuess, this.player.username];
-            console.log(this.tabnotes);
+            console.log("TABNOTES : ",this.tabnotes);
             console.log('NOTES RECUES');
             this.player.tabAttributed = true;
         });
@@ -291,14 +292,11 @@ export default defineComponent({
             this.startGame();
         });
 
-        this.socket.on('final rewind', (room: any) => {
+        this.socket.on('KBNOTES/final rewind', (room: any) => {
             this.rewindAll = room.rewind;
             console.log("LALALA REWIND", room.rewind);
 
             this.rewindCounter++;
-            if (this.rewindCounter === room.rewind.length) {
-                this.socket.emit("clear rewind", this.player.roomId);
-            }
 
         });
 
@@ -306,6 +304,7 @@ export default defineComponent({
             if (!this.player.host) {
                 this.endGame();
             }
+            this.resetGame();
         })
 
         this.socket.on('MainGame', (userIdeas: any) => {
@@ -500,7 +499,6 @@ export default defineComponent({
             if (this.player.host) {
                 this.socket.emit("endgame", this.player.roomId);
             }
-            this.resetGame();
         },
 
         Firststep() {
@@ -541,6 +539,7 @@ export default defineComponent({
                                 this.showMainGame = true;
                                 this.showAfterGame = false; // Cacher la div après 30 secondes
                                 this.remainingTime = this.roundDuration; // Réinitialiser le temps restant
+                                console.log(this.tabnotes);
                                 this.playRound(); // Appeler la fonction playRound() pour démarrer un nouveau tour
                             } else {
                                 this.secondsLeft--; // Mettre à jour le compteur de secondes
@@ -572,6 +571,7 @@ export default defineComponent({
             console.log(`je suis la musique apres avant été vidée ${this.music}`);
             this.music = [];
             console.log(`je suis la musique apres avoir été vidée ${this.music}`);
+            this.socket.emit("KBNOTES/reset round", this.player.roomId);
         },
 
         resetGame() {
@@ -602,7 +602,7 @@ export default defineComponent({
             this.noteSelectedId = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 40; // Durée de chaque tour en secondes
+            this.roundDuration = 10; // Durée de chaque tour en secondes
             this.interRoundDuration = 10;
             this.timerInterval = 0;
             this.secondsLeft = 0;
@@ -618,6 +618,7 @@ export default defineComponent({
             this.music = [] as Notes[],
             this.music2 = [] as Notes[],
             this.isPlaying= false,
+            this.socket.emit("clear rewind", this.player.roomId);
 
             this.rewindId = this.generateID();
             if (this.player.host) {
