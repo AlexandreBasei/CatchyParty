@@ -105,47 +105,9 @@ io.on('connection', (socket) => {
         });
     });
 
-<<<<<<< HEAD
-    socket.on('sumbitGuess', (idea, player) => {
-        let playersLENGTH = 0;
-        let isDone = false;
-        rooms.forEach(room => {
-            console.log(`${player.roomId} + ${room.id}`);
-            if (player.roomId === room.id) {
-                console.log("hey");
-                room.players.forEach(p => {
-
-                    if (p.socketId !== player.socketId && p.idea == false && !isDone) {
-                        io.to(p.socketId).emit('newUserIdea', idea);
-                        userIdeas.push({ id: p.socketId, idea: idea });
-                        p.idea = true;
-                        isDone = !isDone;
-                        console.log(`${userIdeas.length} / ${playersLENGTH}`);
-                        console.log(`Nouvelle idée reçue côté serveur de l'utilisateur ${socket.id}: ${idea}`);
-                    }
-
-                    playersLENGTH = room.players.length;
-
-                });
-            }
-        });
-
-        if (userIdeas.length === playersLENGTH) {
-            console.log('Tous les joueurs ont soumis une idée. Passage à la prochaine étape...');
-            io.emit('MainGame', userIdeas);
-
-        }
-        socket.emit('ideaSubmitted');
-        console.log(userIdeas);
-    });
-
-    socket.on('sendPlayer:3', (player) => {
-        io.to(player.socketId).emit('receivePlayer:3', player);
-=======
 
     socket.on('sendPlayer', (player) => {
         io.to(player.socketId).emit('receivePlayer', player);
->>>>>>> 225dd8a29c45eaf4e4daf98e285412768e9d9683
     });
 
     socket.on('update gamesChosen', (roomId, updatedGamesChosen) => {
