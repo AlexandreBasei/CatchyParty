@@ -129,10 +129,10 @@ export default defineComponent({
             currentTurn: 0 as number,
             maxTurns: 1,
             nextRoundCounter: 0 as number,
-            turnDuration: 40,
-            responseDuration: 40,
-            timer: 30,
-            responseTimer: 15,
+            turnDuration: 20,
+            responseDuration: 30,
+            timer: 20,
+            responseTimer: 30,
             timerInterval: 0 as any,
             responseInterval: 0 as any,
             foundCount: 0 as number,
@@ -437,12 +437,12 @@ export default defineComponent({
             this.selectedCard = -1 as number;
             this.randomSong = 0 as number;
             this.currentTurn = 0 as number;
-            this.maxTurns = 1;
+            this.maxTurns = 3;
             this.nextRoundCounter = 0 as number;
-            this.turnDuration = 40;
-            this.responseDuration = 40;
-            this.timer = 30;
-            this.responseTimer = 15;
+            this.turnDuration = 20;
+            this.responseDuration = 30;
+            this.timer = 20;
+            this.responseTimer = 30;
             this.timerInterval = 0 as any;
             this.responseInterval = 0 as any;
             this.foundCount = 0 as number;

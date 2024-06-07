@@ -203,8 +203,8 @@ export default defineComponent({
             noteSelectedId: "",
             showTimer: false,
             remainingTime: 0,
-            roundDuration: 10, // Durée de chaque tour en secondes
-            interRoundDuration: 10,
+            roundDuration: 50, // Durée de chaque tour en secondes
+            interRoundDuration: 20,
             timerInterval: 0 as any,
             secondsLeft: 0,
             player: {} as Player,
@@ -602,8 +602,8 @@ export default defineComponent({
             this.noteSelectedId = "";
             this.showTimer = false;
             this.remainingTime = 0;
-            this.roundDuration = 10; // Durée de chaque tour en secondes
-            this.interRoundDuration = 10;
+            this.roundDuration = 50; // Durée de chaque tour en secondes
+            this.interRoundDuration = 20;
             this.timerInterval = 0;
             this.secondsLeft = 0;
             this.assignedIdea = {} as AssignedIdea;
