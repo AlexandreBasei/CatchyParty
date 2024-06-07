@@ -450,4 +450,9 @@ form .messages{
 .rewind2{
     background: var(--primary);
     border-radius: var(--borderradius);
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
