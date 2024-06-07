@@ -12,9 +12,12 @@
           <h3>{{ $t('MUSIQUE_CHOISIE') }}</h3>
           <p>{{ rewind.music }}</p>
         </div>
-        <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
-        <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
-        <button v-if="player.host" @click="WTSendgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+
+        <div id="rewind-buttons-container">
+          <button @click="rewindBtns(0, index)">{{ $t('AFFICHER_LE_PRECEDENT') }}</button>
+          <button @click="rewindBtns(1, index)">{{ $t('AFFICHER_LE_SUIVANT') }}</button>
+          <button v-if="player.host" @click="WTSendgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
+        </div>
       </div>
     </section>
     <main class="game-main" v-show="showGame">
@@ -27,7 +30,7 @@
       </section>
     </main>
     <div class="songCont" v-show="showGame">
-      <div class="after-selection"></div>
+      <!-- <div class="after-selection"></div> -->
 
       <div class="song-cards">
         <div class="song-card" v-if="musics[0]" @click="WTSselectCard(0)" >
@@ -163,10 +166,10 @@ export default defineComponent({
         const submit: any = document.getElementById("submit");
         submit.disabled = false;
         this.isSubmitDisabled = false;
-        const afterSelectionDiv: any = document.querySelector(".after-selection");
+        // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-        afterSelectionDiv.style.opacity = "0";
-        afterSelectionDiv.style.pointerEvents = "none";
+        // afterSelectionDiv.style.opacity = "0";
+        // afterSelectionDiv.style.pointerEvents = "none";
 
         this.currentTurn++;
         console.log("Next round");
@@ -255,10 +258,10 @@ export default defineComponent({
       const submit: any = document.getElementById("submit");
       submit.disabled = false;
       this.isSubmitDisabled = false;
-      const afterSelectionDiv: any = document.querySelector(".after-selection");
+      // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-      afterSelectionDiv.style.opacity = "0";
-      afterSelectionDiv.style.pointerEvents = "none";
+      // afterSelectionDiv.style.opacity = "0";
+      // afterSelectionDiv.style.pointerEvents = "none";
     },
 
     WTSselectCard(number: number) {
@@ -312,10 +315,10 @@ export default defineComponent({
         
       });
 
-      const afterSelectionDiv: any = document.querySelector(".after-selection");
+      // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-      afterSelectionDiv.style.opacity = "0.3";
-      afterSelectionDiv.style.pointerEvents = "all";
+      // afterSelectionDiv.style.opacity = "0.3";
+      // afterSelectionDiv.style.pointerEvents = "all";
 
       this.socket.emit("WTS/nextRound", this.player.roomId);
     },
