@@ -10,11 +10,14 @@
 
 .game-main {
     height: fit-content;
-    min-height: 25%;
     background-color: var(--black);
-    border-radius: 20px;
+    border-radius: var(--borderradius);
     width: 100%;
     box-sizing: border-box;
+}
+
+.game-main h3 {
+    background-color: var(--darkgrey);
 }
 
 .songCont {
@@ -23,10 +26,10 @@
 }
 
 .song-card {
-    background-color: red;
-    border-radius: 20px;
+    background-color: var(--primary);
+    border-radius: var(--borderradius);
     width: auto;
-    min-width: 100px;
+    min-width: 150px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -46,6 +49,9 @@
     align-items: flex-start;
     width: 100%;
     align-items: center;
+    gap: 30px;
+
+    margin-bottom: 20px;
 }
 
 #timer-container div{
@@ -77,8 +83,19 @@
 .listen {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
+.game-main.listen #listen {
+    width: 100%;
+}
+.game-main.listen #listen p{
+    margin: 0;
+}
+.game-main.listen > h3{
+    background-color: var(--white);
+    color: var(--black);
+}
+
 
 /* .listen div h3, .listen div p{
     text-align: justify;
@@ -106,6 +123,12 @@
     border-radius: 1em;
 
     overflow-x: auto;
+}
+
+#anecdoteDiv{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .after-selection::-webkit-scrollbar {

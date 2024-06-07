@@ -22,11 +22,10 @@ h3 {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    padding-top: 10px;
-    padding: 20px;
+    padding: 10px;
     box-sizing: border-box;
 
-    gap: 30px;
+    gap: 20px;
 }
 .song-card p {
     margin: 0;
@@ -88,7 +87,17 @@ h3 {
 .song-cards {
     display: flex;
     gap: 1em;
-    justify-content: center;
+    /* justify-content: center; */
+    overflow-x: auto;
+}
+.song-cards::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--black);
+}
+
+.song-cards::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--tertiary)
 }
 
 .game-main {
@@ -202,10 +211,27 @@ main {
   
 .card-flip {
     transform: rotateY(180deg); /* Retournement des cartes */
+    pointer-events: none;
 }
 
 .song-card.flip p,
 .song-card.card-flip h3 {
     opacity: 0; /* Rendre le texte des balises <p> transparent */
     transition: opacity 0.3s ease; /* Ajouter une transition pour une animation fluide */
+}
+
+.rewind > h3:first-of-type{
+    background: var(--darkgrey);
+    padding: 30px;
+}
+
+#rewind-buttons-container {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.rewind p {
+    margin: 0;
 }

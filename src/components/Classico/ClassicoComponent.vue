@@ -41,7 +41,7 @@
             </div>
         </main>
         <div class="songCont" v-show="showCards">
-            <div class="after-selection"></div>
+            <!-- <div class="after-selection"></div> -->
 
             <div class="song-cards">
 
@@ -129,8 +129,8 @@ export default defineComponent({
             currentTurn: 0 as number,
             maxTurns: 1,
             nextRoundCounter: 0 as number,
-            turnDuration: 10,
-            responseDuration: 10,
+            turnDuration: 40,
+            responseDuration: 40,
             timer: 30,
             responseTimer: 15,
             timerInterval: 0 as any,
@@ -209,10 +209,10 @@ export default defineComponent({
                 const submit: any = document.getElementById("submit");
                 submit.disabled = false;
                 this.isSubmitDisabled = false;
-                const afterSelectionDiv: any = document.querySelector(".after-selection");
+                // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-                afterSelectionDiv.style.opacity = "0";
-                afterSelectionDiv.style.pointerEvents = "none";
+                // afterSelectionDiv.style.opacity = "0";
+                // afterSelectionDiv.style.pointerEvents = "none";
 
                 this.currentTurn++;
                 this.nextRoundCounter = 0;
@@ -394,10 +394,10 @@ export default defineComponent({
 
             this.rewindObj = { username: this.player.username, foundCount: this.foundCount, noFoundCount: this.noFoundCount };
 
-            const afterSelectionDiv: any = document.querySelector(".after-selection");
+            // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-            afterSelectionDiv.style.opacity = "0.3";
-            afterSelectionDiv.style.pointerEvents = "all";
+            // afterSelectionDiv.style.opacity = "0.3";
+            // afterSelectionDiv.style.pointerEvents = "all";
             this.validated = true;
         },
 
@@ -438,8 +438,8 @@ export default defineComponent({
             this.currentTurn = 0 as number;
             this.maxTurns = 1;
             this.nextRoundCounter = 0 as number;
-            this.turnDuration = 10;
-            this.responseDuration = 10;
+            this.turnDuration = 40;
+            this.responseDuration = 40;
             this.timer = 30;
             this.responseTimer = 15;
             this.timerInterval = 0 as any;
@@ -465,10 +465,10 @@ export default defineComponent({
             const submit: any = document.getElementById("submit");
             submit.disabled = false;
             this.isSubmitDisabled = false;
-            const afterSelectionDiv: any = document.querySelector(".after-selection");
+            // const afterSelectionDiv: any = document.querySelector(".after-selection");
 
-            afterSelectionDiv.style.opacity = "0";
-            afterSelectionDiv.style.pointerEvents = "none";
+            // afterSelectionDiv.style.opacity = "0";
+            // afterSelectionDiv.style.pointerEvents = "none";
         },
     }
 })
