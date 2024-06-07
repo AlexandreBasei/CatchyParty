@@ -1,12 +1,12 @@
 <template>
-     <div class="info-container" id="infosComponent">
-        <button class="infosBtn" v-if="showInfo">
-            <img src="@/assets/svg/icons/infos.svg" @click="showPopUp()" alt="infos" class="infos-icon">
-        </button>
-        <button class="infosBtn" v-if="showClose">
-            <img src="@/assets/svg/icons/close.svg" @click="closePopUp()" alt="close" class="infos-icon">
-        </button>
-     </div>
+     <!-- <div class="info-container" id="infosComponent"> -->
+    <button class="infosBtn" v-if="showInfo">
+        <img src="@/assets/svg/icons/infos.svg" @click="showPopUp()" alt="infos" class="infos-icon">
+    </button>
+    <button class="infosBtn" v-else-if="showClose">
+        <img src="@/assets/svg/icons/close.svg" @click="closePopUp()" alt="close" class="infos-icon">
+    </button>
+     <!-- </div> -->
      <div v-if="showPopup" class="popUp">
         <h3>{{ $t('REGLES') }}</h3>
         <div class="game-infos-container">

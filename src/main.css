@@ -150,6 +150,18 @@ ul{
     border: 2px solid var(--white);
     border-radius: var(--borderradius);
     padding: 20px 15px;
+
+    width: fit-content;
+}
+
+.timer.flow {
+    position: inherit;
+    transform: inherit;
+    top: auto;
+}
+
+.timer p {
+    margin: 0;
 }
 
 input[type=range] {

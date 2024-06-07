@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 70%;
     position: relative;
-    justify-content: center;
+    justify-content: flex-start;
     gap: inherit;
     align-items: center;
 }
@@ -11,20 +11,22 @@
 .game-main {
     height: fit-content;
     min-height: 25%;
-    background-color: var(--primary);
+    background-color: var(--black);
     border-radius: 20px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .songCont {
     position: relative;
-    background-size: cover;
+    width: 100%;
 }
 
 .song-card {
     background-color: red;
     border-radius: 20px;
-    width: 20vh;
+    width: auto;
+    min-width: 100px;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -72,21 +74,26 @@
     margin-top: 50px;
 }
 
+.listen {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-.listen div h3, .listen div p{
+/* .listen div h3, .listen div p{
     text-align: justify;
     padding: 0 5%;
 }
 
 .listen div h3{
     margin-top: 3%;
-}
+} */
 
-.listen div p:last-child {
+/* .listen div p:last-child {
     line-height: 30px;
 
     padding: 0 5% 5% 5%;
-}
+} */
 
 .after-selection{
     width: 100%;
@@ -97,4 +104,75 @@
     pointer-events: none;
     transition: opacity .2s ease;
     border-radius: 1em;
+
+    overflow-x: auto;
 }
+
+.after-selection::-webkit-scrollbar {
+    width: 10px;
+    background-color: var(--black);
+}
+
+.after-selection::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    background-color: var(--tertiary)
+}
+
+.rewindAll{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 20px;
+}
+
+.rewindAll .block {
+    background-color: var(--primary);
+    padding: 20px;
+    border-radius: var(--borderradius);
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listen {
+    padding: 20px;
+}
+
+.rewindAll .player-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.rewindAll .player-score span{
+    position: relative;
+}
+
+.rewindAll .player-score.first-player span::before {
+    content: '';
+    display: block;
+    position: absolute;
+    background-image: url(http://localhost:8080/img/crownny.e5a5625d.svg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+.rewindAll .player-score span {
+    padding: 10px 20px;
+    background: linear-gradient(193deg, var(--secondary) 29%, var(--quaternary));
+    border-radius: var(--borderradius);
+    color: var(--black);
+    font-weight: bold;
+}
+

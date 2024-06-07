@@ -4,11 +4,16 @@
             <h2>{{ $t('DEMARRER_JEU_SUIVANT') }}</h2>
         </section>
         <section class="rewindAll" v-show="showRewind">
-            <h2>{{ $t('RESULTAT') }}</h2>
-            <div v-for="(rewind, index) in sortedRewindAll" :key="index">
-                    <h4>{{ rewind.username }}</h4>
+            <div class="block">
+                <h3>{{ $t('RESULTAT') }}</h3>
+                <div v-for="(rewind, index) in rewindAll" :key="index" 
+                    :class="['player-score', { 'first-player': rewind.foundCount === maxScore }]">
+                    <span>{{ rewind.username }}</span>
                     <p>{{ $t('MUSIQUES_TROUVEE') }}{{ rewind.foundCount }} / {{ maxTurns + 1 }}</p>
+                </div>
             </div>
+
+            
             <button v-if="player.host" @click="endgame()">{{ $t('TERMINER_LA_MANCHE') }}</button>
         </section>
         <div id="timer-container" v-show="showTimer">
@@ -17,26 +22,23 @@
                 <input type="range" id="volume-slider" min="0" max="1" step="0.05" v-model="volume"
                     @input="setVolume" />
             </div>
-            <div class="timer">
+            <div class="timer flow">
                 <p v-show="showRoundTimer">{{ $t('TEMPS_RESTANT') }} {{ timer }} {{ $t('SECONDES') }}</p>
                 <p v-show="showResponseTimer">{{ $t('RESPONSE TIMER') }} {{ responseTimer }} {{ $t('SECONDES') }}</p>
             </div>
         </div>
-        <main class="game-main" v-show="showGame">
-
-            <section class="listen">
-                <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
-                <hr>
-                <div id="listen" v-show="showListen">
-                    <p>{{ $t('ECOUTE') }}</p>
-                </div>
-                <div id="anecdoteDiv" v-show="showResponse">
-                    <h3>{{ $t('REPONSE') }}</h3>
-                    <p id="response"></p>
-                    <h3>{{ $t('ANECDOTE') }}</h3>
-                    <p id="anecdote"></p>
-                </div>
-            </section>
+        <main class="game-main listen" v-show="showGame">
+            <h3>{{ $t('ROUND') }} {{ currentTurn + 1 }} / {{ maxTurns + 1 }}</h3>
+            
+            <div id="listen" v-show="showListen">
+                <p>{{ $t('ECOUTE') }}</p>
+            </div>
+            <div id="anecdoteDiv" v-show="showResponse">
+                <h3>{{ $t('REPONSE') }}</h3>
+                <p id="response"></p>
+                <h3>{{ $t('ANECDOTE') }}</h3>
+                <p id="anecdote"></p>
+            </div>
         </main>
         <div class="songCont" v-show="showCards">
             <div class="after-selection"></div>
@@ -45,20 +47,20 @@
 
                 <div class="song-card" v-if="classico[0]" @click="selectCard(0)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[0].title }}</p>
+                    <h3>{{ classico[0].title }}</h3>
                     <p>{{ classico[0].artiste }}</p>
                     <p>{{ classico[0].date }}</p>
                 </div>
 
                 <div class="song-card" v-if="classico[1]" @click="selectCard(1)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[1].title }}</p>
+                    <h3>{{ classico[1].title }}</h3>
                     <p>{{ classico[1].artiste }}</p>
                     <p>{{ classico[1].date }}</p>
                 </div>
                 <div class="song-card" v-if="classico[2]" @click="selectCard(2)">
                     <!-- <img src="../../assets/svg/image.svg" alt="image"> -->
-                    <p>{{ classico[2].title }}</p>
+                    <h3>{{ classico[2].title }}</h3>
                     <p>{{ classico[2].artiste }}</p>
                     <p>{{ classico[2].date }}</p>
                 </div>
@@ -144,6 +146,9 @@ export default defineComponent({
         sortedRewindAll() {
             return this.rewindAll.slice().sort((a: any, b: any) => b.foundCount - a.foundCount);
         },
+        maxScore() {
+            return Math.max(...this.rewindAll.map((player: any) => player.foundCount));
+        }
     },
 
     mounted() {
@@ -245,7 +250,6 @@ export default defineComponent({
     },
 
     methods: {
-
         turnTimer() {
             this.showRoundTimer = true;
             this.showResponseTimer = false;

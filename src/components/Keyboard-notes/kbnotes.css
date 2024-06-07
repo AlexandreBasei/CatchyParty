@@ -238,4 +238,20 @@
 .after-game{
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  position: relative;
+}
+
+.guess-container {
+  background-color: var(--black);
+  padding: 20px;
+  border-radius: var(--borderradius);
+}
+
+.guess-input-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
