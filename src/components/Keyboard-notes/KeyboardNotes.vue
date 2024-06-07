@@ -35,16 +35,6 @@
             <div class="timer" v-show="timerInGame || timerInterGame">
                 {{ $t('TEMPS_RESTANT') }} {{ timerInGame ? remainingTime : secondsLeft }} {{ $t('SECONDES') }}
             </div>
-<<<<<<< HEAD
-            <div id="note-container"></div>
-            <button id="play" @click="handlePlayClick">Écoute ta musique</button>
-        </div>
-        <div class="after-game" v-show="showAfterGame">
-            <label for="guess">Quelle musique as-tu entendue ?</label>
-            <input type="text" v-model="guessInput"
-                placeholder="Nom de la musique">
-            <button id="playGuessing" @click="handlePlayGuessingClick">Écouter la musique</button>
-=======
 
             <div class="topBlock">
                 <div v-for="(item, index) in assignedIdea" :key="index" v-show="showIdea && item.receiverId === socket.id">
@@ -102,7 +92,6 @@
             <label for="guess">{{ $t('QUELLE_MUSIQUE_ENTENDUE_?') }}</label>
             <input type="text" v-model="userIdeaInput" :placeholder="$t('NOM_DE_LA_MUSIQUE')">
             <button @click="handlePlayGuessingClick()">{{ $t('ECOUTE_LA_MUSIQUE') }}</button>
->>>>>>> 225dd8a29c45eaf4e4daf98e285412768e9d9683
         </div>
     </div>
     <img src="@/assets/gif/rotate.gif" alt="rotate phone" class="rotateGif">
@@ -344,64 +333,8 @@ export default defineComponent({
             event.preventDefault();
         });
 
-<<<<<<< HEAD
-        // this.socket.on('assigned idea', (assignedIdeas: AssignedIdea[]) => {
-        //     // Parcourir les idées attribuées pour trouver celle qui correspond à l'utilisateur actuel
-        //     assignedIdeas.forEach(idea => {
-        //         if (idea.id === this.socket.id) {
-        //             // Mettre à jour l'idée attribuée pour l'utilisateur actuel
-        //             this.assignedIdea = idea;
-        //             this.assignedIdeaDone = this.assignedIdea.idea;
-
-        //             console.log('Assigned idea for current user:', this.assignedIdea.idea);
-        //         }
-        //     });
-        // });
-
-        noteContainer.addEventListener("drop", (event) => {
-            event.preventDefault();
-            if (event instanceof DragEvent) {
-                const note = event.dataTransfer?.getData("text/plain") || "";
-                const noteElement = document.createElement("div");
-                noteElement.id = this.noteID();
-                noteElement.className = "note";
-                noteElement.textContent = note;
-                noteElement.dataset.duration = "1"; // Default duration
-                const durationInput = document.createElement("input");
-                durationInput.type = "range";
-                durationInput.min = "0.2";
-                durationInput.max = "2";
-                durationInput.step = "0.1";
-                durationInput.value = "1";
-                durationInput.addEventListener("change", () => {
-                    this.updateDuration(noteElement.id, parseFloat(durationInput.value));
-                });
-                noteContainer.appendChild(noteElement);
-                noteContainer.appendChild(durationInput);
-
-                const intervalInput = document.createElement("input");
-                intervalInput.type = "range";
-                intervalInput.min = "0.0";
-                intervalInput.max = "3";
-                intervalInput.step = "0.1";
-                intervalInput.value = "0";
-                intervalInput.addEventListener("change", () => {
-                    this.updateInterval(noteElement.id, parseFloat(intervalInput.value));
-                });
-                noteContainer.appendChild(intervalInput);
-
-                // Load the sound for this note
-                this.sounds[note] = new Howl({
-                    src: [`./sounds/${note}.mp3`] // Path to local audio files
-                });
-
-                // Store the note and its duration
-                this.notesDuration.push({ userId: this.socket.id, infos: { id: noteElement.id, note: note, duration: parseFloat(noteElement.dataset.duration), interval: parseFloat(intervalInput.value) } });
-            }
-=======
         optionNoteContainer.addEventListener("drop", (event) => {
             this.handleDrop(event);
->>>>>>> 225dd8a29c45eaf4e4daf98e285412768e9d9683
         });
     },
     methods: {
@@ -446,9 +379,6 @@ export default defineComponent({
             }
         },
 
-<<<<<<< HEAD
-        noteID() {
-=======
         deleteNote() {
             this.music = this.music.filter(note => note.infos.id !== this.noteSelectedId);
             if (this.music.length){
@@ -542,35 +472,7 @@ export default defineComponent({
         },
 
         generateID() {
->>>>>>> 225dd8a29c45eaf4e4daf98e285412768e9d9683
             return Math.random().toString(36).substr(2, 9);
-        },
-
-        playSounds(soundList:any) {
-            let currentTime = 0;
-            soundList.forEach((item:any, index:any) => {
-                console.log(item.infos.note);
-                const sound = new Howl({
-                src: [`./sounds/${item.infos.note}.mp3`] // Path to local audio files
-            });
-                if (sound) {
-                    setTimeout(() => {
-                        sound.play();
-                        setTimeout(() => sound.stop(), item.infos.duration * 1000);
-                    }, currentTime * 1000);
-                    currentTime += (item.infos.duration + (soundList[index + 1] ? parseFloat(soundList[index + 1].infos.interval.toString()) : 0));
-                }
-            });
-        },
-
-        handlePlayClick() {
-            console.log(this.notesDuration);
-            this.playSounds(this.notesDuration);
-        },
-
-        handlePlayGuessingClick() {
-            console.log(this.tabnotes);
-            this.playSounds(this.tabnotes);
         },
     
         playSound(note: string) {
